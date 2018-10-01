@@ -8,13 +8,21 @@
 
 /* Begin PBXBuildFile section */
 		07094A512161C32E00B5B08C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07094A502161C32E00B5B08C /* AppDelegate.swift */; };
-		07094A532161C32E00B5B08C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07094A522161C32E00B5B08C /* ViewController.swift */; };
+		07094A532161C32E00B5B08C /* DashboardVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07094A522161C32E00B5B08C /* DashboardVC.swift */; };
 		07094A562161C32E00B5B08C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 07094A542161C32E00B5B08C /* Main.storyboard */; };
 		07094A592161C32E00B5B08C /* Morari_Bapu.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 07094A572161C32E00B5B08C /* Morari_Bapu.xcdatamodeld */; };
 		07094A5B2161C33000B5B08C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07094A5A2161C33000B5B08C /* Assets.xcassets */; };
 		07094A5E2161C33000B5B08C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 07094A5C2161C33000B5B08C /* LaunchScreen.storyboard */; };
 		07094A692161C33000B5B08C /* Morari_BapuTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07094A682161C33000B5B08C /* Morari_BapuTests.swift */; };
 		07094A742161C33000B5B08C /* Morari_BapuUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07094A732161C33000B5B08C /* Morari_BapuUITests.swift */; };
+		07094A852161DA9200B5B08C /* WebServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07094A842161DA9200B5B08C /* WebServices.swift */; };
+		07094A892161DAB400B5B08C /* GlobalConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07094A872161DAB400B5B08C /* GlobalConstants.swift */; };
+		07094A8A2161DAB400B5B08C /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07094A882161DAB400B5B08C /* Utility.swift */; };
+		07094A8D2161DB6500B5B08C /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07094A8C2161DB6500B5B08C /* Reachability.swift */; };
+		07A7551721624BC400793232 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 07A7551621624BC400793232 /* Default-568h@2x.png */; };
+		B4EEC5909677DC647695E296 /* Pods_Morari_BapuTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC4BD43BCEDC5FD94AD884CF /* Pods_Morari_BapuTests.framework */; };
+		DA8CD2ED06F8BF46F430A842 /* Pods_Morari_Bapu.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF96C55420CE8AEB3492FBD9 /* Pods_Morari_Bapu.framework */; };
+		FCCB5EC9D7AF0C4135855622 /* Pods_Morari_BapuUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C7EC3ED81FE47D190032489 /* Pods_Morari_BapuUITests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,18 +45,32 @@
 /* Begin PBXFileReference section */
 		07094A4D2161C32E00B5B08C /* Morari Bapu.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Morari Bapu.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		07094A502161C32E00B5B08C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		07094A522161C32E00B5B08C /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		07094A522161C32E00B5B08C /* DashboardVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardVC.swift; sourceTree = "<group>"; };
 		07094A552161C32E00B5B08C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		07094A582161C32E00B5B08C /* Morari_Bapu.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Morari_Bapu.xcdatamodel; sourceTree = "<group>"; };
 		07094A5A2161C33000B5B08C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		07094A5D2161C33000B5B08C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		07094A5F2161C33000B5B08C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		07094A5F2161C33000B5B08C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = "../Morari Bapu/Info.plist"; sourceTree = "<group>"; };
 		07094A642161C33000B5B08C /* Morari BapuTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Morari BapuTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		07094A682161C33000B5B08C /* Morari_BapuTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Morari_BapuTests.swift; sourceTree = "<group>"; };
 		07094A6A2161C33000B5B08C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		07094A6F2161C33000B5B08C /* Morari BapuUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Morari BapuUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		07094A732161C33000B5B08C /* Morari_BapuUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Morari_BapuUITests.swift; sourceTree = "<group>"; };
 		07094A752161C33000B5B08C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		07094A842161DA9200B5B08C /* WebServices.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebServices.swift; sourceTree = "<group>"; };
+		07094A872161DAB400B5B08C /* GlobalConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalConstants.swift; sourceTree = "<group>"; };
+		07094A882161DAB400B5B08C /* Utility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
+		07094A8C2161DB6500B5B08C /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
+		07A7551621624BC400793232 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		4C7EC3ED81FE47D190032489 /* Pods_Morari_BapuUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Morari_BapuUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5A88026A43A3E43A2EF17F46 /* Pods-Morari Bapu.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Morari Bapu.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Morari Bapu/Pods-Morari Bapu.debug.xcconfig"; sourceTree = "<group>"; };
+		6903C3D27825025CE29FD0C2 /* Pods-Morari BapuUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Morari BapuUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Morari BapuUITests/Pods-Morari BapuUITests.release.xcconfig"; sourceTree = "<group>"; };
+		758D1A5C898793BC3048DC78 /* Pods-Morari Bapu.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Morari Bapu.release.xcconfig"; path = "Pods/Target Support Files/Pods-Morari Bapu/Pods-Morari Bapu.release.xcconfig"; sourceTree = "<group>"; };
+		81DA82811205960EE5158AC9 /* Pods-Morari BapuUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Morari BapuUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Morari BapuUITests/Pods-Morari BapuUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		82D6D832A79F74B1A912BD5D /* Pods-Morari BapuTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Morari BapuTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Morari BapuTests/Pods-Morari BapuTests.debug.xcconfig"; sourceTree = "<group>"; };
+		AF96C55420CE8AEB3492FBD9 /* Pods_Morari_Bapu.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Morari_Bapu.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BEE2EED588D18856E060368A /* Pods-Morari BapuTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Morari BapuTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Morari BapuTests/Pods-Morari BapuTests.release.xcconfig"; sourceTree = "<group>"; };
+		FC4BD43BCEDC5FD94AD884CF /* Pods_Morari_BapuTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Morari_BapuTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +78,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DA8CD2ED06F8BF46F430A842 /* Pods_Morari_Bapu.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -63,6 +86,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B4EEC5909677DC647695E296 /* Pods_Morari_BapuTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -70,6 +94,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FCCB5EC9D7AF0C4135855622 /* Pods_Morari_BapuUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -79,10 +104,13 @@
 		07094A442161C32E00B5B08C = {
 			isa = PBXGroup;
 			children = (
+				07A7551621624BC400793232 /* Default-568h@2x.png */,
 				07094A4F2161C32E00B5B08C /* Morari Bapu */,
 				07094A672161C33000B5B08C /* Morari BapuTests */,
 				07094A722161C33000B5B08C /* Morari BapuUITests */,
 				07094A4E2161C32E00B5B08C /* Products */,
+				F17D00F721DC2523AE5A7930 /* Pods */,
+				8DF30DBF619FC95482207BBC /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -100,12 +128,12 @@
 			isa = PBXGroup;
 			children = (
 				07094A502161C32E00B5B08C /* AppDelegate.swift */,
-				07094A522161C32E00B5B08C /* ViewController.swift */,
-				07094A542161C32E00B5B08C /* Main.storyboard */,
-				07094A5A2161C33000B5B08C /* Assets.xcassets */,
-				07094A5C2161C33000B5B08C /* LaunchScreen.storyboard */,
-				07094A5F2161C33000B5B08C /* Info.plist */,
-				07094A572161C32E00B5B08C /* Morari_Bapu.xcdatamodeld */,
+				07094A832161DA7100B5B08C /* APIHelper */,
+				07094A862161DAA000B5B08C /* ThirdParty Classes  */,
+				07094A812161DA5C00B5B08C /* Controller */,
+				07094A8E2161DB7300B5B08C /* Storyboard */,
+				07094A822161DA6A00B5B08C /* Resources */,
+				07094A8F2161DB9200B5B08C /* Database */,
 			);
 			path = "Morari Bapu";
 			sourceTree = "<group>";
@@ -113,6 +141,7 @@
 		07094A672161C33000B5B08C /* Morari BapuTests */ = {
 			isa = PBXGroup;
 			children = (
+				07094A5F2161C33000B5B08C /* Info.plist */,
 				07094A682161C33000B5B08C /* Morari_BapuTests.swift */,
 				07094A6A2161C33000B5B08C /* Info.plist */,
 			);
@@ -128,6 +157,96 @@
 			path = "Morari BapuUITests";
 			sourceTree = "<group>";
 		};
+		07094A812161DA5C00B5B08C /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				07094A902161DC2C00B5B08C /* Dashboard */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		07094A822161DA6A00B5B08C /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				07094A5A2161C33000B5B08C /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		07094A832161DA7100B5B08C /* APIHelper */ = {
+			isa = PBXGroup;
+			children = (
+				07094A842161DA9200B5B08C /* WebServices.swift */,
+			);
+			path = APIHelper;
+			sourceTree = "<group>";
+		};
+		07094A862161DAA000B5B08C /* ThirdParty Classes  */ = {
+			isa = PBXGroup;
+			children = (
+				07094A8B2161DB5D00B5B08C /* Rechability */,
+				07094A872161DAB400B5B08C /* GlobalConstants.swift */,
+				07094A882161DAB400B5B08C /* Utility.swift */,
+			);
+			path = "ThirdParty Classes ";
+			sourceTree = "<group>";
+		};
+		07094A8B2161DB5D00B5B08C /* Rechability */ = {
+			isa = PBXGroup;
+			children = (
+				07094A8C2161DB6500B5B08C /* Reachability.swift */,
+			);
+			path = Rechability;
+			sourceTree = "<group>";
+		};
+		07094A8E2161DB7300B5B08C /* Storyboard */ = {
+			isa = PBXGroup;
+			children = (
+				07094A5C2161C33000B5B08C /* LaunchScreen.storyboard */,
+				07094A542161C32E00B5B08C /* Main.storyboard */,
+			);
+			path = Storyboard;
+			sourceTree = "<group>";
+		};
+		07094A8F2161DB9200B5B08C /* Database */ = {
+			isa = PBXGroup;
+			children = (
+				07094A572161C32E00B5B08C /* Morari_Bapu.xcdatamodeld */,
+			);
+			path = Database;
+			sourceTree = "<group>";
+		};
+		07094A902161DC2C00B5B08C /* Dashboard */ = {
+			isa = PBXGroup;
+			children = (
+				07094A522161C32E00B5B08C /* DashboardVC.swift */,
+			);
+			path = Dashboard;
+			sourceTree = "<group>";
+		};
+		8DF30DBF619FC95482207BBC /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				AF96C55420CE8AEB3492FBD9 /* Pods_Morari_Bapu.framework */,
+				FC4BD43BCEDC5FD94AD884CF /* Pods_Morari_BapuTests.framework */,
+				4C7EC3ED81FE47D190032489 /* Pods_Morari_BapuUITests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F17D00F721DC2523AE5A7930 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				5A88026A43A3E43A2EF17F46 /* Pods-Morari Bapu.debug.xcconfig */,
+				758D1A5C898793BC3048DC78 /* Pods-Morari Bapu.release.xcconfig */,
+				82D6D832A79F74B1A912BD5D /* Pods-Morari BapuTests.debug.xcconfig */,
+				BEE2EED588D18856E060368A /* Pods-Morari BapuTests.release.xcconfig */,
+				81DA82811205960EE5158AC9 /* Pods-Morari BapuUITests.debug.xcconfig */,
+				6903C3D27825025CE29FD0C2 /* Pods-Morari BapuUITests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -135,9 +254,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 07094A782161C33000B5B08C /* Build configuration list for PBXNativeTarget "Morari Bapu" */;
 			buildPhases = (
+				39CF1C452D8F30032D4B9976 /* [CP] Check Pods Manifest.lock */,
 				07094A492161C32E00B5B08C /* Sources */,
 				07094A4A2161C32E00B5B08C /* Frameworks */,
 				07094A4B2161C32E00B5B08C /* Resources */,
+				938FF903B861E6FC99B11B66 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -152,6 +273,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 07094A7B2161C33000B5B08C /* Build configuration list for PBXNativeTarget "Morari BapuTests" */;
 			buildPhases = (
+				BCA8C7F0EA0182478E6F6116 /* [CP] Check Pods Manifest.lock */,
 				07094A602161C33000B5B08C /* Sources */,
 				07094A612161C33000B5B08C /* Frameworks */,
 				07094A622161C33000B5B08C /* Resources */,
@@ -170,6 +292,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 07094A7E2161C33000B5B08C /* Build configuration list for PBXNativeTarget "Morari BapuUITests" */;
 			buildPhases = (
+				76ED5B705A7A1BDA363FEFEC /* [CP] Check Pods Manifest.lock */,
 				07094A6B2161C33000B5B08C /* Sources */,
 				07094A6C2161C33000B5B08C /* Frameworks */,
 				07094A6D2161C33000B5B08C /* Resources */,
@@ -233,6 +356,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				07094A5E2161C33000B5B08C /* LaunchScreen.storyboard in Resources */,
+				07A7551721624BC400793232 /* Default-568h@2x.png in Resources */,
 				07094A5B2161C33000B5B08C /* Assets.xcassets in Resources */,
 				07094A562161C32E00B5B08C /* Main.storyboard in Resources */,
 			);
@@ -254,13 +378,128 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		39CF1C452D8F30032D4B9976 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Morari Bapu-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		76ED5B705A7A1BDA363FEFEC /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Morari BapuUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		938FF903B861E6FC99B11B66 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-Morari Bapu/Pods-Morari Bapu-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
+				"${BUILT_PRODUCTS_DIR}/IQKeyboardManagerSwift/IQKeyboardManagerSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/Kingfisher/Kingfisher.framework",
+				"${BUILT_PRODUCTS_DIR}/Protobuf/Protobuf.framework",
+				"${BUILT_PRODUCTS_DIR}/SVProgressHUD/SVProgressHUD.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftyGif/SwiftyGif.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftyUserDefaults/SwiftyUserDefaults.framework",
+				"${BUILT_PRODUCTS_DIR}/Toast-Swift/Toast_Swift.framework",
+				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IQKeyboardManagerSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Kingfisher.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Protobuf.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SVProgressHUD.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyGif.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyUserDefaults.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Toast_Swift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Morari Bapu/Pods-Morari Bapu-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		BCA8C7F0EA0182478E6F6116 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Morari BapuTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		07094A492161C32E00B5B08C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				07094A532161C32E00B5B08C /* ViewController.swift in Sources */,
+				07094A8D2161DB6500B5B08C /* Reachability.swift in Sources */,
+				07094A532161C32E00B5B08C /* DashboardVC.swift in Sources */,
 				07094A592161C32E00B5B08C /* Morari_Bapu.xcdatamodeld in Sources */,
+				07094A8A2161DAB400B5B08C /* Utility.swift in Sources */,
+				07094A892161DAB400B5B08C /* GlobalConstants.swift in Sources */,
+				07094A852161DA9200B5B08C /* WebServices.swift in Sources */,
 				07094A512161C32E00B5B08C /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -434,11 +673,13 @@
 		};
 		07094A792161C33000B5B08C /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5A88026A43A3E43A2EF17F46 /* Pods-Morari Bapu.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = RMQN2WYMSF;
 				INFOPLIST_FILE = "Morari Bapu/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -452,11 +693,13 @@
 		};
 		07094A7A2161C33000B5B08C /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 758D1A5C898793BC3048DC78 /* Pods-Morari Bapu.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = RMQN2WYMSF;
 				INFOPLIST_FILE = "Morari Bapu/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -470,6 +713,7 @@
 		};
 		07094A7C2161C33000B5B08C /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 82D6D832A79F74B1A912BD5D /* Pods-Morari BapuTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -491,6 +735,7 @@
 		};
 		07094A7D2161C33000B5B08C /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = BEE2EED588D18856E060368A /* Pods-Morari BapuTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -512,6 +757,7 @@
 		};
 		07094A7F2161C33000B5B08C /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 81DA82811205960EE5158AC9 /* Pods-Morari BapuUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -532,6 +778,7 @@
 		};
 		07094A802161C33000B5B08C /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6903C3D27825025CE29FD0C2 /* Pods-Morari BapuUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
