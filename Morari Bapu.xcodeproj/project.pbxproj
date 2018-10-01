@@ -1,0 +1,608 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		07094A512161C32E00B5B08C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07094A502161C32E00B5B08C /* AppDelegate.swift */; };
+		07094A532161C32E00B5B08C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07094A522161C32E00B5B08C /* ViewController.swift */; };
+		07094A562161C32E00B5B08C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 07094A542161C32E00B5B08C /* Main.storyboard */; };
+		07094A592161C32E00B5B08C /* Morari_Bapu.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 07094A572161C32E00B5B08C /* Morari_Bapu.xcdatamodeld */; };
+		07094A5B2161C33000B5B08C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07094A5A2161C33000B5B08C /* Assets.xcassets */; };
+		07094A5E2161C33000B5B08C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 07094A5C2161C33000B5B08C /* LaunchScreen.storyboard */; };
+		07094A692161C33000B5B08C /* Morari_BapuTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07094A682161C33000B5B08C /* Morari_BapuTests.swift */; };
+		07094A742161C33000B5B08C /* Morari_BapuUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07094A732161C33000B5B08C /* Morari_BapuUITests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		07094A652161C33000B5B08C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 07094A452161C32E00B5B08C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 07094A4C2161C32E00B5B08C;
+			remoteInfo = "Morari Bapu";
+		};
+		07094A702161C33000B5B08C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 07094A452161C32E00B5B08C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 07094A4C2161C32E00B5B08C;
+			remoteInfo = "Morari Bapu";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		07094A4D2161C32E00B5B08C /* Morari Bapu.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Morari Bapu.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		07094A502161C32E00B5B08C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		07094A522161C32E00B5B08C /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		07094A552161C32E00B5B08C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		07094A582161C32E00B5B08C /* Morari_Bapu.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Morari_Bapu.xcdatamodel; sourceTree = "<group>"; };
+		07094A5A2161C33000B5B08C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		07094A5D2161C33000B5B08C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		07094A5F2161C33000B5B08C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		07094A642161C33000B5B08C /* Morari BapuTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Morari BapuTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		07094A682161C33000B5B08C /* Morari_BapuTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Morari_BapuTests.swift; sourceTree = "<group>"; };
+		07094A6A2161C33000B5B08C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		07094A6F2161C33000B5B08C /* Morari BapuUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Morari BapuUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		07094A732161C33000B5B08C /* Morari_BapuUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Morari_BapuUITests.swift; sourceTree = "<group>"; };
+		07094A752161C33000B5B08C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		07094A4A2161C32E00B5B08C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		07094A612161C33000B5B08C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		07094A6C2161C33000B5B08C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		07094A442161C32E00B5B08C = {
+			isa = PBXGroup;
+			children = (
+				07094A4F2161C32E00B5B08C /* Morari Bapu */,
+				07094A672161C33000B5B08C /* Morari BapuTests */,
+				07094A722161C33000B5B08C /* Morari BapuUITests */,
+				07094A4E2161C32E00B5B08C /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		07094A4E2161C32E00B5B08C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				07094A4D2161C32E00B5B08C /* Morari Bapu.app */,
+				07094A642161C33000B5B08C /* Morari BapuTests.xctest */,
+				07094A6F2161C33000B5B08C /* Morari BapuUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		07094A4F2161C32E00B5B08C /* Morari Bapu */ = {
+			isa = PBXGroup;
+			children = (
+				07094A502161C32E00B5B08C /* AppDelegate.swift */,
+				07094A522161C32E00B5B08C /* ViewController.swift */,
+				07094A542161C32E00B5B08C /* Main.storyboard */,
+				07094A5A2161C33000B5B08C /* Assets.xcassets */,
+				07094A5C2161C33000B5B08C /* LaunchScreen.storyboard */,
+				07094A5F2161C33000B5B08C /* Info.plist */,
+				07094A572161C32E00B5B08C /* Morari_Bapu.xcdatamodeld */,
+			);
+			path = "Morari Bapu";
+			sourceTree = "<group>";
+		};
+		07094A672161C33000B5B08C /* Morari BapuTests */ = {
+			isa = PBXGroup;
+			children = (
+				07094A682161C33000B5B08C /* Morari_BapuTests.swift */,
+				07094A6A2161C33000B5B08C /* Info.plist */,
+			);
+			path = "Morari BapuTests";
+			sourceTree = "<group>";
+		};
+		07094A722161C33000B5B08C /* Morari BapuUITests */ = {
+			isa = PBXGroup;
+			children = (
+				07094A732161C33000B5B08C /* Morari_BapuUITests.swift */,
+				07094A752161C33000B5B08C /* Info.plist */,
+			);
+			path = "Morari BapuUITests";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		07094A4C2161C32E00B5B08C /* Morari Bapu */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 07094A782161C33000B5B08C /* Build configuration list for PBXNativeTarget "Morari Bapu" */;
+			buildPhases = (
+				07094A492161C32E00B5B08C /* Sources */,
+				07094A4A2161C32E00B5B08C /* Frameworks */,
+				07094A4B2161C32E00B5B08C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Morari Bapu";
+			productName = "Morari Bapu";
+			productReference = 07094A4D2161C32E00B5B08C /* Morari Bapu.app */;
+			productType = "com.apple.product-type.application";
+		};
+		07094A632161C33000B5B08C /* Morari BapuTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 07094A7B2161C33000B5B08C /* Build configuration list for PBXNativeTarget "Morari BapuTests" */;
+			buildPhases = (
+				07094A602161C33000B5B08C /* Sources */,
+				07094A612161C33000B5B08C /* Frameworks */,
+				07094A622161C33000B5B08C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				07094A662161C33000B5B08C /* PBXTargetDependency */,
+			);
+			name = "Morari BapuTests";
+			productName = "Morari BapuTests";
+			productReference = 07094A642161C33000B5B08C /* Morari BapuTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		07094A6E2161C33000B5B08C /* Morari BapuUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 07094A7E2161C33000B5B08C /* Build configuration list for PBXNativeTarget "Morari BapuUITests" */;
+			buildPhases = (
+				07094A6B2161C33000B5B08C /* Sources */,
+				07094A6C2161C33000B5B08C /* Frameworks */,
+				07094A6D2161C33000B5B08C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				07094A712161C33000B5B08C /* PBXTargetDependency */,
+			);
+			name = "Morari BapuUITests";
+			productName = "Morari BapuUITests";
+			productReference = 07094A6F2161C33000B5B08C /* Morari BapuUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		07094A452161C32E00B5B08C /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1000;
+				LastUpgradeCheck = 1000;
+				ORGANIZATIONNAME = "Bhavin Chauhan";
+				TargetAttributes = {
+					07094A4C2161C32E00B5B08C = {
+						CreatedOnToolsVersion = 10.0;
+					};
+					07094A632161C33000B5B08C = {
+						CreatedOnToolsVersion = 10.0;
+						TestTargetID = 07094A4C2161C32E00B5B08C;
+					};
+					07094A6E2161C33000B5B08C = {
+						CreatedOnToolsVersion = 10.0;
+						TestTargetID = 07094A4C2161C32E00B5B08C;
+					};
+				};
+			};
+			buildConfigurationList = 07094A482161C32E00B5B08C /* Build configuration list for PBXProject "Morari Bapu" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 07094A442161C32E00B5B08C;
+			productRefGroup = 07094A4E2161C32E00B5B08C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				07094A4C2161C32E00B5B08C /* Morari Bapu */,
+				07094A632161C33000B5B08C /* Morari BapuTests */,
+				07094A6E2161C33000B5B08C /* Morari BapuUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		07094A4B2161C32E00B5B08C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				07094A5E2161C33000B5B08C /* LaunchScreen.storyboard in Resources */,
+				07094A5B2161C33000B5B08C /* Assets.xcassets in Resources */,
+				07094A562161C32E00B5B08C /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		07094A622161C33000B5B08C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		07094A6D2161C33000B5B08C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		07094A492161C32E00B5B08C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				07094A532161C32E00B5B08C /* ViewController.swift in Sources */,
+				07094A592161C32E00B5B08C /* Morari_Bapu.xcdatamodeld in Sources */,
+				07094A512161C32E00B5B08C /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		07094A602161C33000B5B08C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				07094A692161C33000B5B08C /* Morari_BapuTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		07094A6B2161C33000B5B08C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				07094A742161C33000B5B08C /* Morari_BapuUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		07094A662161C33000B5B08C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 07094A4C2161C32E00B5B08C /* Morari Bapu */;
+			targetProxy = 07094A652161C33000B5B08C /* PBXContainerItemProxy */;
+		};
+		07094A712161C33000B5B08C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 07094A4C2161C32E00B5B08C /* Morari Bapu */;
+			targetProxy = 07094A702161C33000B5B08C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		07094A542161C32E00B5B08C /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				07094A552161C32E00B5B08C /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		07094A5C2161C33000B5B08C /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				07094A5D2161C33000B5B08C /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		07094A762161C33000B5B08C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		07094A772161C33000B5B08C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		07094A792161C33000B5B08C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = RMQN2WYMSF;
+				INFOPLIST_FILE = "Morari Bapu/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "Nivida-Web-Solutions-Pvt.-Ltd.Morari-Bapu";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		07094A7A2161C33000B5B08C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = RMQN2WYMSF;
+				INFOPLIST_FILE = "Morari Bapu/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "Nivida-Web-Solutions-Pvt.-Ltd.Morari-Bapu";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		07094A7C2161C33000B5B08C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = RMQN2WYMSF;
+				INFOPLIST_FILE = "Morari BapuTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "Nivida-Web-Solutions-Pvt.-Ltd.Morari-BapuTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Morari Bapu.app/Morari Bapu";
+			};
+			name = Debug;
+		};
+		07094A7D2161C33000B5B08C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = RMQN2WYMSF;
+				INFOPLIST_FILE = "Morari BapuTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "Nivida-Web-Solutions-Pvt.-Ltd.Morari-BapuTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Morari Bapu.app/Morari Bapu";
+			};
+			name = Release;
+		};
+		07094A7F2161C33000B5B08C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = RMQN2WYMSF;
+				INFOPLIST_FILE = "Morari BapuUITests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "Nivida-Web-Solutions-Pvt.-Ltd.Morari-BapuUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "Morari Bapu";
+			};
+			name = Debug;
+		};
+		07094A802161C33000B5B08C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = RMQN2WYMSF;
+				INFOPLIST_FILE = "Morari BapuUITests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "Nivida-Web-Solutions-Pvt.-Ltd.Morari-BapuUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "Morari Bapu";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		07094A482161C32E00B5B08C /* Build configuration list for PBXProject "Morari Bapu" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				07094A762161C33000B5B08C /* Debug */,
+				07094A772161C33000B5B08C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		07094A782161C33000B5B08C /* Build configuration list for PBXNativeTarget "Morari Bapu" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				07094A792161C33000B5B08C /* Debug */,
+				07094A7A2161C33000B5B08C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		07094A7B2161C33000B5B08C /* Build configuration list for PBXNativeTarget "Morari BapuTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				07094A7C2161C33000B5B08C /* Debug */,
+				07094A7D2161C33000B5B08C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		07094A7E2161C33000B5B08C /* Build configuration list for PBXNativeTarget "Morari BapuUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				07094A7F2161C33000B5B08C /* Debug */,
+				07094A802161C33000B5B08C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		07094A572161C32E00B5B08C /* Morari_Bapu.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				07094A582161C32E00B5B08C /* Morari_Bapu.xcdatamodel */,
+			);
+			currentVersion = 07094A582161C32E00B5B08C /* Morari_Bapu.xcdatamodel */;
+			path = Morari_Bapu.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = 07094A452161C32E00B5B08C /* Project object */;
+}
