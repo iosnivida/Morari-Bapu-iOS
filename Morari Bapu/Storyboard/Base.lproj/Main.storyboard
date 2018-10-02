@@ -33,6 +33,9 @@
                                         </constraints>
                                         <inset key="imageEdgeInsets" minX="5" minY="5" maxX="5" maxY="5"/>
                                         <state key="normal" image="menu"/>
+                                        <connections>
+                                            <action selector="btnMenu:" destination="qbL-Pq-bhq" eventType="touchUpInside" id="pUQ-I8-a0M"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vPt-RO-3pI">
                                         <rect key="frame" x="327" y="0.0" width="40" height="44"/>

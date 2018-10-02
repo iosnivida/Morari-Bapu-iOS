@@ -23,9 +23,9 @@ class WebServices: NSObject
     // Call with Raw/Json Parameter
     func CallGlobalAPI(url:String, headers:HTTPHeaders,parameters:NSDictionary, HttpMethod:String, ProgressView:Bool, responseDict:@escaping ( _ jsonResponce:JSON?, _ strErrorMessage:String) -> Void )  {
         
-        //print("URL: \(url)")
-        //print("Headers: \n\(headers)")
-        //print("Parameters: \n\(parameters)")
+        print("URL: \(url)")
+        print("Headers: \n\(headers)")
+        print("Parameters: \n\(parameters)")
         
         //Loader Required or Not
         if ProgressView == true {
@@ -56,7 +56,7 @@ class WebServices: NSObject
                                 if((response.result.value) != nil) {
                                     let jsonResponce = JSON(response.result.value!)
                                     
-                                     //print("Responce: \n\(jsonResponce)")
+                                     print("Responce: \n\(jsonResponce)")
                                     
                                     DispatchQueue.main.async {
                                         responseDict(jsonResponce,"")
@@ -114,7 +114,7 @@ class WebServices: NSObject
                                 if((response.result.value) != nil) {
                                     let jsonResponce = JSON(response.result.value!)
                                     
-                                    //print("Responce: \n\(jsonResponce)")
+                                    print("Responce: \n\(jsonResponce)")
                                     
                                     DispatchQueue.main.async {
                                         SVProgressHUD.dismiss()

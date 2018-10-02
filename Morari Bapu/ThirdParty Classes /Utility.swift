@@ -49,9 +49,9 @@ class Utility: NSObject
             lblMessage.text = message
             
             if UIDevice.current.userInterfaceIdiom == .pad{
-                lblMessage.font = UIFont(name:MontserratMedium, size:25)
+                lblMessage.font = UIFont(name:MontserratSemiBold, size:25)
             }else{
-                lblMessage.font = UIFont(name:MontserratMedium, size:20)
+                lblMessage.font = UIFont(name:MontserratSemiBold, size:20)
             }
             
             lblMessage.textAlignment = .center
@@ -71,9 +71,9 @@ class Utility: NSObject
             messageLabel.textAlignment = .center
             
             if UIDevice.current.userInterfaceIdiom == .pad{
-                messageLabel.font = UIFont(name:MontserratMedium, size:25)
+                messageLabel.font = UIFont(name:MontserratSemiBold, size:25)
             }else{
-                messageLabel.font = UIFont(name:MontserratMedium, size:20)
+                messageLabel.font = UIFont(name:MontserratSemiBold, size:20)
             }
             
             messageLabel.sizeToFit()
@@ -96,9 +96,9 @@ class Utility: NSObject
         lblMessage.text = message
         
         if UIDevice.current.userInterfaceIdiom == .pad{
-            lblMessage.font = UIFont(name:MontserratMedium, size:25)
+            lblMessage.font = UIFont(name:MontserratSemiBold, size:25)
         }else{
-            lblMessage.font = UIFont(name:MontserratMedium, size:20)
+            lblMessage.font = UIFont(name:MontserratSemiBold, size:20)
         }
         
         lblMessage.textAlignment = .center
@@ -430,6 +430,24 @@ class Utility: NSObject
         return emailTest.evaluate(with: testStr)
     }
     
+    //MARK: DropDown (Show Hide)
+    static func menu_Show(onViewController: UIViewController) {
+        DispatchQueue.main.async {
+            //let objVC = self.storyboard?.instantiateViewController(withIdentifier: "LoaderVC") as! LoaderVC
+            let storyboardCustom : UIStoryboard = UIStoryboard(name: Custome_Storyboard, bundle: nil)
+            let objVC = storyboardCustom.instantiateViewController(withIdentifier: "MenuVC") as? MenuVC
+            objVC?.modalPresentationStyle = .overCurrentContext
+            objVC?.modalTransitionStyle = .crossDissolve
+            onViewController.present(objVC!, animated: false, completion: nil)
+            //UIApplication.shared.delegate?.window!?.rootViewController?.present(objVC, animated: true, completion: nil)
+        }
+    }
+    
+    static func menu_Hide(onViewController: UIViewController) {
+        DispatchQueue.main.async {
+            onViewController.dismiss(animated: false, completion: nil)
+        }
+    }
    
 
 }

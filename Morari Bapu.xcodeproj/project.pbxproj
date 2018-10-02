@@ -19,7 +19,14 @@
 		07094A892161DAB400B5B08C /* GlobalConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07094A872161DAB400B5B08C /* GlobalConstants.swift */; };
 		07094A8A2161DAB400B5B08C /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07094A882161DAB400B5B08C /* Utility.swift */; };
 		07094A8D2161DB6500B5B08C /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07094A8C2161DB6500B5B08C /* Reachability.swift */; };
+		076BA35C21632A48004BD807 /* KathaChopaiVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 076BA35B21632A48004BD807 /* KathaChopaiVC.swift */; };
 		07A7551721624BC400793232 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 07A7551621624BC400793232 /* Default-568h@2x.png */; };
+		07A755192162592100793232 /* Custom.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 07A755182162592000793232 /* Custom.storyboard */; };
+		07A7551D21625A1800793232 /* MenuVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07A7551C21625A1800793232 /* MenuVC.swift */; };
+		07A755202162658B00793232 /* MenuCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07A7551F2162658B00793232 /* MenuCollectionViewCell.swift */; };
+		07A755252162869100793232 /* MontserratAlternates-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 07A755222162869100793232 /* MontserratAlternates-SemiBold.otf */; };
+		07A755262162869100793232 /* MontserratAlternates-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 07A755232162869100793232 /* MontserratAlternates-Light.otf */; };
+		07A755272162869100793232 /* MontserratAlternates-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 07A755242162869100793232 /* MontserratAlternates-Regular.otf */; };
 		B4EEC5909677DC647695E296 /* Pods_Morari_BapuTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC4BD43BCEDC5FD94AD884CF /* Pods_Morari_BapuTests.framework */; };
 		DA8CD2ED06F8BF46F430A842 /* Pods_Morari_Bapu.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF96C55420CE8AEB3492FBD9 /* Pods_Morari_Bapu.framework */; };
 		FCCB5EC9D7AF0C4135855622 /* Pods_Morari_BapuUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C7EC3ED81FE47D190032489 /* Pods_Morari_BapuUITests.framework */; };
@@ -61,7 +68,14 @@
 		07094A872161DAB400B5B08C /* GlobalConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalConstants.swift; sourceTree = "<group>"; };
 		07094A882161DAB400B5B08C /* Utility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
 		07094A8C2161DB6500B5B08C /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
+		076BA35B21632A48004BD807 /* KathaChopaiVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KathaChopaiVC.swift; sourceTree = "<group>"; };
 		07A7551621624BC400793232 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		07A755182162592000793232 /* Custom.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Custom.storyboard; sourceTree = "<group>"; };
+		07A7551C21625A1800793232 /* MenuVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuVC.swift; sourceTree = "<group>"; };
+		07A7551F2162658B00793232 /* MenuCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuCollectionViewCell.swift; sourceTree = "<group>"; };
+		07A755222162869100793232 /* MontserratAlternates-SemiBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MontserratAlternates-SemiBold.otf"; sourceTree = "<group>"; };
+		07A755232162869100793232 /* MontserratAlternates-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MontserratAlternates-Light.otf"; sourceTree = "<group>"; };
+		07A755242162869100793232 /* MontserratAlternates-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MontserratAlternates-Regular.otf"; sourceTree = "<group>"; };
 		4C7EC3ED81FE47D190032489 /* Pods_Morari_BapuUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Morari_BapuUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A88026A43A3E43A2EF17F46 /* Pods-Morari Bapu.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Morari Bapu.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Morari Bapu/Pods-Morari Bapu.debug.xcconfig"; sourceTree = "<group>"; };
 		6903C3D27825025CE29FD0C2 /* Pods-Morari BapuUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Morari BapuUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Morari BapuUITests/Pods-Morari BapuUITests.release.xcconfig"; sourceTree = "<group>"; };
@@ -130,8 +144,8 @@
 				07094A502161C32E00B5B08C /* AppDelegate.swift */,
 				07094A832161DA7100B5B08C /* APIHelper */,
 				07094A862161DAA000B5B08C /* ThirdParty Classes  */,
-				07094A812161DA5C00B5B08C /* Controller */,
 				07094A8E2161DB7300B5B08C /* Storyboard */,
+				07094A812161DA5C00B5B08C /* Controller */,
 				07094A822161DA6A00B5B08C /* Resources */,
 				07094A8F2161DB9200B5B08C /* Database */,
 			);
@@ -160,6 +174,8 @@
 		07094A812161DA5C00B5B08C /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				076BA35A21632A14004BD807 /* Katha Chopai  */,
+				07A7551E21625A1C00793232 /* Menu */,
 				07094A902161DC2C00B5B08C /* Dashboard */,
 			);
 			path = Controller;
@@ -184,6 +200,7 @@
 		07094A862161DAA000B5B08C /* ThirdParty Classes  */ = {
 			isa = PBXGroup;
 			children = (
+				07A755212162868500793232 /* Fonts */,
 				07094A8B2161DB5D00B5B08C /* Rechability */,
 				07094A872161DAB400B5B08C /* GlobalConstants.swift */,
 				07094A882161DAB400B5B08C /* Utility.swift */,
@@ -203,6 +220,7 @@
 			isa = PBXGroup;
 			children = (
 				07094A5C2161C33000B5B08C /* LaunchScreen.storyboard */,
+				07A755182162592000793232 /* Custom.storyboard */,
 				07094A542161C32E00B5B08C /* Main.storyboard */,
 			);
 			path = Storyboard;
@@ -222,6 +240,33 @@
 				07094A522161C32E00B5B08C /* DashboardVC.swift */,
 			);
 			path = Dashboard;
+			sourceTree = "<group>";
+		};
+		076BA35A21632A14004BD807 /* Katha Chopai  */ = {
+			isa = PBXGroup;
+			children = (
+				076BA35B21632A48004BD807 /* KathaChopaiVC.swift */,
+			);
+			path = "Katha Chopai ";
+			sourceTree = "<group>";
+		};
+		07A7551E21625A1C00793232 /* Menu */ = {
+			isa = PBXGroup;
+			children = (
+				07A7551C21625A1800793232 /* MenuVC.swift */,
+				07A7551F2162658B00793232 /* MenuCollectionViewCell.swift */,
+			);
+			path = Menu;
+			sourceTree = "<group>";
+		};
+		07A755212162868500793232 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				07A755232162869100793232 /* MontserratAlternates-Light.otf */,
+				07A755242162869100793232 /* MontserratAlternates-Regular.otf */,
+				07A755222162869100793232 /* MontserratAlternates-SemiBold.otf */,
+			);
+			path = Fonts;
 			sourceTree = "<group>";
 		};
 		8DF30DBF619FC95482207BBC /* Frameworks */ = {
@@ -355,10 +400,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				07A755272162869100793232 /* MontserratAlternates-Regular.otf in Resources */,
+				07A755252162869100793232 /* MontserratAlternates-SemiBold.otf in Resources */,
+				07A755262162869100793232 /* MontserratAlternates-Light.otf in Resources */,
 				07094A5E2161C33000B5B08C /* LaunchScreen.storyboard in Resources */,
 				07A7551721624BC400793232 /* Default-568h@2x.png in Resources */,
 				07094A5B2161C33000B5B08C /* Assets.xcassets in Resources */,
 				07094A562161C32E00B5B08C /* Main.storyboard in Resources */,
+				07A755192162592100793232 /* Custom.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -494,11 +543,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				076BA35C21632A48004BD807 /* KathaChopaiVC.swift in Sources */,
 				07094A8D2161DB6500B5B08C /* Reachability.swift in Sources */,
 				07094A532161C32E00B5B08C /* DashboardVC.swift in Sources */,
+				07A755202162658B00793232 /* MenuCollectionViewCell.swift in Sources */,
 				07094A592161C32E00B5B08C /* Morari_Bapu.xcdatamodeld in Sources */,
 				07094A8A2161DAB400B5B08C /* Utility.swift in Sources */,
 				07094A892161DAB400B5B08C /* GlobalConstants.swift in Sources */,
+				07A7551D21625A1800793232 /* MenuVC.swift in Sources */,
 				07094A852161DA9200B5B08C /* WebServices.swift in Sources */,
 				07094A512161C32E00B5B08C /* AppDelegate.swift in Sources */,
 			);
