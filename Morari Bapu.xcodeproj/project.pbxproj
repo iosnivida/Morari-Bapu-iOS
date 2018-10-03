@@ -19,6 +19,10 @@
 		07094A892161DAB400B5B08C /* GlobalConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07094A872161DAB400B5B08C /* GlobalConstants.swift */; };
 		07094A8A2161DAB400B5B08C /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07094A882161DAB400B5B08C /* Utility.swift */; };
 		07094A8D2161DB6500B5B08C /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07094A8C2161DB6500B5B08C /* Reachability.swift */; };
+		070B71F62163C31400EF085E /* SliderCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 070B71F52163C31300EF085E /* SliderCollectionViewCell.swift */; };
+		07443DF42165220C00F39CCD /* YoutubeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07443DF32165220C00F39CCD /* YoutubeTableViewCell.swift */; };
+		07443DF62165223400F39CCD /* QuotesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07443DF52165223400F39CCD /* QuotesTableViewCell.swift */; };
+		07443DF82165228900F39CCD /* UpcomingKathaTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07443DF72165228900F39CCD /* UpcomingKathaTableViewCell.swift */; };
 		076BA35C21632A48004BD807 /* KathaChopaiVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 076BA35B21632A48004BD807 /* KathaChopaiVC.swift */; };
 		07A7551721624BC400793232 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 07A7551621624BC400793232 /* Default-568h@2x.png */; };
 		07A755192162592100793232 /* Custom.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 07A755182162592000793232 /* Custom.storyboard */; };
@@ -68,6 +72,10 @@
 		07094A872161DAB400B5B08C /* GlobalConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalConstants.swift; sourceTree = "<group>"; };
 		07094A882161DAB400B5B08C /* Utility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
 		07094A8C2161DB6500B5B08C /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
+		070B71F52163C31300EF085E /* SliderCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderCollectionViewCell.swift; sourceTree = "<group>"; };
+		07443DF32165220C00F39CCD /* YoutubeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YoutubeTableViewCell.swift; sourceTree = "<group>"; };
+		07443DF52165223400F39CCD /* QuotesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuotesTableViewCell.swift; sourceTree = "<group>"; };
+		07443DF72165228900F39CCD /* UpcomingKathaTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpcomingKathaTableViewCell.swift; sourceTree = "<group>"; };
 		076BA35B21632A48004BD807 /* KathaChopaiVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KathaChopaiVC.swift; sourceTree = "<group>"; };
 		07A7551621624BC400793232 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		07A755182162592000793232 /* Custom.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Custom.storyboard; sourceTree = "<group>"; };
@@ -174,9 +182,9 @@
 		07094A812161DA5C00B5B08C /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				076BA35A21632A14004BD807 /* Katha Chopai  */,
 				07A7551E21625A1C00793232 /* Menu */,
 				07094A902161DC2C00B5B08C /* Dashboard */,
+				076BA35A21632A14004BD807 /* Katha Chopai  */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -238,6 +246,10 @@
 			isa = PBXGroup;
 			children = (
 				07094A522161C32E00B5B08C /* DashboardVC.swift */,
+				070B71F52163C31300EF085E /* SliderCollectionViewCell.swift */,
+				07443DF32165220C00F39CCD /* YoutubeTableViewCell.swift */,
+				07443DF52165223400F39CCD /* QuotesTableViewCell.swift */,
+				07443DF72165228900F39CCD /* UpcomingKathaTableViewCell.swift */,
 			);
 			path = Dashboard;
 			sourceTree = "<group>";
@@ -482,6 +494,7 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Morari Bapu/Pods-Morari Bapu-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/CenteredCollectionView/CenteredCollectionView.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
 				"${BUILT_PRODUCTS_DIR}/IQKeyboardManagerSwift/IQKeyboardManagerSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/Kingfisher/Kingfisher.framework",
@@ -498,6 +511,7 @@
 			);
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CenteredCollectionView.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IQKeyboardManagerSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Kingfisher.framework",
@@ -543,14 +557,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				07443DF62165223400F39CCD /* QuotesTableViewCell.swift in Sources */,
 				076BA35C21632A48004BD807 /* KathaChopaiVC.swift in Sources */,
+				070B71F62163C31400EF085E /* SliderCollectionViewCell.swift in Sources */,
 				07094A8D2161DB6500B5B08C /* Reachability.swift in Sources */,
+				07443DF82165228900F39CCD /* UpcomingKathaTableViewCell.swift in Sources */,
 				07094A532161C32E00B5B08C /* DashboardVC.swift in Sources */,
 				07A755202162658B00793232 /* MenuCollectionViewCell.swift in Sources */,
 				07094A592161C32E00B5B08C /* Morari_Bapu.xcdatamodeld in Sources */,
 				07094A8A2161DAB400B5B08C /* Utility.swift in Sources */,
 				07094A892161DAB400B5B08C /* GlobalConstants.swift in Sources */,
 				07A7551D21625A1800793232 /* MenuVC.swift in Sources */,
+				07443DF42165220C00F39CCD /* YoutubeTableViewCell.swift in Sources */,
 				07094A852161DA9200B5B08C /* WebServices.swift in Sources */,
 				07094A512161C32E00B5B08C /* AppDelegate.swift in Sources */,
 			);
