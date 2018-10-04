@@ -32,16 +32,15 @@ class DashboardVC: UIViewController {
     // A reference to the `CenteredCollectionViewFlowLayout`.
     // Must be aquired from the IBOutlet collectionView.
     var centeredCollectionViewFlowLayout: CenteredCollectionViewFlowLayout!
-    
-    
+  
     override func viewDidLoad() {
         super.viewDidLoad()
       
         tblHome.tableFooterView = UIView.init(frame: .zero)
         tblHome.layoutMargins = .zero
       
-        tblHome.rowHeight = 350
-      tblHome.estimatedRowHeight = UITableView.automaticDimension
+        tblHome.rowHeight = 500
+        tblHome.estimatedRowHeight = UITableView.automaticDimension
       
         if UIDevice.current.userInterfaceIdiom != .pad{
             cellPercentWidth = 0.6
@@ -67,8 +66,8 @@ class DashboardVC: UIViewController {
         
         // Configure the required item size (REQURED STEP)
         centeredCollectionViewFlowLayout.itemSize = CGSize(
-            width: view.bounds.width * cellPercentWidth,
-            height: cvSlider.frame.height
+            width: 250,
+            height: 500
         )
         
         if UIDevice.current.userInterfaceIdiom != .pad{
@@ -95,11 +94,11 @@ class DashboardVC: UIViewController {
   override func viewDidLayoutSubviews() {
     super.viewDidLayoutSubviews()
     
-    DispatchQueue.main.async {
+    print(constraintHeightTableView.constant)
+    
       self.constraintHeightTableView.constant = self.tblHome.contentSize.height
       self.view.layoutIfNeeded()
-      
-    }
+  
     
   }
     
@@ -214,16 +213,13 @@ extension DashboardVC: UICollectionViewDelegateFlowLayout, UICollectionViewDeleg
             
             let data = arrSlider[indexPath.row]
       
-      
-      
-      
       if data["link"].stringValue.count == 0{
             cell.lblTitle.text = "Image"
       }else{
             cell.lblTitle.text = "Video"
       }
       
-            let imgUrl = data["image"].stringValue
+            let imgUrl = "\(BASE_URL_IMAGE)\(data["image"].stringValue)"
         
             let placeHolder = UIImage(named: "splashscreen")
         
@@ -268,31 +264,74 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     
-      let cellIdentifier = "YoutubeTableViewCell"
-      
-      guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? YoutubeTableViewCell  else {
-        fatalError("The dequeued cell is not an instance of MealTableViewCell.")
-      }
+  
       
       let data = arrHome[indexPath.row]
     
-//    if data["youtube_link"].stringValue.count != 0{
-//
+      if data["youtube_link"].stringValue.count != 0{
+
+        let cellIdentifier = "YoutubeTableViewCell"
+        
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? YoutubeTableViewCell  else {
+          fatalError("The dequeued cell is not an instance of MealTableViewCell.")
+        }
+        
       cell.lblTitle.text = data["title"].stringValue
-      cell.lblDuration.text = data["video_duration"].stringValue
+        cell.lblDuration.text = "Duration: \(data["video_duration"].stringValue)"
       cell.lblDate.text = data["date"].stringValue
       
-      let placeHolder = UIImage(named: "placeholder")
+      let placeHolder = UIImage(named: "youtube_placeholder")
       
       cell.imgVideo.kf.indicatorType = .activity
-      cell.imgVideo.kf.setImage(with: data["youtube_link"].url, placeholder: placeHolder, options: [.transition(ImageTransition.fade(1))])
+      cell.imgVideo.kf.setImage(with: data["video_image"].url, placeholder: placeHolder, options: [.transition(ImageTransition.fade(1))])
       
       cell.btnMoveToCatrgoryLink.setTitle(data["list_heading"].stringValue, for: .normal)
+        
+        if data["is_favourite"].boolValue == true{
+          cell.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
+        }else{
+          cell.btnFavourite.setImage(UIImage(named: "unfavorite"), for: .normal)
+        }
+        
+        return cell
+
+    }
+    else if data["quotes_english"].stringValue.count != 0{
       
-      return cell
- 
-    
-   
+        let cellIdentifier = "QuotesTableViewCell"
+        
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? QuotesTableViewCell  else {
+          fatalError("The dequeued cell is not an instance of MealTableViewCell.")
+        }
+        
+      cell.lblQuotes.text = data["quotes_english"].stringValue
+      cell.lblDate.text = data["date"].stringValue
+      cell.btnCategories.setTitle(data["list_heading"].stringValue, for: .normal)
+        
+        if data["is_favourite"].boolValue == true{
+          cell.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
+        }else{
+          cell.btnFavourite.setImage(UIImage(named: "unfavorite"), for: .normal)
+        }
+        return cell
+        
+      } else{
+        
+        let cellIdentifier = "UpcomingKathaTableViewCell"
+        
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? UpcomingKathaTableViewCell  else {
+          fatalError("The dequeued cell is not an instance of MealTableViewCell.")
+        }
+        
+        cell.lblDay.text = data["from_date"].stringValue
+        cell.lblTitle.text = data["title"].stringValue
+        cell.lblDate.text = data["from_date"].stringValue
+        cell.lblScheduleDate.text = "\(data["from_date"].stringValue) to \(data["to_date"].stringValue)"
+        cell.btnCategoryName.setTitle(data["list_heading"].stringValue, for: .normal)
+        
+        return cell
+
+    }
   }
   
   func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

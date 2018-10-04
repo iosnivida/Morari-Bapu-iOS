@@ -10,6 +10,13 @@ import UIKit
 
 class QuotesTableViewCell: UITableViewCell {
 
+  
+  @IBOutlet weak var btnCategories: UIButton!
+  @IBOutlet weak var btnShare: UIButton!
+  @IBOutlet weak var lblDate: UILabel!
+  @IBOutlet weak var lblQuotes: UILabel!
+  @IBOutlet weak var btnFavourite: UIButton!
+  
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

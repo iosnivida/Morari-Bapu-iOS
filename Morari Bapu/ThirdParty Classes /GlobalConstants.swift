@@ -16,7 +16,9 @@ let Main_Storyboard                        = "Main"
 //var BASE_URL                             = "http://vetolution.com:3004/api/v1/" //Live
 var BASE_URL                               = "http://app.nivida.in/moraribapu/" //Development
 
-//Login Signup Apis
+var BASE_URL_IMAGE                                = "http://app.nivida.in/moraribapu/files/"
+
+
 
 let WebService_Slider_Dashboard                      = "\(BASE_URL)Slider/App_Get_Slider"
 let WebService_Dashboard_List                        = "\(BASE_URL)HomeApi/App_GetHome"

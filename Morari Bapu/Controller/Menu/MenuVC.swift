@@ -85,6 +85,11 @@ extension MenuVC: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, 
         
         }else if indexPath.row == 7{
             //You Tube Channel
+          
+          let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+          let vc = storyboard.instantiateViewController(withIdentifier: "WebViewVC") as! WebViewVC
+          vc.screenDirection = .YouTubeChannel
+          navigationController?.pushViewController(vc, animated: true)
         
         }else if indexPath.row == 8{
         //Live Katha Video
@@ -111,7 +116,6 @@ extension MenuVC: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, 
         //Katha Ebook
         }
 
-        
         Utility.menu_Hide(onViewController: self)
 
     }
