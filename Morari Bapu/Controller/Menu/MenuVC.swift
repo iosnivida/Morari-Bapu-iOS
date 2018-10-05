@@ -63,7 +63,9 @@ extension MenuVC: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, 
         }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
+      
+      Utility.menu_Hide(onViewController: self)
+
         if indexPath.row == 0{
             //Home
         }else if indexPath.row == 1{
@@ -85,6 +87,7 @@ extension MenuVC: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, 
         
         }else if indexPath.row == 7{
             //You Tube Channel
+          
           
           let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
           let vc = storyboard.instantiateViewController(withIdentifier: "WebViewVC") as! WebViewVC
@@ -116,7 +119,6 @@ extension MenuVC: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, 
         //Katha Ebook
         }
 
-        Utility.menu_Hide(onViewController: self)
 
     }
 }

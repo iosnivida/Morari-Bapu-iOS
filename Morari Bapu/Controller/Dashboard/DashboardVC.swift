@@ -9,9 +9,8 @@
 import UIKit
 import Alamofire
 import SwiftyJSON
-import CenteredCollectionView
 import Kingfisher
-
+import iCarousel
 
 class DashboardVC: UIViewController {
 
@@ -19,70 +18,37 @@ class DashboardVC: UIViewController {
     var arrSlider  = [JSON]()
     var arrHome  = [JSON]()
     
-    @IBOutlet weak var scrollView: UIScrollView!
-    @IBOutlet var cvSlider: UICollectionView!
+  @IBOutlet weak var lblSliderTitle: UILabel!
+  @IBOutlet weak var vwCarousel: iCarousel!
+  @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet var btnDown: UIButton!
     @IBOutlet weak var pageControl: UIPageControl!
     @IBOutlet weak var constraintHeightTableView: NSLayoutConstraint!
+  @IBOutlet weak var carouselHeight: NSLayoutConstraint!
   
   @IBOutlet weak var tblHome: UITableView!
   
-    var cellPercentWidth: CGFloat = 0.8
-    
-    // A reference to the `CenteredCollectionViewFlowLayout`.
-    // Must be aquired from the IBOutlet collectionView.
-    var centeredCollectionViewFlowLayout: CenteredCollectionViewFlowLayout!
-  
+  let screenSize: CGRect = UIScreen.main.bounds
+
     override func viewDidLoad() {
         super.viewDidLoad()
+
+      let screenHeight = screenSize.height
+
+      carouselHeight.constant = screenHeight - 160
+      self.view.layoutIfNeeded()
       
-        tblHome.tableFooterView = UIView.init(frame: .zero)
+        tblHome.tableFooterView =  UIView.init(frame: .zero)
         tblHome.layoutMargins = .zero
       
         tblHome.rowHeight = 500
         tblHome.estimatedRowHeight = UITableView.automaticDimension
       
-        if UIDevice.current.userInterfaceIdiom != .pad{
-            cellPercentWidth = 0.6
-            
-        }else{
-            cellPercentWidth = 0.9
-            
-        }
-        
         btnDown.imageColorChange(imageColor: UIColor.black)
         scrollView.isScrollEnabled = false
         pageControl.numberOfPages = 0
         
-        // Get the reference to the `CenteredCollectionViewFlowLayout` (REQURED STEP)
-        centeredCollectionViewFlowLayout = (cvSlider.collectionViewLayout as! CenteredCollectionViewFlowLayout)
-        
-        // Modify the collectionView's decelerationRate (REQURED STEP)
-        cvSlider.decelerationRate = UIScrollView.DecelerationRate.fast
-        
-        // Assign delegate and data source
-        cvSlider.delegate = self
-        cvSlider.dataSource = self
-        
-        // Configure the required item size (REQURED STEP)
-        centeredCollectionViewFlowLayout.itemSize = CGSize(
-            width: 250,
-            height: 500
-        )
-        
-        if UIDevice.current.userInterfaceIdiom != .pad{
-            centeredCollectionViewFlowLayout.minimumLineSpacing = 10
-            
-        }else{
-            centeredCollectionViewFlowLayout.minimumLineSpacing = 20
-            
-        }
-        // Configure the optional inter item spacing (OPTIONAL STEP)
-        
-        // Get rid of scrolling indicators
-        cvSlider.showsVerticalScrollIndicator = false
-        cvSlider.showsHorizontalScrollIndicator = false
-        
+      
         pageControl.numberOfPages = 0
         pageControl.currentPage = 0
         
@@ -94,12 +60,11 @@ class DashboardVC: UIViewController {
   override func viewDidLayoutSubviews() {
     super.viewDidLayoutSubviews()
     
-    print(constraintHeightTableView.constant)
-    
       self.constraintHeightTableView.constant = self.tblHome.contentSize.height
       self.view.layoutIfNeeded()
   
-    
+    print("TableView Height: \(constraintHeightTableView.constant)")
+
   }
     
     //MARK: Api Call
@@ -121,19 +86,31 @@ class DashboardVC: UIViewController {
                     self.arrSlider = jsonResponce!["data"].arrayValue
 
                     if self.arrSlider.count != 0{
-                        
+                      
+                      
                         DispatchQueue.main.async {
                             self.pageControl.numberOfPages = self.arrSlider.count
-                            self.cvSlider.reloadData()
+                        
+                          let title = self.arrSlider[0]
+                          
+                          if title["link"].stringValue.count != 0 {
+                            self.lblSliderTitle.text = "Video"
+                          }else{
+                            self.lblSliderTitle.text = "Image"
+                          }
+                          
+                          
+                          self.vwCarousel.type = iCarouselType.coverFlow2
+                          self.vwCarousel.centerItemWhenSelected = false
+                          self.vwCarousel.autoscroll=0.3;
+                            self.vwCarousel .reloadData()
                         }
                     }
                     else
                     {
                         
                         DispatchQueue.main.async {
-                            self.cvSlider.reloadData()
-                            Utility.collectionViewNoDataMessage(collectionView: self.cvSlider, message: "No records", textColor: UIColor.black)
-                            
+                          
                         }
                     }
                     
@@ -146,8 +123,10 @@ class DashboardVC: UIViewController {
     }
     
     func getHome(){
-        
-        WebServices().CallGlobalAPI(url: WebService_Dashboard_List,headers: [:], parameters: [:], HttpMethod: "POST", ProgressView: true) { ( _ jsonResponce:JSON? , _ strErrorMessage:String) in
+      
+      let param = ["page":"1"]
+      
+      WebServices().CallGlobalAPI(url: WebService_Dashboard_List,headers: [:], parameters: param as NSDictionary, HttpMethod: "POST", ProgressView: true) { ( _ jsonResponce:JSON? , _ strErrorMessage:String) in
             
             if(jsonResponce?.error != nil) {
                 
@@ -192,63 +171,14 @@ class DashboardVC: UIViewController {
     }
     
     @IBAction func swipeUp(_ sender: Any) {
-        
+      
+        tblHome.reloadData()
         scrollView.isScrollEnabled = true
 
         
     }
 }
 
-
-// MARK: CollectionView Delegate
-extension DashboardVC: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, UICollectionViewDataSource{
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    
-            return arrSlider.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SliderCollectionViewCell", for: indexPath) as! SliderCollectionViewCell
-            
-            let data = arrSlider[indexPath.row]
-      
-      if data["link"].stringValue.count == 0{
-            cell.lblTitle.text = "Image"
-      }else{
-            cell.lblTitle.text = "Video"
-      }
-      
-            let imgUrl = "\(BASE_URL_IMAGE)\(data["image"].stringValue)"
-        
-            let placeHolder = UIImage(named: "splashscreen")
-        
-            cell.imgPhotos.kf.indicatorType = .activity
-            cell.imgPhotos.kf.setImage(with: URL(string: imgUrl), placeholder: placeHolder, options: [.transition(ImageTransition.fade(1))])
-      
-      
-            return cell
-      
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-      
-    }
-    
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        print("Current centered index: \(String(describing: centeredCollectionViewFlowLayout.currentCenteredPage ?? nil))")
-        
-          pageControl.currentPage = centeredCollectionViewFlowLayout.currentCenteredPage!
-    }
-    
-    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
-        print("Current centered index: \(String(describing: centeredCollectionViewFlowLayout.currentCenteredPage ?? nil))")
-        
-      pageControl.currentPage = centeredCollectionViewFlowLayout.currentCenteredPage!
-    }
-    
-}
 
 //MARK TableView Delegate
 extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
@@ -278,7 +208,7 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
         
       cell.lblTitle.text = data["title"].stringValue
         cell.lblDuration.text = "Duration: \(data["video_duration"].stringValue)"
-      cell.lblDate.text = data["date"].stringValue
+      cell.lblDate.text = Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd-MM-yyyy")
       
       let placeHolder = UIImage(named: "youtube_placeholder")
       
@@ -293,6 +223,11 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
           cell.btnFavourite.setImage(UIImage(named: "unfavorite"), for: .normal)
         }
         
+        cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
+        cell.btnYoutube.addTarget(self, action: #selector(btnYoutube), for: UIControl.Event.touchUpInside)
+        cell.btnFavourite.addTarget(self, action: #selector(btnFavourite), for: UIControl.Event.touchUpInside)
+
+
         return cell
 
     }
@@ -304,15 +239,21 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
           fatalError("The dequeued cell is not an instance of MealTableViewCell.")
         }
         
-      cell.lblQuotes.text = data["quotes_english"].stringValue
-      cell.lblDate.text = data["date"].stringValue
-      cell.btnCategories.setTitle(data["list_heading"].stringValue, for: .normal)
+        cell.lblQuotes.text = data["quotes_english"].stringValue
+        cell.lblDate.text = Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd-MM-yyyy")
+        cell.btnCategories.setTitle(data["list_heading"].stringValue, for: .normal)
         
         if data["is_favourite"].boolValue == true{
           cell.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
         }else{
           cell.btnFavourite.setImage(UIImage(named: "unfavorite"), for: .normal)
         }
+        
+        cell.btnFavourite.addTarget(self, action: #selector(btnFavourite), for: UIControl.Event.touchUpInside)
+
+        cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
+
+        
         return cell
         
       } else{
@@ -323,10 +264,11 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
           fatalError("The dequeued cell is not an instance of MealTableViewCell.")
         }
         
-        cell.lblDay.text = data["from_date"].stringValue
+        
+        cell.lblDay.text = Utility.dateToString(dateStr: data["from_date"].stringValue, strDateFormat: "d")
         cell.lblTitle.text = data["title"].stringValue
-        cell.lblDate.text = data["from_date"].stringValue
-        cell.lblScheduleDate.text = "\(data["from_date"].stringValue) to \(data["to_date"].stringValue)"
+        cell.lblDate.text = Utility.dateToString(dateStr: data["from_date"].stringValue, strDateFormat: "MM,yyyy")
+        cell.lblScheduleDate.text = "\(Utility.dateToString(dateStr: data["from_date"].stringValue, strDateFormat: "dd-MM-yyyy")) to \(Utility.dateToString(dateStr: data["to_date"].stringValue, strDateFormat: "dd-MM-yyyy"))"
         cell.btnCategoryName.setTitle(data["list_heading"].stringValue, for: .normal)
         
         return cell
@@ -345,9 +287,147 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     
    
+  }
+  
+  @IBAction func btnShare(_ sender: UIButton) {
+    
+    let buttonPosition:CGPoint = sender.convert(CGPoint.zero, to:self.tblHome)
+    let indexPath = self.tblHome.indexPathForRow(at: buttonPosition)
+    
+    // text to share
+    let text = "https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
+    
+    // set up activity view controller
+    let textToShare = [ text ]
+    let activityViewController = UIActivityViewController(activityItems: textToShare, applicationActivities: nil)
+    activityViewController.popoverPresentationController?.sourceView = self.view // so that iPads won't crash
+    
+    // exclude some activity types from the list (optional)
+    activityViewController.excludedActivityTypes = [ UIActivity.ActivityType.airDrop, UIActivity.ActivityType.postToFacebook ]
+    
+    // present the view controller
+    
+    DispatchQueue.main.async {
+      self.present(activityViewController, animated: true, completion: nil)
+    }
+  }
+  
+  @IBAction func btnYoutube(_ sender: UIButton) {
+    
+    let buttonPosition:CGPoint = sender.convert(CGPoint.zero, to:self.tblHome)
+    let indexPath = self.tblHome.indexPathForRow(at: buttonPosition)
+    
+    let link = arrHome[indexPath!.row]
+    let youtubeLink = link["youtube_link"].url
+ 
+    DispatchQueue.main.async {
+      UIApplication.shared.open(youtubeLink!, options: [:])
+      }
     
   }
+  
+  @IBAction func btnFavourite(_ sender: UIButton) {
+    
+    let buttonPosition:CGPoint = sender.convert(CGPoint.zero, to:self.tblHome)
+    let indexPath = self.tblHome.indexPathForRow(at: buttonPosition)
+    
+    let data = arrHome[indexPath!.row]
+    let app_id = data["id"].stringValue
+    var favourite_for = String()
+    let favourite_id = data["id"].stringValue
+
+    
+    if data["youtube_link"].stringValue.count != 0{
+      //Youtube
+      favourite_for = "4"
+    }
+    else if data["quotes_english"].stringValue.count != 0{
+      //Quotes
+      favourite_for = "1"
+    } else{
+      // Upcoming
+      favourite_for = "6"
+    }
+    
+    
+    let paramater = ["app_id":app_id,
+                    "favourite_for":favourite_for,
+                    "favourite_id":favourite_id]
+    
+    WebServices().CallGlobalAPI(url: WebService_Favourite,headers: [:], parameters: paramater as NSDictionary, HttpMethod: "POST", ProgressView: true) { ( _ jsonResponce:JSON? , _ strErrorMessage:String) in
+      
+      if(jsonResponce?.error != nil) {
+        
+        var errorMess = jsonResponce?.error?.localizedDescription
+        errorMess = MESSAGE_Err_Service
+        Utility().showAlertMessage(vc: self, titleStr: "", messageStr: errorMess!)
+      }
+      else {
+        
+        if jsonResponce!["status"].stringValue == "true"{
+         self.getHome()
+        }
+        else {
+          Utility().showAlertMessage(vc: self, titleStr: "", messageStr: jsonResponce!["message"].stringValue)
+        }
+      }
+    }
+    
+  }
+  
 }
 
+extension DashboardVC : iCarouselDataSource, iCarouselDelegate{
+ 
+  func numberOfItems(in carousel: iCarousel) -> Int {
+     return arrSlider.count
+  }
+  
+  func carousel(_ carousel: iCarousel, viewForItemAt index: Int, reusing view: UIView?) -> UIView {
+    var itemView: UIImageView
+    if (view == nil)
+    {
+      let screenWidth = screenSize.width * 0.70
 
+      let screenHeight = screenSize.height
+
+      itemView = UIImageView(frame:CGRect(x:0, y:0, width:screenWidth, height:screenHeight - 160))
+      itemView.contentMode = .scaleAspectFit
+    }
+    else
+    {
+      itemView = view as! UIImageView;
+    }
+    
+    let image = arrSlider[index]
+    let placeHolder = UIImage(named: "placeholder_doc")
+    itemView.kf.setImage(with: URL(string: "\(BASE_URL_IMAGE)\(image["image"].stringValue)"), placeholder: placeHolder, options: [.transition(ImageTransition.fade(1))])
+    
+    return itemView
+  }
+  
+  func carouselCurrentItemIndexDidChange(_ carousel: iCarousel) {
+ 
+    if arrSlider.count != 0{
+      let title = arrSlider[carousel.currentItemIndex]
+      
+      if title["link"].stringValue.count != 0 {
+        lblSliderTitle.text = "Video"
+      }else{
+        lblSliderTitle.text = "Image"
+      }
+      
+      self.pageControl.currentPage = carousel.currentItemIndex
+    }
+    
+    
+  }
+  
+  private func carousel(carousel: iCarousel, didSelectItemAtIndex index: Int)
+  {
+    print(index)
+  }
+  
+  
+}
 

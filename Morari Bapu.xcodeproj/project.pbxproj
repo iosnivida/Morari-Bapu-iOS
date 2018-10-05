@@ -20,7 +20,6 @@
 		07094A8A2161DAB400B5B08C /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07094A882161DAB400B5B08C /* Utility.swift */; };
 		07094A8D2161DB6500B5B08C /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07094A8C2161DB6500B5B08C /* Reachability.swift */; };
 		070AD48121661A14007E6149 /* WebViewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 070AD48021661A14007E6149 /* WebViewVC.swift */; };
-		070B71F62163C31400EF085E /* SliderCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 070B71F52163C31300EF085E /* SliderCollectionViewCell.swift */; };
 		07443DF42165220C00F39CCD /* YoutubeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07443DF32165220C00F39CCD /* YoutubeTableViewCell.swift */; };
 		07443DF62165223400F39CCD /* QuotesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07443DF52165223400F39CCD /* QuotesTableViewCell.swift */; };
 		07443DF82165228900F39CCD /* UpcomingKathaTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07443DF72165228900F39CCD /* UpcomingKathaTableViewCell.swift */; };
@@ -74,7 +73,6 @@
 		07094A882161DAB400B5B08C /* Utility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
 		07094A8C2161DB6500B5B08C /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		070AD48021661A14007E6149 /* WebViewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewVC.swift; sourceTree = "<group>"; };
-		070B71F52163C31300EF085E /* SliderCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderCollectionViewCell.swift; sourceTree = "<group>"; };
 		07443DF32165220C00F39CCD /* YoutubeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YoutubeTableViewCell.swift; sourceTree = "<group>"; };
 		07443DF52165223400F39CCD /* QuotesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuotesTableViewCell.swift; sourceTree = "<group>"; };
 		07443DF72165228900F39CCD /* UpcomingKathaTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpcomingKathaTableViewCell.swift; sourceTree = "<group>"; };
@@ -249,7 +247,6 @@
 			isa = PBXGroup;
 			children = (
 				07094A522161C32E00B5B08C /* DashboardVC.swift */,
-				070B71F52163C31300EF085E /* SliderCollectionViewCell.swift */,
 				07443DF32165220C00F39CCD /* YoutubeTableViewCell.swift */,
 				07443DF52165223400F39CCD /* QuotesTableViewCell.swift */,
 				07443DF72165228900F39CCD /* UpcomingKathaTableViewCell.swift */,
@@ -505,7 +502,6 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Morari Bapu/Pods-Morari Bapu-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
-				"${BUILT_PRODUCTS_DIR}/CenteredCollectionView/CenteredCollectionView.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
 				"${BUILT_PRODUCTS_DIR}/IQKeyboardManagerSwift/IQKeyboardManagerSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/Kingfisher/Kingfisher.framework",
@@ -514,7 +510,7 @@
 				"${BUILT_PRODUCTS_DIR}/SwiftyGif/SwiftyGif.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyUserDefaults/SwiftyUserDefaults.framework",
-				"${BUILT_PRODUCTS_DIR}/Toast-Swift/Toast_Swift.framework",
+				"${BUILT_PRODUCTS_DIR}/iCarousel/iCarousel.framework",
 				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -522,7 +518,6 @@
 			);
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CenteredCollectionView.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IQKeyboardManagerSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Kingfisher.framework",
@@ -531,7 +526,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyGif.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyUserDefaults.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Toast_Swift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/iCarousel.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -571,7 +566,6 @@
 				07443DF62165223400F39CCD /* QuotesTableViewCell.swift in Sources */,
 				076BA35C21632A48004BD807 /* KathaChopaiVC.swift in Sources */,
 				070AD48121661A14007E6149 /* WebViewVC.swift in Sources */,
-				070B71F62163C31400EF085E /* SliderCollectionViewCell.swift in Sources */,
 				07094A8D2161DB6500B5B08C /* Reachability.swift in Sources */,
 				07443DF82165228900F39CCD /* UpcomingKathaTableViewCell.swift in Sources */,
 				07094A532161C32E00B5B08C /* DashboardVC.swift in Sources */,

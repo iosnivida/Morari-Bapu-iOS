@@ -52,6 +52,8 @@ let WebService_Other_Video_Media                    = "\(BASE_URL)Kathavideo/App
 
 let WebService_Sankirtan_Media_Audio                = "\(BASE_URL)Sankirtan/App_GetSankirtan"
 
+//Favourite
+let WebService_Favourite                            = "\(BASE_URL)MyFavourite/App_Favourite"
 
 
 //MARK:- COLOR CONSTANT

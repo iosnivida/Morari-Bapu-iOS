@@ -16,7 +16,7 @@ class YoutubeTableViewCell: UITableViewCell {
   @IBOutlet weak var lblDuration: UILabel!
   @IBOutlet weak var lblDate: UILabel!
   @IBOutlet weak var imgVideo: UIImageView!
-  @IBOutlet weak var btnYoutube: UIImageView!
+  @IBOutlet weak var btnYoutube: UIButton!
   @IBOutlet weak var btnShare: UIButton!
   @IBOutlet weak var btnFavourite: UIButton!
   

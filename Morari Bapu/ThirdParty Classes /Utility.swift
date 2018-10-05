@@ -165,14 +165,13 @@ class Utility: NSObject
         
         if dateStr != ""{
             let dateFormatter = DateFormatter()
-            dateFormatter.locale = Locale(identifier: "en_US_POSIX") // edited
-            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+            dateFormatter.dateFormat = "yyyy-MM-dd"
             dateFormatter.timeZone = TimeZone.current
             
             let date = dateFormatter.date(from:dateStr)!
             //dateFormatter.dateFormat = "dd-MM-yyyy hh:mm:a"
             dateFormatter.dateFormat = strDateFormat
-            dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+            dateFormatter.timeZone = TimeZone.current
             
             strConverted = dateFormatter.string(from:date)
         }else{
@@ -346,12 +345,12 @@ class Utility: NSObject
     static func stringDateToDate(date: String) -> Date {
         
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+        dateFormatter.dateFormat = "yyyy-MM-dd"
         dateFormatter.timeZone = TimeZone.current
         
         let dt = dateFormatter.date(from: date)
-        dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+        dateFormatter.timeZone = TimeZone.current
+        dateFormatter.dateFormat = "yyyy-MM-dd"
         
         let dateStr =  dateFormatter.string(from: dt!)
         
@@ -434,12 +433,20 @@ class Utility: NSObject
     static func menu_Show(onViewController: UIViewController) {
         DispatchQueue.main.async {
             //let objVC = self.storyboard?.instantiateViewController(withIdentifier: "LoaderVC") as! LoaderVC
-            let storyboardCustom : UIStoryboard = UIStoryboard(name: Custome_Storyboard, bundle: nil)
-            let objVC = storyboardCustom.instantiateViewController(withIdentifier: "MenuVC") as? MenuVC
-            objVC?.modalPresentationStyle = .overCurrentContext
-            objVC?.modalTransitionStyle = .crossDissolve
-            onViewController.present(objVC!, animated: false, completion: nil)
-            //UIApplication.shared.delegate?.window!?.rootViewController?.present(objVC, animated: true, completion: nil)
+//            let storyboardCustom : UIStoryboard = UIStoryboard(name: Custome_Storyboard, bundle: nil)
+//            let objVC = storyboardCustom.instantiateViewController(withIdentifier: "MenuVC") as? MenuVC
+//            objVC?.modalPresentationStyle = .overCurrentContext
+//            objVC?.modalTransitionStyle = .crossDissolve
+//            onViewController.present(objVC!, animated: false, completion: nil)
+//            //UIApplication.shared.delegate?.window!?.rootViewController?.present(objVC, animated: true, completion: nil)
+          
+          let storyBoard : UIStoryboard = UIStoryboard(name: Custome_Storyboard, bundle: nil)
+          let vc = storyBoard.instantiateViewController(withIdentifier: "MenuVC");
+          let navCntr = UINavigationController.init(rootViewController: vc);
+          
+          let window = UIApplication.shared.keyWindow;
+          window?.rootViewController?.present(navCntr, animated: true, completion: nil);
+          
         }
     }
     
