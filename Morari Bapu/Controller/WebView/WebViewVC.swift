@@ -10,14 +10,16 @@ import UIKit
 import SVProgressHUD
 
 enum WebViewScreen {
-  case Privacy
-  case YouTubeChannel
+  
+  case Moraribapu_Youtube_Channel
+  case Sangeet_Ni_Duniya_Online_Shop
+  
 }
 
 
 class WebViewVC: UIViewController {
 
-  var screenDirection = WebViewScreen.Privacy
+  var screenDirection = WebViewScreen.Moraribapu_Youtube_Channel
   @IBOutlet weak var webView: UIWebView!
   
     override func viewDidLoad() {
@@ -26,27 +28,25 @@ class WebViewVC: UIViewController {
       webView.isOpaque = false;
       webView.backgroundColor = UIColor.clear
       
-      if screenDirection == .Privacy{
+      if screenDirection == .Moraribapu_Youtube_Channel{
         
         DispatchQueue.main.async {
           let url = URL(string: "http://doggietheapp.com/doggieprivacy.html")
           self.webView.loadRequest(NSURLRequest(url: url!) as URLRequest)
         }
       }
-      else if screenDirection == .YouTubeChannel{
-        
+      else if screenDirection == .Sangeet_Ni_Duniya_Online_Shop{
         DispatchQueue.main.async {
-          let url = URL(string: "http://doggietheapp.com/doggieprivacy.html")
+          let url = URL(string: "http://www.sangeetniduniya.net/")
           self.webView.loadRequest(NSURLRequest(url: url!) as URLRequest)
         }
       }
-      
-        // Do any additional setup after loading the view.
-    }
+  }
   
   //MARK : Button Event
   @IBAction func btnBack(_ sender: Any) {
-    self.navigationController?.popViewController(animated:true)
+    //self.navigationController?.popViewController(animated:true)
+    self.dismiss(animated: true, completion: nil)
   }
   
   @IBAction func backToHome(_ sender: Any) {

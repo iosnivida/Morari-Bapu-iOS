@@ -55,6 +55,8 @@ let WebService_Sankirtan_Media_Audio                = "\(BASE_URL)Sankirtan/App_
 //Favourite
 let WebService_Favourite                            = "\(BASE_URL)MyFavourite/App_Favourite"
 
+let WebService_Katha_EBook                          = "\(BASE_URL)KathaEBook/App_GetKathaEBook"
+
 
 //MARK:- COLOR CONSTANT
 let color_Green_Light: UIColor                     = UIColor(red: 105.0/255.0, green: 192.0/255.0, blue: 164.0/255.0, alpha: 1.0)

@@ -10,74 +10,6 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--MenuVC-->
-        <scene sceneID="JVO-Gz-Mgh">
-            <objects>
-                <viewController storyboardIdentifier="MenuVC" id="P8j-BY-Wl4" customClass="MenuVC" customModule="Morari_Bapu" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="NmC-TH-QPY">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Cqu-Aa-Pby">
-                                <rect key="frame" x="0.0" y="41" width="375" height="626"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="K7E-tw-NFZ">
-                                    <size key="itemSize" width="70" height="70"/>
-                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                    <inset key="sectionInset" minX="20" minY="0.0" maxX="20" maxY="0.0"/>
-                                </collectionViewFlowLayout>
-                                <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="MenuCollectionViewCell" id="y2m-lb-tvD" customClass="MenuCollectionViewCell" customModule="Morari_Bapu" customModuleProvider="target">
-                                        <rect key="frame" x="20" y="0.0" width="70" height="70"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
-                                            <rect key="frame" x="0.0" y="0.0" width="70" height="70"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="menu_1" translatesAutoresizingMaskIntoConstraints="NO" id="w8p-dw-ubQ">
-                                                    <rect key="frame" x="0.0" y="0.0" width="70" height="70"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="70" id="4Fy-ev-Srr"/>
-                                                        <constraint firstAttribute="width" constant="70" id="HdG-48-u6c"/>
-                                                    </constraints>
-                                                </imageView>
-                                            </subviews>
-                                        </view>
-                                        <constraints>
-                                            <constraint firstItem="w8p-dw-ubQ" firstAttribute="centerY" secondItem="y2m-lb-tvD" secondAttribute="centerY" id="WII-Ts-v4e"/>
-                                            <constraint firstItem="w8p-dw-ubQ" firstAttribute="centerX" secondItem="y2m-lb-tvD" secondAttribute="centerX" id="far-wL-w1d"/>
-                                        </constraints>
-                                        <size key="customSize" width="70" height="70"/>
-                                        <connections>
-                                            <outlet property="imgMenu" destination="w8p-dw-ubQ" id="Rie-ab-nh2"/>
-                                        </connections>
-                                    </collectionViewCell>
-                                </cells>
-                                <connections>
-                                    <outlet property="dataSource" destination="P8j-BY-Wl4" id="nOy-Vv-lca"/>
-                                    <outlet property="delegate" destination="P8j-BY-Wl4" id="lRb-9D-cze"/>
-                                </connections>
-                            </collectionView>
-                        </subviews>
-                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
-                        <gestureRecognizers/>
-                        <constraints>
-                            <constraint firstItem="jJ3-di-YH2" firstAttribute="bottom" secondItem="Cqu-Aa-Pby" secondAttribute="bottom" id="FHi-2J-nah"/>
-                            <constraint firstItem="Cqu-Aa-Pby" firstAttribute="leading" secondItem="jJ3-di-YH2" secondAttribute="leading" id="Zb1-eK-M6k"/>
-                            <constraint firstItem="Cqu-Aa-Pby" firstAttribute="trailing" secondItem="jJ3-di-YH2" secondAttribute="trailing" id="nWz-IS-yDU"/>
-                            <constraint firstItem="Cqu-Aa-Pby" firstAttribute="top" secondItem="jJ3-di-YH2" secondAttribute="top" constant="21" id="qY1-XT-HaU"/>
-                        </constraints>
-                        <viewLayoutGuide key="safeArea" id="jJ3-di-YH2"/>
-                    </view>
-                    <connections>
-                        <outlet property="cvMenu" destination="Cqu-Aa-Pby" id="NUf-dM-fj2"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="znY-1a-8Q1" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-1551.2" y="-741.67916041979015"/>
-        </scene>
         <!--LoaderVC-->
         <scene sceneID="gCu-ee-UNh">
             <objects>
@@ -145,6 +77,74 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6eB-v3-XO7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-794.39999999999998" y="-740.7796101949026"/>
+        </scene>
+        <!--MenuVC-->
+        <scene sceneID="rT4-Gq-PxZ">
+            <objects>
+                <viewController storyboardIdentifier="MenuVC" id="A98-zR-eY0" customClass="MenuVC" customModule="Morari_Bapu" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="kNa-ai-nHb">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="lsI-34-BKw">
+                                <rect key="frame" x="0.0" y="41" width="375" height="626"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="YPS-ON-yvG">
+                                    <size key="itemSize" width="70" height="70"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="20" minY="0.0" maxX="20" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="MenuCollectionViewCell" id="gCw-6S-Hp2" customClass="MenuCollectionViewCell" customModule="Morari_Bapu" customModuleProvider="target">
+                                        <rect key="frame" x="20" y="0.0" width="70" height="70"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                            <rect key="frame" x="0.0" y="0.0" width="70" height="70"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="menu_1" translatesAutoresizingMaskIntoConstraints="NO" id="Tsy-Md-vRy">
+                                                    <rect key="frame" x="0.0" y="0.0" width="70" height="70"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="70" id="OLY-Su-Jzx"/>
+                                                        <constraint firstAttribute="width" constant="70" id="Og0-9g-y0p"/>
+                                                    </constraints>
+                                                </imageView>
+                                            </subviews>
+                                        </view>
+                                        <constraints>
+                                            <constraint firstItem="Tsy-Md-vRy" firstAttribute="centerX" secondItem="gCw-6S-Hp2" secondAttribute="centerX" id="ftJ-G2-MiL"/>
+                                            <constraint firstItem="Tsy-Md-vRy" firstAttribute="centerY" secondItem="gCw-6S-Hp2" secondAttribute="centerY" id="qHa-xy-WE4"/>
+                                        </constraints>
+                                        <size key="customSize" width="70" height="70"/>
+                                        <connections>
+                                            <outlet property="imgMenu" destination="Tsy-Md-vRy" id="hkr-TM-Xwl"/>
+                                        </connections>
+                                    </collectionViewCell>
+                                </cells>
+                                <connections>
+                                    <outlet property="dataSource" destination="A98-zR-eY0" id="jVw-OQ-f2b"/>
+                                    <outlet property="delegate" destination="A98-zR-eY0" id="j1m-Rk-yhY"/>
+                                </connections>
+                            </collectionView>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <gestureRecognizers/>
+                        <constraints>
+                            <constraint firstItem="lsI-34-BKw" firstAttribute="top" secondItem="JWt-Rd-4eE" secondAttribute="top" constant="21" id="6gs-Az-OPV"/>
+                            <constraint firstItem="lsI-34-BKw" firstAttribute="leading" secondItem="JWt-Rd-4eE" secondAttribute="leading" id="Dwv-wz-Oc6"/>
+                            <constraint firstItem="lsI-34-BKw" firstAttribute="trailing" secondItem="JWt-Rd-4eE" secondAttribute="trailing" id="m5p-CP-I4p"/>
+                            <constraint firstItem="JWt-Rd-4eE" firstAttribute="bottom" secondItem="lsI-34-BKw" secondAttribute="bottom" id="p5X-on-Bg1"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="JWt-Rd-4eE"/>
+                    </view>
+                    <connections>
+                        <outlet property="cvMenu" destination="lsI-34-BKw" id="fCU-FT-EnG"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="DIT-AE-d6g" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-54" y="-718"/>
         </scene>
     </scenes>
     <resources>

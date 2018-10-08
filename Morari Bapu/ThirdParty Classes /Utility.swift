@@ -428,25 +428,24 @@ class Utility: NSObject
         let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
         return emailTest.evaluate(with: testStr)
     }
+  
+  static func getDeviceID() -> String {
     
+   return UIDevice.current.identifierForVendor!.uuidString
+
+  }
+  
     //MARK: DropDown (Show Hide)
     static func menu_Show(onViewController: UIViewController) {
         DispatchQueue.main.async {
-            //let objVC = self.storyboard?.instantiateViewController(withIdentifier: "LoaderVC") as! LoaderVC
-//            let storyboardCustom : UIStoryboard = UIStoryboard(name: Custome_Storyboard, bundle: nil)
-//            let objVC = storyboardCustom.instantiateViewController(withIdentifier: "MenuVC") as? MenuVC
-//            objVC?.modalPresentationStyle = .overCurrentContext
-//            objVC?.modalTransitionStyle = .crossDissolve
-//            onViewController.present(objVC!, animated: false, completion: nil)
-//            //UIApplication.shared.delegate?.window!?.rootViewController?.present(objVC, animated: true, completion: nil)
-          
-          let storyBoard : UIStoryboard = UIStoryboard(name: Custome_Storyboard, bundle: nil)
-          let vc = storyBoard.instantiateViewController(withIdentifier: "MenuVC");
-          let navCntr = UINavigationController.init(rootViewController: vc);
-          
-          let window = UIApplication.shared.keyWindow;
-          window?.rootViewController?.present(navCntr, animated: true, completion: nil);
-          
+            let storyboardCustom : UIStoryboard = UIStoryboard(name: Custome_Storyboard, bundle: nil)
+            let objVC = storyboardCustom.instantiateViewController(withIdentifier: "MenuVC") as? MenuVC
+          objVC!.providesPresentationContextTransitionStyle = true
+          objVC!.definesPresentationContext = true
+          objVC!.modalPresentationStyle = UIModalPresentationStyle.overCurrentContext;
+          objVC!.view.backgroundColor = UIColor.init(white: 0.4, alpha: 0.8)
+          onViewController.present(objVC!, animated: false, completion: nil)
+  
         }
     }
     
@@ -627,6 +626,8 @@ extension UITableView{
         self.layer.shadowRadius = 2.0
     }
 }
+
+
 
 struct Device {
     // iDevice detection code

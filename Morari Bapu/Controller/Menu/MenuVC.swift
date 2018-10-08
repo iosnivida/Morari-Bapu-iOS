@@ -13,17 +13,21 @@ import IQKeyboardManagerSwift
 import Kingfisher
 import SwiftyUserDefaults
 
+protocol MenuNavigationDelegate: class {
+  func SelectedMenu(ScreenName: String?)
+}
+
+
 class MenuVC: UIViewController {
     
     @IBOutlet var cvMenu: UICollectionView!
     
     var arrMenu = NSArray()
-    
-    
+    weak var delegate: MenuNavigationDelegate?
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
-      
     }
  
    
@@ -64,7 +68,6 @@ extension MenuVC: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, 
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
       
-      Utility.menu_Hide(onViewController: self)
 
         if indexPath.row == 0{
             //Home
@@ -87,13 +90,13 @@ extension MenuVC: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, 
         
         }else if indexPath.row == 7{
             //You Tube Channel
-          
-          
+//
+
           let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
           let vc = storyboard.instantiateViewController(withIdentifier: "WebViewVC") as! WebViewVC
-          vc.screenDirection = .YouTubeChannel
-          navigationController?.pushViewController(vc, animated: true)
-        
+          vc.screenDirection = .Moraribapu_Youtube_Channel
+          self.present(vc, animated: false, completion: nil)
+
         }else if indexPath.row == 8{
         //Live Katha Video
         

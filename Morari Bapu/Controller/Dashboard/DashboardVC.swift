@@ -17,7 +17,9 @@ class DashboardVC: UIViewController {
 
     var arrSlider  = [JSON]()
     var arrHome  = [JSON]()
-    
+    var currentPageNo = Int()
+    var totalPageNo = Int()
+  
   @IBOutlet weak var lblSliderTitle: UILabel!
   @IBOutlet weak var vwCarousel: iCarousel!
   @IBOutlet weak var scrollView: UIScrollView!
@@ -33,6 +35,8 @@ class DashboardVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+      currentPageNo = 1
+      
       let screenHeight = screenSize.height
 
       carouselHeight.constant = screenHeight - 160
@@ -82,7 +86,7 @@ class DashboardVC: UIViewController {
             else {
                 
                 if jsonResponce!["status"].stringValue == "true"{
-                    self.getHome()
+                  self.getHome(pageNo: self.currentPageNo)
                     self.arrSlider = jsonResponce!["data"].arrayValue
 
                     if self.arrSlider.count != 0{
@@ -122,9 +126,9 @@ class DashboardVC: UIViewController {
             }
     }
     
-    func getHome(){
+  func getHome(pageNo:Int){
       
-      let param = ["page":"1"]
+      let param = ["page":"\(pageNo)"]
       
       WebServices().CallGlobalAPI(url: WebService_Dashboard_List,headers: [:], parameters: param as NSDictionary, HttpMethod: "POST", ProgressView: true) { ( _ jsonResponce:JSON? , _ strErrorMessage:String) in
             
@@ -142,9 +146,10 @@ class DashboardVC: UIViewController {
 
                   if self.arrHome.count != 0{
                     DispatchQueue.main.async {
+                      
+                      self.totalPageNo = jsonResponce!["total_page"].intValue
                       self.tblHome.reloadData()
                       Utility.tableNoDataMessage(tableView: self.tblHome, message: "",messageColor:UIColor.white, displayMessage: .Center)
-                      
                     }
                   }
                   else{
@@ -167,7 +172,7 @@ class DashboardVC: UIViewController {
     @IBAction func btnMenu(_ sender: Any) {
         
         Utility.menu_Show(onViewController: self)
-        
+      
     }
     
     @IBAction func swipeUp(_ sender: Any) {
@@ -286,9 +291,37 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     
+    let data = arrHome[indexPath.row]
+    
+    if data["youtube_link"].stringValue.count != 0{
+      
+      
+    }
+    else if data["quotes_english"].stringValue.count != 0{
+      
+  
+      
+    } else{
+      
+ 
+    }
    
   }
   
+  func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+    
+    if indexPath.row == arrHome.count - 1 {
+   
+      if totalPageNo < currentPageNo{
+       
+        print("Page Load....")
+        
+        self.getHome(pageNo: currentPageNo + 1)
+      }
+    }
+  }
+  
+
   @IBAction func btnShare(_ sender: UIButton) {
     
     let buttonPosition:CGPoint = sender.convert(CGPoint.zero, to:self.tblHome)
@@ -332,9 +365,8 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
     let indexPath = self.tblHome.indexPathForRow(at: buttonPosition)
     
     let data = arrHome[indexPath!.row]
-    let app_id = data["id"].stringValue
     var favourite_for = String()
-    let favourite_id = data["id"].stringValue
+    let favourite_id = data["is_favourite"].stringValue
 
     
     if data["youtube_link"].stringValue.count != 0{
@@ -350,7 +382,7 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
     }
     
     
-    let paramater = ["app_id":app_id,
+    let paramater = ["app_id":Utility.getDeviceID(),
                     "favourite_for":favourite_for,
                     "favourite_id":favourite_id]
     
@@ -365,7 +397,7 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
       else {
         
         if jsonResponce!["status"].stringValue == "true"{
-         self.getHome()
+         self.getHome(pageNo: 1)
         }
         else {
           Utility().showAlertMessage(vc: self, titleStr: "", messageStr: jsonResponce!["message"].stringValue)
