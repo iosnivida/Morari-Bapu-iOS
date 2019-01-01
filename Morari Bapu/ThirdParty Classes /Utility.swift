@@ -437,16 +437,16 @@ class Utility: NSObject
   
     //MARK: DropDown (Show Hide)
     static func menu_Show(onViewController: UIViewController) {
-        DispatchQueue.main.async {
-            let storyboardCustom : UIStoryboard = UIStoryboard(name: Custome_Storyboard, bundle: nil)
-            let objVC = storyboardCustom.instantiateViewController(withIdentifier: "MenuVC") as? MenuVC
-          objVC!.providesPresentationContextTransitionStyle = true
-          objVC!.definesPresentationContext = true
-          objVC!.modalPresentationStyle = UIModalPresentationStyle.overCurrentContext;
-          objVC!.view.backgroundColor = UIColor.init(white: 0.4, alpha: 0.8)
-          onViewController.present(objVC!, animated: false, completion: nil)
-  
-        }
+      DispatchQueue.main.async {
+        //let objVC = self.storyboard?.instantiateViewController(withIdentifier: "LoaderVC") as! LoaderVC
+        let storyboardCustom : UIStoryboard = UIStoryboard(name: Custome_Storyboard, bundle: nil)
+        let objVC = storyboardCustom.instantiateViewController(withIdentifier: "MenuVC") as? MenuVC
+        objVC?.modalPresentationStyle = .overCurrentContext
+        objVC?.modalTransitionStyle = .crossDissolve
+        objVC?.delegate = (onViewController as! MenuNavigationDelegate)
+        onViewController.present(objVC!, animated: false, completion: nil)
+        //UIApplication.shared.delegate?.window!?.rootViewController?.present(objVC, animated: true, completion: nil)
+      }
     }
     
     static func menu_Hide(onViewController: UIViewController) {
@@ -454,6 +454,23 @@ class Utility: NSObject
             onViewController.dismiss(animated: false, completion: nil)
         }
     }
+  
+  //MARK: Hanuman Chalisha (Show Hide)
+  static func hanuman_chalisha_Show(onViewController: UIViewController) {
+    DispatchQueue.main.async {
+      //let objVC = self.storyboard?.instantiateViewController(withIdentifier: "LoaderVC") as! LoaderVC
+      let storyboardCustom : UIStoryboard = UIStoryboard(name: Custome_Storyboard, bundle: nil)
+      let objVC = storyboardCustom.instantiateViewController(withIdentifier: "HanumanChalishaVC") as? HanumanChalishaVC
+      onViewController.present(objVC!, animated: false, completion: nil)
+      //UIApplication.shared.delegate?.window!?.rootViewController?.present(objVC, animated: true, completion: nil)
+    }
+  }
+  
+  static func hanuman_chalisha_Hide(onViewController: UIViewController) {
+    DispatchQueue.main.async {
+      onViewController.dismiss(animated: false, completion: nil)
+    }
+  }
    
 
 }

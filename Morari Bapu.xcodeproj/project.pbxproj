@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0702110C21DB8AFB006B6472 /* EventsDetailsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0702110B21DB8AFB006B6472 /* EventsDetailsVC.swift */; };
+		0702110E21DB8B0A006B6472 /* EventsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0702110D21DB8B0A006B6472 /* EventsVC.swift */; };
+		0702111021DB8B1C006B6472 /* EventsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0702110F21DB8B1C006B6472 /* EventsCollectionViewCell.swift */; };
+		0702111321DBA879006B6472 /* FaqVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0702111221DBA879006B6472 /* FaqVC.swift */; };
+		0702111521DBA88C006B6472 /* FaqTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0702111421DBA88C006B6472 /* FaqTableViewCell.swift */; };
+		0708F70A216D132A00A4B079 /* HanumanChalishaVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0708F709216D132A00A4B079 /* HanumanChalishaVC.swift */; };
 		07094A512161C32E00B5B08C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07094A502161C32E00B5B08C /* AppDelegate.swift */; };
 		07094A532161C32E00B5B08C /* DashboardVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07094A522161C32E00B5B08C /* DashboardVC.swift */; };
 		07094A562161C32E00B5B08C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 07094A542161C32E00B5B08C /* Main.storyboard */; };
@@ -61,6 +67,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0702110B21DB8AFB006B6472 /* EventsDetailsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsDetailsVC.swift; sourceTree = "<group>"; };
+		0702110D21DB8B0A006B6472 /* EventsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsVC.swift; sourceTree = "<group>"; };
+		0702110F21DB8B1C006B6472 /* EventsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsCollectionViewCell.swift; sourceTree = "<group>"; };
+		0702111221DBA879006B6472 /* FaqVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaqVC.swift; sourceTree = "<group>"; };
+		0702111421DBA88C006B6472 /* FaqTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaqTableViewCell.swift; sourceTree = "<group>"; };
+		0708F709216D132A00A4B079 /* HanumanChalishaVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HanumanChalishaVC.swift; sourceTree = "<group>"; };
 		07094A4D2161C32E00B5B08C /* Morari Bapu.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Morari Bapu.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		07094A502161C32E00B5B08C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		07094A522161C32E00B5B08C /* DashboardVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardVC.swift; sourceTree = "<group>"; };
@@ -137,6 +149,41 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0702110921DB8ABA006B6472 /* Events */ = {
+			isa = PBXGroup;
+			children = (
+				0702110D21DB8B0A006B6472 /* EventsVC.swift */,
+				0702110F21DB8B1C006B6472 /* EventsCollectionViewCell.swift */,
+				0702110A21DB8AD4006B6472 /* Events Details */,
+			);
+			path = Events;
+			sourceTree = "<group>";
+		};
+		0702110A21DB8AD4006B6472 /* Events Details */ = {
+			isa = PBXGroup;
+			children = (
+				0702110B21DB8AFB006B6472 /* EventsDetailsVC.swift */,
+			);
+			path = "Events Details";
+			sourceTree = "<group>";
+		};
+		0702111121DBA857006B6472 /* FAQ */ = {
+			isa = PBXGroup;
+			children = (
+				0702111221DBA879006B6472 /* FaqVC.swift */,
+				0702111421DBA88C006B6472 /* FaqTableViewCell.swift */,
+			);
+			path = FAQ;
+			sourceTree = "<group>";
+		};
+		0708F708216D12FF00A4B079 /* Hanuman Chalisha */ = {
+			isa = PBXGroup;
+			children = (
+				0708F709216D132A00A4B079 /* HanumanChalishaVC.swift */,
+			);
+			path = "Hanuman Chalisha";
+			sourceTree = "<group>";
+		};
 		07094A442161C32E00B5B08C = {
 			isa = PBXGroup;
 			children = (
@@ -196,7 +243,9 @@
 		07094A812161DA5C00B5B08C /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				0702110921DB8ABA006B6472 /* Events */,
 				07A7551E21625A1C00793232 /* Menu */,
+				0708F708216D12FF00A4B079 /* Hanuman Chalisha */,
 				07094A902161DC2C00B5B08C /* Dashboard */,
 				076BA35A21632A14004BD807 /* Katha Chopai  */,
 				0709A8DE216B256F00371E06 /* Katha Chopai Details */,
@@ -286,6 +335,7 @@
 			children = (
 				0709A8D3216A809600371E06 /* SettingsVC.swift */,
 				0709A8D5216A80C300371E06 /* SettingsTableViewCell.swift */,
+				0702111121DBA857006B6472 /* FAQ */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -563,6 +613,7 @@
 				"${BUILT_PRODUCTS_DIR}/SwiftyGif/SwiftyGif.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyUserDefaults/SwiftyUserDefaults.framework",
+				"${BUILT_PRODUCTS_DIR}/Toast-Swift/Toast_Swift.framework",
 				"${BUILT_PRODUCTS_DIR}/iCarousel/iCarousel.framework",
 				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
@@ -579,6 +630,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyGif.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyUserDefaults.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Toast_Swift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/iCarousel.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 			);
@@ -616,6 +668,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0708F70A216D132A00A4B079 /* HanumanChalishaVC.swift in Sources */,
 				0709A8D4216A809600371E06 /* SettingsVC.swift in Sources */,
 				0709A8DB216B1D5800371E06 /* KathaChopaiTableViewCell.swift in Sources */,
 				0709A8D9216B1A4000371E06 /* QuotesVC.swift in Sources */,
@@ -624,19 +677,24 @@
 				076BA35C21632A48004BD807 /* KathaChopaiVC.swift in Sources */,
 				070AD48121661A14007E6149 /* WebViewVC.swift in Sources */,
 				07094A8D2161DB6500B5B08C /* Reachability.swift in Sources */,
+				0702111521DBA88C006B6472 /* FaqTableViewCell.swift in Sources */,
 				0709A8D1216A6EB500371E06 /* KathaEBookTableViewCell.swift in Sources */,
 				07443DF82165228900F39CCD /* UpcomingKathaTableViewCell.swift in Sources */,
 				07094A532161C32E00B5B08C /* DashboardVC.swift in Sources */,
 				07A755202162658B00793232 /* MenuCollectionViewCell.swift in Sources */,
+				0702111021DB8B1C006B6472 /* EventsCollectionViewCell.swift in Sources */,
 				07094A592161C32E00B5B08C /* Morari_Bapu.xcdatamodeld in Sources */,
+				0702111321DBA879006B6472 /* FaqVC.swift in Sources */,
 				07094A8A2161DAB400B5B08C /* Utility.swift in Sources */,
 				0709A8CE216A6B7000371E06 /* KathaEBookVC.swift in Sources */,
 				07094A892161DAB400B5B08C /* GlobalConstants.swift in Sources */,
 				07A7551D21625A1800793232 /* MenuVC.swift in Sources */,
 				07443DF42165220C00F39CCD /* YoutubeTableViewCell.swift in Sources */,
 				0709A8DD216B255700371E06 /* KathaChopaiDetailsVC.swift in Sources */,
+				0702110C21DB8AFB006B6472 /* EventsDetailsVC.swift in Sources */,
 				07094A852161DA9200B5B08C /* WebServices.swift in Sources */,
 				07094A512161C32E00B5B08C /* AppDelegate.swift in Sources */,
+				0702110E21DB8B0A006B6472 /* EventsVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -813,7 +871,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = RMQN2WYMSF;
+				DEVELOPMENT_TEAM = BPETUWNAYE;
 				INFOPLIST_FILE = "Morari Bapu/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -833,7 +891,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = RMQN2WYMSF;
+				DEVELOPMENT_TEAM = BPETUWNAYE;
 				INFOPLIST_FILE = "Morari Bapu/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (

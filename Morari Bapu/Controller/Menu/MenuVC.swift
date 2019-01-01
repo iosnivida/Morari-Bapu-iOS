@@ -27,11 +27,20 @@ class MenuVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+      
+    
         
     }
- 
+
+  override func viewWillDisappear(_ animated: Bool) {
+    
+    Utility.menu_Hide(onViewController: self)
+
+  }
    
 }
+
+
 
 // MARK: CollectionView Delegate
 extension MenuVC: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, UICollectionViewDataSource{
@@ -70,58 +79,78 @@ extension MenuVC: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, 
       
 
         if indexPath.row == 0{
-            //Home
-        }else if indexPath.row == 1{
-            //Katha Chopai
-        }else if indexPath.row == 2{
-        //Ram Charitra Manas
-        
-        }else if indexPath.row == 3{
-        //Upcoing Katha
-        
-        }else if indexPath.row == 4{
-            //Quotes
-        
-        }else if indexPath.row == 5{
-            //Daily Katha Clip
-        
-        }else if indexPath.row == 6{
-            //Live Katha Audio
-        
-        }else if indexPath.row == 7{
-            //You Tube Channel
-//
+          //Katha Chopai
+          delegate?.SelectedMenu(ScreenName: "Home")
+          
+        }
+        else if indexPath.row == 1{
+          //Katha Chopai
+          delegate?.SelectedMenu(ScreenName: "Katha Chopai")
 
-          let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
-          let vc = storyboard.instantiateViewController(withIdentifier: "WebViewVC") as! WebViewVC
-          vc.screenDirection = .Moraribapu_Youtube_Channel
-          self.present(vc, animated: false, completion: nil)
+        }else if indexPath.row == 2{
+          //Ram Charitra Manas
+          delegate?.SelectedMenu(ScreenName: "Ram Charitra Manas")
+
+        }else if indexPath.row == 3{
+          //Upcoing Katha
+          delegate?.SelectedMenu(ScreenName: "Upcoing Katha")
+
+        }else if indexPath.row == 4{
+          //Quotes
+          delegate?.SelectedMenu(ScreenName: "Quotes")
+
+        }else if indexPath.row == 5{
+          //Daily Katha Clip
+          delegate?.SelectedMenu(ScreenName: "Daily Katha Clip")
+
+        }else if indexPath.row == 6{
+          //Live Katha Audio
+          delegate?.SelectedMenu(ScreenName: "Live Katha Audio")
+
+        }else if indexPath.row == 7{
+          //You Tube Channel
+          delegate?.SelectedMenu(ScreenName: "You Tube Channel")
 
         }else if indexPath.row == 8{
-        //Live Katha Video
-        
+          //Live Katha Video
+          delegate?.SelectedMenu(ScreenName: "Live Katha Video")
+
         }
         else if indexPath.row == 9{
-            //Media
-        
-        }else if indexPath.row == 10{
-            //What's New
-        }else if indexPath.row == 11{
-            //Sangeet Ni Duniya
-        
-        }else if indexPath.row == 12{
-            //Setting
-        }else if indexPath.row == 13{
-            //Search
-        }else if indexPath.row == 14{
-            //Favourites
-        }else if indexPath.row == 15{
-            //Events
-        
-        }else if indexPath.row == 16{
-        //Katha Ebook
-        }
+          //Media
+          delegate?.SelectedMenu(ScreenName: "Media")
 
+        }else if indexPath.row == 10{
+          //What's New
+          delegate?.SelectedMenu(ScreenName: "What's New")
+
+        }else if indexPath.row == 11{
+          //Sangeet Ni Duniya
+          delegate?.SelectedMenu(ScreenName: "Sangeet Ni Duniya")
+
+        }else if indexPath.row == 12{
+          //Setting
+          delegate?.SelectedMenu(ScreenName: "Setting")
+
+        }else if indexPath.row == 13{
+          //Search
+          delegate?.SelectedMenu(ScreenName: "Search")
+
+        }else if indexPath.row == 14{
+          //Favourites
+          delegate?.SelectedMenu(ScreenName: "Favourites")
+
+        }else if indexPath.row == 15{
+          //Events
+          delegate?.SelectedMenu(ScreenName: "Events")
+
+        }else if indexPath.row == 16{
+          //Katha Ebook
+          delegate?.SelectedMenu(ScreenName: "Katha Ebook")
+
+        }
+      
+      Utility.menu_Hide(onViewController: self)
 
     }
 }

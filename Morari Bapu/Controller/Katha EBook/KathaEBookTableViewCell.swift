@@ -14,7 +14,12 @@ class KathaEBookTableViewCell: UITableViewCell {
   @IBOutlet weak var lblDescription1: UILabel!
   @IBOutlet weak var lblDescription2: UILabel!
   @IBOutlet weak var lblDescription3: UILabel!
-
+  @IBOutlet weak var btnEnglish: UIButton!
+  @IBOutlet weak var btnHindi: UIButton!
+  @IBOutlet weak var btnGujarati: UIButton!
+  
+  
+  
   override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
