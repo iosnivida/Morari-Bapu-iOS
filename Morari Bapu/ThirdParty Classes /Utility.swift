@@ -163,7 +163,7 @@ class Utility: NSObject
         
         var strConverted = String()
         
-        if dateStr != ""{
+        if dateStr != "" && dateStr != "0000-00-00"{
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd"
             dateFormatter.timeZone = TimeZone.current

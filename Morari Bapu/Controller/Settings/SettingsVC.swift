@@ -12,6 +12,7 @@ import Toast_Swift
 
 enum SettingScreenIdentify {
   case Settings
+  case About_Us
   case Media
   case Other_Videos
   case Whats_New
@@ -35,6 +36,8 @@ class SettingsVC: UIViewController {
       
       if screenDirection == .Settings{
         lblTitle.text = "Settings"
+      }else if screenDirection == .About_Us{
+        lblTitle.text = "About Us"
       }else if screenDirection == .Media{
         lblTitle.text = "Media"
       }else if screenDirection == .Other_Videos{
@@ -79,6 +82,8 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
     
     if screenDirection == .Settings{
       return 6
+    }else  if screenDirection == .About_Us{
+      return 1
     }else if screenDirection == .Media{
       return 7
     }else if screenDirection == .Other_Videos{
@@ -120,6 +125,10 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
         
       }
 
+    }else if screenDirection == .About_Us{
+      if indexPath.row == 0{
+        cell.lblTitle.text = "About Bapu"
+      }
     }else if screenDirection == .Media{
       if indexPath.row == 0{
         cell.lblTitle.text = "Photos"
@@ -188,13 +197,46 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     if screenDirection == .Settings{
       if indexPath.row == 0{
+        //About Us
+        
+        let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "SettingsVC") as! SettingsVC
+        vc.screenDirection = .About_Us
+        navigationController?.pushViewController(vc, animated:  true)
         
       }else if indexPath.row == 1{
+        //About The App
+        
+        let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "AboutTheAppVC") as! AboutTheAppVC
+        vc.strTitle = "About The App"
+        navigationController?.pushViewController(vc, animated:  true)
         
       }else if indexPath.row == 2{
+        //Feedback
+        
+        let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "FeedbackVC") as! FeedbackVC
+        navigationController?.pushViewController(vc, animated:  true)
         
       }else if indexPath.row == 3{
-        
+       
+        DispatchQueue.main.async {
+          // text to share
+          let text = "This message has been sent via the Morari Bapu App.\nYou can download it too from this link: https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
+          
+          // set up activity view controller
+          let textToShare = [ text ]
+          let activityViewController = UIActivityViewController(activityItems: textToShare, applicationActivities: nil)
+          activityViewController.popoverPresentationController?.sourceView = self.view // so that iPads won't crash
+          
+          // exclude some activity types from the list (optional)
+          activityViewController.excludedActivityTypes = [ UIActivity.ActivityType.airDrop, UIActivity.ActivityType.postToFacebook ]
+          
+            self.present(activityViewController, animated: true, completion: nil)
+          
+        }
+       
       }else if indexPath.row == 4{
         self.view.makeToast("Coming Soon", duration: 3.0, position: .bottom)
       }
@@ -203,6 +245,13 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
         let vc = storyboard.instantiateViewController(withIdentifier: "FaqVC") as! FaqVC
         navigationController?.pushViewController(vc, animated:  true)
       }
+      
+    }else if screenDirection == .About_Us{
+      //About Us
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "AboutTheAppVC") as! AboutTheAppVC
+      vc.strTitle = "About Bapu"
+      navigationController?.pushViewController(vc, animated:  true)
       
     }else if screenDirection == .Media{
     }else if screenDirection == .Other_Videos{
