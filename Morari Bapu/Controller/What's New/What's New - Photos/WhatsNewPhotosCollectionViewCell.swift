@@ -9,5 +9,6 @@
 import UIKit
 
 class WhatsNewPhotosCollectionViewCell: UICollectionViewCell {
-    
+  @IBOutlet weak var imgPhotos: UIImageView!
+  
 }

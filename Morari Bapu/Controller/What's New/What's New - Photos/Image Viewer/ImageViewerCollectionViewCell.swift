@@ -9,5 +9,9 @@
 import UIKit
 
 class ImageViewerCollectionViewCell: UICollectionViewCell {
-    
+  
+  @IBOutlet var imgView: UIImageView!
+  @IBOutlet var btnDownload: UIButton!
+  @IBOutlet var btnShare: UIButton!
+
 }

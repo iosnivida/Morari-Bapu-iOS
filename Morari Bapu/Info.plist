@@ -25,6 +25,10 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Image saved in your photos</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Image saved in your photos</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>MontserratAlternates-Light.otf</string>

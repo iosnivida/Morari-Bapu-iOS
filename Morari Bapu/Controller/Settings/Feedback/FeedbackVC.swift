@@ -90,9 +90,10 @@ class FeedbackVC: UIViewController {
     }
     else {
       self.view.endEditing(true)
+
       
       let param = ["name":txtName.text!,
-                   "contact_no" :txtContactNo.text!,
+                   "mobile" :txtContactNo.text!,
                    "email" :txtEmail.text!,
                    "comment" :txtComments.text!] as [String : Any]
       
@@ -109,14 +110,14 @@ class FeedbackVC: UIViewController {
         }
         else {
           
-          if jsonResponce!["status"].stringValue == "Success"{
+          if jsonResponce!["status"].stringValue == "true"{
             
             self.txtName.text = ""
             self.txtComments.text = ""
             self.txtContactNo.text = ""
             self.txtEmail.text = ""
             
-            self.view.makeToast("Feedback submitted successfully")
+            self.view.makeToast(jsonResponce!["message"].stringValue)
             
           }
           else if jsonResponce!["status"].stringValue == "Error"{

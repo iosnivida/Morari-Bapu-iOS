@@ -10,6 +10,12 @@ import UIKit
 
 class WhatsNewTextTableViewCell: UITableViewCell {
 
+  
+  @IBOutlet weak var lblCreatedBy: UILabel!
+  @IBOutlet weak var lblDescription: UILabel!
+  @IBOutlet weak var lblTitle: UILabel!
+  @IBOutlet weak var btnShare: UIButton!
+  
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

@@ -53,17 +53,33 @@ let WebService_Other_Video_Media                    = "\(BASE_URL)Kathavideo/App
 let WebService_Sankirtan_Media_Audio                = "\(BASE_URL)Sankirtan/App_GetSankirtan"
 
 
-let WebService_Feedback                             = "\(BASE_URL)Sankirtan/App_GetSankirtan"
+let WebService_Feedback                             = "\(BASE_URL)Feedback/App_Add_Feedback"
 
 //Settings
 let WebService_FAQ                                  = "\(BASE_URL)FAQ/App_GetFAQ"
 
 
+//What's New
+let WebService_Whats_New_Text                       = "\(BASE_URL)NewText/App_GetText"
+let WebService_Whats_New_Video                      = "\(BASE_URL)NewVideo/App_GetVideo"
+let WebService_Whats_New_Audio                      = "\(BASE_URL)NewAudio/App_GetAudio"
+let WebService_Whats_New_Photos                     = "\(BASE_URL)NewImage/App_GetImage"
+
+
+//Media
+let WebService_Media_Photos                         = "\(BASE_URL)BapuDarshan/App_GetBapuDarshan"
+let WebService_Media_Video                          = "\(BASE_URL)Kathavideo/App_GetOtherVideo"
+let WebService_Media_Sayri                          = "\(BASE_URL)Bapufavouriteshayari/App_GetBapufavouriteshayari"
+let WebService_Media_Thought                        = "\(BASE_URL)BapuThought/App_GetBapuThought"
+let WebService_Media_Articles                        = "\(BASE_URL)moraribapu/Article/App_GetArticle"
+
 //Favourite
 let WebService_Favourite                            = "\(BASE_URL)MyFavourite/App_Favourite"
-
 let WebService_Katha_EBook                          = "\(BASE_URL)KathaEBook/App_GetKathaEBook"
 
+//Read Unread Count
+let WebService_Menu_Counts                          = "\(BASE_URL)HomeApi/App_GetMenuCount"
+let WebService_Media_Counts                         = "\(BASE_URL)HomeApi/App_GetMediaCount"
 
 //MARK:- COLOR CONSTANT
 let color_Green_Light: UIColor                     = UIColor(red: 105.0/255.0, green: 192.0/255.0, blue: 164.0/255.0, alpha: 1.0)

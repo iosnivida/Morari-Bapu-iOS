@@ -471,6 +471,28 @@ class Utility: NSObject
       onViewController.dismiss(animated: false, completion: nil)
     }
   }
+  
+  
+  static func image_Viewer_Show(onViewController: UIViewController, indexPosition: IndexPath, images:[JSON]) {
+    DispatchQueue.main.async {
+      //let objVC = self.storyboard?.instantiateViewController(withIdentifier: "LoaderVC") as! LoaderVC
+      let storyboardCustom : UIStoryboard = UIStoryboard(name: Custome_Storyboard, bundle: nil)
+      let objVC = storyboardCustom.instantiateViewController(withIdentifier: "ImageViewerVC") as? ImageViewerVC
+      objVC?.modalPresentationStyle = .overCurrentContext
+      objVC?.modalTransitionStyle = .crossDissolve
+      objVC?.indexPosition = indexPosition
+      objVC?.arrImages = images
+      onViewController.present(objVC!, animated: false, completion: nil)
+      //UIApplication.shared.delegate?.window!?.rootViewController?.present(objVC, animated: true, completion: nil)
+    }
+  }
+  
+  static func image_Viewer_Hide(onViewController: UIViewController) {
+    DispatchQueue.main.async {
+      onViewController.dismiss(animated: false, completion: nil)
+    }
+  }
+  
    
 
 }

@@ -11,6 +11,7 @@ import UIKit
 class SettingsTableViewCell: UITableViewCell {
 
   
+  @IBOutlet weak var lblUnReadCount: UILabel!
   @IBOutlet weak var lblTitle: UILabel!
   
   override func awakeFromNib() {

@@ -22,13 +22,17 @@ class MenuVC: UIViewController {
     
     @IBOutlet var cvMenu: UICollectionView!
     
-    var arrMenu = NSArray()
+     var arrMenu  = [String:JSON]()
+  
     weak var delegate: MenuNavigationDelegate?
-
+  
     override func viewDidLoad() {
         super.viewDidLoad()
       
     
+      DispatchQueue.main.async {
+        self.getUnreadCounter()
+      }
         
     }
 
@@ -37,6 +41,50 @@ class MenuVC: UIViewController {
     Utility.menu_Hide(onViewController: self)
 
   }
+  
+  //MARK: Api Call
+  func getUnreadCounter(){
+    
+    let param = ["id" : "1",
+                 "app_id":Utility.getDeviceID()] as NSDictionary
+    
+    WebServices().CallGlobalAPI(url: WebService_Menu_Counts,headers: [:], parameters: param, HttpMethod: "POST", ProgressView: false) { ( _ jsonResponce:JSON? , _ strErrorMessage:String) in
+      
+      if(jsonResponce?.error != nil) {
+        
+        var errorMess = jsonResponce?.error?.localizedDescription
+        errorMess = MESSAGE_Err_Service
+        Utility().showAlertMessage(vc: self, titleStr: "", messageStr: errorMess!)
+      }
+      else {
+        
+        if jsonResponce!["status"].stringValue == "true"{
+          
+          self.arrMenu = jsonResponce!["data"].dictionaryValue
+          
+          if self.arrMenu.count != 0{
+            
+            DispatchQueue.main.async {
+              self.cvMenu .reloadData()
+            }
+          }
+          else
+          {
+            
+            DispatchQueue.main.async {
+              self.cvMenu .reloadData()
+              
+            }
+          }
+          
+        }
+        else {
+          Utility().showAlertMessage(vc: self, titleStr: "", messageStr: jsonResponce!["message"].stringValue)
+        }
+      }
+    }
+  }
+  
    
 }
 
@@ -51,9 +99,116 @@ extension MenuVC: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, 
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MenuCollectionViewCell", for: indexPath) as! MenuCollectionViewCell
-            
-            cell.imgMenu.image = UIImage(named: "menu_\(indexPath.row+1)")
+      let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MenuCollectionViewCell", for: indexPath) as! MenuCollectionViewCell
+      
+      cell.imgMenu.image = UIImage(named: "menu_\(indexPath.row+1)")
+      
+      
+      cell.lblCounter.layer.masksToBounds = true
+      cell.lblCounter.layer.borderWidth = 1.5
+      cell.lblCounter.layer.borderColor = UIColor.white.cgColor
+      cell.lblCounter.layer.cornerRadius = cell.lblCounter.frame.height / 2
+      
+      if indexPath.row == 1{
+        //Katha Chopai
+        
+        cell.lblCounter.isHidden = false
+        
+        if arrMenu["KathaChopai"]?.intValue ?? 0 < 99{
+            cell.lblCounter.text = arrMenu["KathaChopai"]?.stringValue
+        }else{
+            cell.lblCounter.text = " 99+ "
+        }
+        
+        
+        
+      }else if indexPath.row == 2{
+        //Ram Charitra Manas
+        cell.lblCounter.isHidden = false
+       
+        if arrMenu["Ramcharit"]?.intValue ?? 0 < 99{
+          cell.lblCounter.text = arrMenu["Ramcharit"]?.stringValue
+        }else{
+          cell.lblCounter.text = " 99+ "
+        }
+        
+      }else if indexPath.row == 3{
+        //Upcoing Katha
+          cell.lblCounter.isHidden = false
+        
+        if arrMenu["UpcomingKatha"]?.intValue ?? 0 < 99{
+          cell.lblCounter.text = arrMenu["UpcomingKatha"]?.stringValue
+        }else{
+          cell.lblCounter.text = " 99+ "
+        }
+        
+        
+      }else if indexPath.row == 4{
+        //Quotes
+          cell.lblCounter.isHidden = false
+        
+        if arrMenu["Quotes"]?.intValue ?? 0 < 99{
+          cell.lblCounter.text = arrMenu["Quotes"]?.stringValue
+        }else{
+          cell.lblCounter.text = " 99+ "
+        }
+        
+      }else if indexPath.row == 5{
+        //Daily Katha Clip
+        cell.lblCounter.isHidden = false
+        if arrMenu["DailyKathaVideo"]?.intValue ?? 0 < 99{
+          cell.lblCounter.text = arrMenu["DailyKathaVideo"]?.stringValue
+        }else{
+          cell.lblCounter.text = " 99+ "
+        }
+      }
+      else if indexPath.row == 9{
+        //Media
+        
+        cell.lblCounter.isHidden = false
+        if arrMenu["Media"]?.intValue ?? 0 < 99{
+          cell.lblCounter.text = arrMenu["Media"]?.stringValue
+        }else{
+          cell.lblCounter.text = " 99+ "
+        }
+        
+      }else if indexPath.row == 10{
+        //What's New
+        
+          cell.lblCounter.isHidden = false
+        
+        if arrMenu["WhatsNew"]?.intValue ?? 0 < 99{
+          cell.lblCounter.text = arrMenu["WhatsNew"]?.stringValue
+        }else{
+          cell.lblCounter.text = " 99+ "
+        }
+        
+      }else if indexPath.row == 15{
+        //Events
+      
+          cell.lblCounter.isHidden = false
+        if arrMenu["Event"]?.intValue ?? 0 < 99{
+          cell.lblCounter.text = arrMenu["Event"]?.stringValue
+        }else{
+          cell.lblCounter.text = " 99+ "
+        }
+      
+      }else if indexPath.row == 16{
+        //Katha Ebook
+      
+          cell.lblCounter.isHidden = false
+      
+        if arrMenu["KathaEBook"]?.intValue ?? 0 < 99{
+          cell.lblCounter.text = arrMenu["KathaEBook"]?.stringValue
+        }else{
+          cell.lblCounter.text = " 99+ "
+        }
+        
+      }else{
+        cell.lblCounter.isHidden = true
+      }
+      
+      
         
             return cell
     
