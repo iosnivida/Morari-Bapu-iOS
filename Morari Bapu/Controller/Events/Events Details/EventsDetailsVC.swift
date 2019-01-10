@@ -84,10 +84,17 @@ extension EventsDetailsVC: MenuNavigationDelegate{
       
     }else if ScreenName == "Quotes"{
       //Quotes
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "KathaChopaiVC") as! KathaChopaiVC
+      vc.screenDirection = .Quotes
+      navigationController?.pushViewController(vc, animated:  true)
       
     }else if ScreenName == "Daily Katha Clip"{
       //Daily Katha Clip
-      
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "WhatsNewVideoVC") as! WhatsNewVideoVC
+      vc.screenDirection = .Daily_Katha_Clip
+      navigationController?.pushViewController(vc, animated:  true)
       
     }else if ScreenName == "Live Katha Audio"{
       //Live Katha Audio

@@ -224,7 +224,7 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
       let placeHolder = UIImage(named: "youtube_placeholder")
       
       cell.imgVideo.kf.indicatorType = .activity
-      cell.imgVideo.kf.setImage(with: data["video_image"].url, placeholder: placeHolder, options: [.transition(ImageTransition.fade(1))])
+      cell.imgVideo.kf.setImage(with: URL(string: "\(BASE_URL_IMAGE)\(data["video_image"].stringValue)"), placeholder: placeHolder, options: [.transition(ImageTransition.fade(1))])
       
       cell.btnMoveToCatrgoryLink.setTitle(data["list_heading"].stringValue, for: .normal)
         
@@ -497,10 +497,17 @@ extension DashboardVC: MenuNavigationDelegate{
       
     }else if ScreenName == "Quotes"{
       //Quotes
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "KathaChopaiVC") as! KathaChopaiVC
+      vc.screenDirection = .Quotes
+      navigationController?.pushViewController(vc, animated:  true)
       
     }else if ScreenName == "Daily Katha Clip"{
       //Daily Katha Clip
-      
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "WhatsNewVideoVC") as! WhatsNewVideoVC
+      vc.screenDirection = .Daily_Katha_Clip
+      navigationController?.pushViewController(vc, animated:  true)
       
     }else if ScreenName == "Live Katha Audio"{
       //Live Katha Audio

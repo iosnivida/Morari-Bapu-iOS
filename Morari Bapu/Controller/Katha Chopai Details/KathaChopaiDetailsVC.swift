@@ -19,6 +19,7 @@ class KathaChopaiDetailsVC: UIViewController {
   @IBOutlet weak var lblDescription1: UILabel!
   @IBOutlet weak var lblDescription2: UILabel!
   @IBOutlet weak var lblDescription3: UILabel!
+  @IBOutlet weak var lblDescription4: UILabel!
 
   var arrKathaDetails = [String:JSON]()
   var strTitle = String()
@@ -30,20 +31,31 @@ class KathaChopaiDetailsVC: UIViewController {
       
       if lblTitle.text == "Katha Chopai"{
        
-        lblSubTitle.text = arrKathaDetails["title"]!.stringValue
-        lblDate.text = Utility.dateToString(dateStr: arrKathaDetails["from_date"]!.stringValue, strDateFormat: "dd MMM yyyy")
-        lblDescription1.text = arrKathaDetails["katha_english"]!.stringValue
+        lblSubTitle.text = "\(arrKathaDetails["title"]!.stringValue)-\(arrKathaDetails["title_no"]!.stringValue)"
+        lblDate.text = Utility.dateToString(dateStr: arrKathaDetails["to_date"]?.stringValue ?? "", strDateFormat: "dd MMM yyyy")
+        lblDescription1.text = arrKathaDetails["katha_gujarati"]!.stringValue
         lblDescription2.text = arrKathaDetails["katha_hindi"]!.stringValue
-        lblDescription3.text = arrKathaDetails["description"]!.stringValue
+        lblDescription3.text = arrKathaDetails["katha_english"]!.stringValue
+        lblDescription4.text = arrKathaDetails["description"]!.stringValue
 
-      }else{
+      }else if lblTitle.text == "Ram Charit Manas"{
+        
+        lblSubTitle.text = "\(arrKathaDetails["title"]!.stringValue)-\(arrKathaDetails["title_no"]!.stringValue)"
+        lblDate.text = Utility.dateToString(dateStr: arrKathaDetails["date"]?.stringValue ?? "", strDateFormat: "dd MMM yyyy")
+        lblDescription1.text = arrKathaDetails["katha_gujarati"]!.stringValue
+        lblDescription2.text = arrKathaDetails["katha_hindi"]!.stringValue
+        lblDescription3.text = arrKathaDetails["katha_english"]!.stringValue
+        lblDescription4.text = arrKathaDetails["description"]!.stringValue
+        
+      }
+      else{
         
         lblSubTitle.text = arrKathaDetails["title"]!.stringValue
-        lblDate.text = Utility.dateToString(dateStr: arrKathaDetails["date"]!.stringValue, strDateFormat: "dd MMM yyyy")
-        lblDescription1.text = arrKathaDetails["katha_english"]!.stringValue
-        lblDescription2.text = arrKathaDetails["katha_hindi"]!.stringValue
-        lblDescription3.text = arrKathaDetails["description"]!.stringValue
-   
+        lblDate.text = Utility.dateToString(dateStr: arrKathaDetails["quotes_date"]?.stringValue ?? "", strDateFormat: "dd MMM yyyy")
+        lblDescription1.text = arrKathaDetails["quotes_gujarati"]!.stringValue
+        lblDescription2.text = arrKathaDetails["quotes_hindi"]!.stringValue
+        lblDescription3.text = arrKathaDetails["quotes_english"]!.stringValue
+
       }
       
     }
@@ -55,5 +67,124 @@ class KathaChopaiDetailsVC: UIViewController {
   
   @IBAction func backToHome(_ sender: Any) {
     self.navigationController?.popToRootViewController(animated: true)
+  }
+  
+  @IBAction func btnMenu(_ sender: Any) {
+    Utility.menu_Show(onViewController: self)
+    
+  }
+  
+  @IBAction func btnHanumanChalisha(_ sender: Any) {
+    Utility.hanuman_chalisha_Show(onViewController: self)
+    
+  }
+}
+
+//MARK: Menu Navigation Delegate
+extension KathaChopaiDetailsVC: MenuNavigationDelegate{
+  
+  func SelectedMenu(ScreenName: String?) {
+    
+    if ScreenName == "Home"{
+      //Home
+      self.navigationController?.popToRootViewController(animated: true)
+      
+    }else if ScreenName == "Katha Chopai"{
+      //Katha Chopai
+      
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "KathaChopaiVC") as! KathaChopaiVC
+      vc.screenDirection = .Katha_Chopai
+      navigationController?.pushViewController(vc, animated:  true)
+      
+    }else if ScreenName == "Ram Charitra Manas"{
+      //Ram Charitra Manas
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "KathaChopaiVC") as! KathaChopaiVC
+      vc.screenDirection = .Ram_Charit_Manas
+      navigationController?.pushViewController(vc, animated:  true)
+      
+    }else if ScreenName == "Upcoing Katha"{
+      //Upcoing Katha
+      
+    }else if ScreenName == "Quotes"{
+      //Quotes
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "KathaChopaiVC") as! KathaChopaiVC
+      vc.screenDirection = .Quotes
+      navigationController?.pushViewController(vc, animated:  true)
+      
+    }else if ScreenName == "Daily Katha Clip"{
+      //Daily Katha Clip
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "WhatsNewVideoVC") as! WhatsNewVideoVC
+      vc.screenDirection = .Daily_Katha_Clip
+      navigationController?.pushViewController(vc, animated:  true)
+      
+    }else if ScreenName == "Live Katha Audio"{
+      //Live Katha Audio
+      
+    }else if ScreenName == "You Tube Channel"{
+      //You Tube Channel
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "WebViewVC") as! WebViewVC
+      vc.screenDirection = .Moraribapu_Youtube_Channel
+      vc.strTitle = "Morari Bapu Youtube channel"
+      navigationController?.pushViewController(vc, animated:  true)
+      
+    }else if ScreenName == "Live Katha Video"{
+      //Live Katha Video
+      
+    }
+    else if ScreenName == "Media"{
+      //Media
+      
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "SettingsVC") as! SettingsVC
+      vc.screenDirection = .Media
+      navigationController?.pushViewController(vc, animated:  true)
+      
+      
+    }else if ScreenName == "What's New"{
+      //What's New
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "SettingsVC") as! SettingsVC
+      vc.screenDirection = .Whats_New
+      navigationController?.pushViewController(vc, animated:  true)
+      
+    }else if ScreenName == "Sangeet Ni Duniya"{
+      //Sangeet Ni Duniya
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "WebViewVC") as! WebViewVC
+      vc.screenDirection = .Sangeet_Ni_Duniya_Online_Shop
+      vc.strTitle = "Sangeet Ni Duniya Online Shop"
+      navigationController?.pushViewController(vc, animated:  true)
+      
+    }else if ScreenName == "Setting"{
+      //Setting
+      
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "SettingsVC") as! SettingsVC
+      vc.screenDirection = .Settings
+      navigationController?.pushViewController(vc, animated:  true)
+      
+    }else if ScreenName == "Search"{
+      //Search
+    }else if ScreenName == "Favourites"{
+      //Favourites
+    }else if ScreenName == "Events"{
+      //Events
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "EventsVC") as! EventsVC
+      navigationController?.pushViewController(vc, animated:  true)
+      
+    }else if ScreenName == "Katha Ebook"{
+      //Katha Ebook
+      
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "KathaEBookVC") as! KathaEBookVC
+      navigationController?.pushViewController(vc, animated:  true)
+      
+    }
   }
 }

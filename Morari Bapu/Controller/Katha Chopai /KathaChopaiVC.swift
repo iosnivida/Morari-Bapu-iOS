@@ -13,6 +13,8 @@ import Alamofire
 enum KathaChopaiScreenIdentify {
   case Katha_Chopai
   case Ram_Charit_Manas
+  case Quotes
+
 }
 
 class KathaChopaiVC: UIViewController {
@@ -22,7 +24,6 @@ class KathaChopaiVC: UIViewController {
   @IBOutlet weak var lblTitle: UILabel!
 
   var arrKathaChopia : [JSON] = []
-  var arrRamCharitManas : [JSON] = []
   
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,12 +35,21 @@ class KathaChopaiVC: UIViewController {
       tblKathaChopai.estimatedRowHeight = UITableView.automaticDimension
       
       if screenDirection == .Katha_Chopai{
+        //Katha Chopai
+
         lblTitle.text = "Katha Chopai"
         getKathaChopai()
-      }else{
+      }else if screenDirection == .Ram_Charit_Manas{
         //Ram Charit Manas
+
         lblTitle.text = "Ram Charit Manas"
-        getRamCharitManas()
+        getKathaChopai()
+      }
+      else{
+        //Quotes
+        
+        lblTitle.text = "Quotes"
+        getKathaChopai()
       }
       
   }
@@ -51,7 +61,21 @@ class KathaChopaiVC: UIViewController {
                  "app_id":Utility.getDeviceID(),
                  "favourite_for":"1"] as NSDictionary
     
-    WebServices().CallGlobalAPI(url: WebService_Chopai_List,headers: [:], parameters: param, HttpMethod: "POST", ProgressView: true) { ( _ jsonResponce:JSON? , _ strErrorMessage:String) in
+    var api_Url = String()
+    
+    if screenDirection == .Katha_Chopai{
+      //Katha Chopai
+      api_Url = WebService_Chopai_List
+    }else if screenDirection == .Ram_Charit_Manas{
+      //Ram Charit Manas
+      api_Url = WebService_Ram_Charit_Manas_List
+    }
+    else{
+      //Quotes
+      api_Url = WebService_Quotes_List
+    }
+    
+    WebServices().CallGlobalAPI(url: api_Url,headers: [:], parameters: param, HttpMethod: "POST", ProgressView: true) { ( _ jsonResponce:JSON? , _ strErrorMessage:String) in
       
       if(jsonResponce?.error != nil) {
         
@@ -89,49 +113,6 @@ class KathaChopaiVC: UIViewController {
     }
   }
   
-  func getRamCharitManas(){
-    
-    let param = ["page" : "1",
-                 "app_id":Utility.getDeviceID(),
-                 "favourite_for":"1"] as NSDictionary
-    
-    WebServices().CallGlobalAPI(url: WebService_Ram_Charit_Manas_List,headers: [:], parameters: param, HttpMethod: "POST", ProgressView: true) { ( _ jsonResponce:JSON? , _ strErrorMessage:String) in
-      
-      if(jsonResponce?.error != nil) {
-        
-        var errorMess = jsonResponce?.error?.localizedDescription
-        errorMess = MESSAGE_Err_Service
-        Utility().showAlertMessage(vc: self, titleStr: "", messageStr: errorMess!)
-      }
-      else {
-        
-        if jsonResponce!["status"].stringValue == "true"{
-          self.arrRamCharitManas = jsonResponce!["data"].arrayValue
-          
-          if self.arrRamCharitManas.count != 0{
-            DispatchQueue.main.async {
-              
-              Utility.tableNoDataMessage(tableView: self.tblKathaChopai, message: "",messageColor:UIColor.white, displayMessage: .Center)
-              
-              self.tblKathaChopai .reloadData()
-            }
-          }
-          else
-          {
-            
-            DispatchQueue.main.async {
-              self.tblKathaChopai.reloadData()
-              Utility.tableNoDataMessage(tableView: self.tblKathaChopai, message: "No records",messageColor:UIColor.white, displayMessage: .Center)
-            }
-          }
-          
-        }
-        else {
-          Utility().showAlertMessage(vc: self, titleStr: "", messageStr: jsonResponce!["message"].stringValue)
-        }
-      }
-    }
-  }
   
   //MARK: Button Event
   @IBAction func btnMenu(_ sender: Any) {
@@ -143,6 +124,14 @@ class KathaChopaiVC: UIViewController {
     Utility.hanuman_chalisha_Show(onViewController: self)
 
   }
+  
+  @IBAction func btnBack(_ sender: Any) {
+    self.navigationController?.popViewController(animated:true)
+  }
+  
+  @IBAction func backToHome(_ sender: Any) {
+    self.navigationController?.popToRootViewController(animated: true)
+  }
 }
 
 //MARK TableView Delegate
@@ -153,13 +142,7 @@ extension KathaChopaiVC : UITableViewDelegate, UITableViewDataSource{
   }
   
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    
-    if screenDirection == .Katha_Chopai{
       return arrKathaChopia.count
-    }else{
-      //Ram Charit Manas
-      return arrRamCharitManas.count
-    }
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -170,33 +153,31 @@ extension KathaChopaiVC : UITableViewDelegate, UITableViewDataSource{
     guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? KathaChopaiTableViewCell  else {
       fatalError("The dequeued cell is not an instance of MealTableViewCell.")
     }
-    
-    if screenDirection == .Katha_Chopai{
-      
+  
       let data = arrKathaChopia[indexPath.row]
       
-      cell.lblTitle.text = data["title"].stringValue
-      cell.lblDate.text = Utility.dateToString(dateStr: data["from_date"].stringValue, strDateFormat: "dd MMM yyyy")
-      cell.lblDescription1.text = data["katha_english"].stringValue
-      cell.lblDescription2.text = data["katha_hindi"].stringValue
-
+    if screenDirection == .Katha_Chopai {
       
-      return cell
-    }else
-    {
-      //Ram Charit Manas
+      cell.lblTitle.text = "\(data["title"].stringValue)-\(data["title_no"].stringValue)"
+      cell.lblDate.text = Utility.dateToString(dateStr: data["to_date"].stringValue, strDateFormat: "dd MMM yyyy")
+      cell.lblDescription1.text = data["katha_hindi"].stringValue
       
-      let data = arrRamCharitManas[indexPath.row]
+    }else if screenDirection == .Ram_Charit_Manas{
       
-      cell.lblTitle.text = data["title"].stringValue
+      cell.lblTitle.text = "\(data["title"].stringValue)-\(data["title_no"].stringValue)"
       cell.lblDate.text = Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd MMM yyyy")
-      cell.lblDescription1.text = data["katha_english"].stringValue
-      cell.lblDescription2.text = data["katha_hindi"].stringValue
+      cell.lblDescription1.text = data["katha_hindi"].stringValue
+      
+    }
+    else{
+      
+      cell.lblTitle.text = data["title"].stringValue
+      cell.lblDate.text = Utility.dateToString(dateStr: data["quotes_date"].stringValue, strDateFormat: "dd MMM yyyy")
+      cell.lblDescription1.text = data["quotes_hindi"].stringValue
+      
+    }
       
       return cell
-      
-      }
-  
   }
   
   func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -209,7 +190,7 @@ extension KathaChopaiVC : UITableViewDelegate, UITableViewDataSource{
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
    
-    if screenDirection == .Katha_Chopai{
+    if screenDirection == .Katha_Chopai || screenDirection == .Ram_Charit_Manas{
       
       let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "KathaChopaiDetailsVC") as! KathaChopaiDetailsVC
@@ -218,13 +199,15 @@ extension KathaChopaiVC : UITableViewDelegate, UITableViewDataSource{
       navigationController?.pushViewController(vc, animated:  true)
       
     }else{
-      //Ram Charit Manas
+      
       let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "KathaChopaiDetailsVC") as! KathaChopaiDetailsVC
       vc.strTitle = lblTitle.text!
-      vc.arrKathaDetails = arrRamCharitManas[indexPath.row].dictionaryValue
+      vc.arrKathaDetails = arrKathaChopia[indexPath.row].dictionaryValue
       navigationController?.pushViewController(vc, animated:  true)
+      
     }
+    
     
   }
 }
@@ -258,10 +241,17 @@ extension KathaChopaiVC : MenuNavigationDelegate{
       
     }else if ScreenName == "Quotes"{
       //Quotes
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "KathaChopaiVC") as! KathaChopaiVC
+      vc.screenDirection = .Quotes
+      navigationController?.pushViewController(vc, animated:  true)
       
     }else if ScreenName == "Daily Katha Clip"{
       //Daily Katha Clip
-      
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "WhatsNewVideoVC") as! WhatsNewVideoVC
+      vc.screenDirection = .Daily_Katha_Clip
+      navigationController?.pushViewController(vc, animated:  true)
       
     }else if ScreenName == "Live Katha Audio"{
       //Live Katha Audio

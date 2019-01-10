@@ -11,11 +11,19 @@ import Alamofire
 import SwiftyJSON
 import Kingfisher
 
+enum WhatsNewVideoScreenIdentify {
+  case WhatsNew_Video
+  case Other_Videos
+  case Daily_Katha_Clip
+}
+
 class WhatsNewVideoVC: UIViewController {
   
   @IBOutlet weak var tblVideo: UITableView!
   var arrVideo = [JSON]()
-  
+  @IBOutlet weak var lblTitle: UILabel!
+  var screenDirection = WhatsNewVideoScreenIdentify.WhatsNew_Video
+
   override func viewDidLoad() {
     super.viewDidLoad()
     
@@ -29,6 +37,14 @@ class WhatsNewVideoVC: UIViewController {
       self.getWhatsNewVideo(page: "1")
     }
     
+    if screenDirection == .WhatsNew_Video{
+      lblTitle.text = "Video"
+    }else if screenDirection == .Other_Videos{
+      lblTitle.text = "Other Video"
+    }else if screenDirection == .Daily_Katha_Clip{
+      lblTitle.text = "Daily Katha Clip"
+    }
+    
   }
   
   
@@ -38,7 +54,17 @@ class WhatsNewVideoVC: UIViewController {
     let param = ["page" : page,
                  "app_id":Utility.getDeviceID()] as NSDictionary
     
-    WebServices().CallGlobalAPI(url: WebService_Whats_New_Video,headers: [:], parameters: param, HttpMethod: "POST", ProgressView: true) { ( _ jsonResponce:JSON? , _ strErrorMessage:String) in
+    var api_url = String()
+    
+    if screenDirection == .WhatsNew_Video{
+      api_url = WebService_Whats_New_Video
+    }else if screenDirection == .Other_Videos{
+      api_url = WebService_Other_Video_Media
+    }else if screenDirection == .Daily_Katha_Clip{
+      api_url = WebService_Daily_Katha_Clip
+    }
+    
+    WebServices().CallGlobalAPI(url: api_url,headers: [:], parameters: param, HttpMethod: "POST", ProgressView: true) { ( _ jsonResponce:JSON? , _ strErrorMessage:String) in
       
       if(jsonResponce?.error != nil) {
         
@@ -127,10 +153,17 @@ extension WhatsNewVideoVC: MenuNavigationDelegate{
       
     }else if ScreenName == "Quotes"{
       //Quotes
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "KathaChopaiVC") as! KathaChopaiVC
+      vc.screenDirection = .Quotes
+      navigationController?.pushViewController(vc, animated:  true)
       
     }else if ScreenName == "Daily Katha Clip"{
       //Daily Katha Clip
-      
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "WhatsNewVideoVC") as! WhatsNewVideoVC
+      vc.screenDirection = .Daily_Katha_Clip
+      navigationController?.pushViewController(vc, animated:  true)
       
     }else if ScreenName == "Live Katha Audio"{
       //Live Katha Audio
@@ -222,13 +255,13 @@ extension WhatsNewVideoVC : UITableViewDelegate, UITableViewDataSource{
     let data = arrVideo[indexPath.row]
     
     cell.lblTitle.text = data["title"].stringValue
-    cell.lblDuration.text = "Duration: \(data["video_duration"].stringValue)"
+    cell.lblDuration.text = "(Duration: \(data["video_duration"].stringValue))"
     cell.lblDate.text = Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd-MM-yyyy")
     
     let placeHolder = UIImage(named: "youtube_placeholder")
     
     cell.imgVideo.kf.indicatorType = .activity
-    cell.imgVideo.kf.setImage(with: data["video_image"].url, placeholder: placeHolder, options: [.transition(ImageTransition.fade(1))])
+    cell.imgVideo.kf.setImage(with: URL(string: "\(BASE_URL_IMAGE)\(data["video_image"].stringValue)"), placeholder: placeHolder, options: [.transition(ImageTransition.fade(1))])
     
     if data["is_favourite"].boolValue == true{
       cell.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
