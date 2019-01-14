@@ -13,6 +13,8 @@ enum WebViewScreen {
   
   case Moraribapu_Youtube_Channel
   case Sangeet_Ni_Duniya_Online_Shop
+  case Live_Katha_Streaming_Audio
+  case Live_Katha_Streaming_Video
   
 }
 
@@ -46,6 +48,18 @@ class WebViewVC: UIViewController {
           self.webView.loadRequest(NSURLRequest(url: url!) as URLRequest)
         }
       }
+      else if screenDirection == .Live_Katha_Streaming_Audio{
+        DispatchQueue.main.async {
+          let url = URL(string: "http://moraribapu.org//Live_ramkatha_audio.html")
+          self.webView.loadRequest(NSURLRequest(url: url!) as URLRequest)
+        }
+      }
+      else if screenDirection == .Live_Katha_Streaming_Video{
+        DispatchQueue.main.async {
+          let url = URL(string: "http://moraribapu.org//live_katha_youtube.php")
+          self.webView.loadRequest(NSURLRequest(url: url!) as URLRequest)
+        }
+      }
   }
   
   //MARK : Button Event
@@ -57,7 +71,7 @@ class WebViewVC: UIViewController {
     self.navigationController?.popToRootViewController(animated: true)
   }
   
-  //MARK: Button Event
+  //MARK:- Button Event
   @IBAction func btnMenu(_ sender: Any) {
     
     Utility.menu_Show(onViewController: self)
@@ -85,7 +99,7 @@ extension WebViewVC : UIWebViewDelegate{
   
 }
 
-//MARK: Menu Navigation Delegate
+//MARK:- Menu Navigation Delegate
 extension WebViewVC: MenuNavigationDelegate{
   
   func SelectedMenu(ScreenName: String?) {
@@ -129,17 +143,27 @@ extension WebViewVC: MenuNavigationDelegate{
       
     }else if ScreenName == "Live Katha Audio"{
       //Live Katha Audio
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "WebViewVC") as! WebViewVC
+      vc.screenDirection = .Live_Katha_Streaming_Audio
+      vc.strTitle = "Live Katha Audio"
+      navigationController?.pushViewController(vc, animated:  true)
       
     }else if ScreenName == "You Tube Channel"{
       //You Tube Channel
       let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "WebViewVC") as! WebViewVC
       vc.screenDirection = .Moraribapu_Youtube_Channel
-      vc.strTitle = "Morari Bapu Youtube channel"
+      vc.strTitle = "Morari Bapu Youtube Channel"
       navigationController?.pushViewController(vc, animated:  true)
       
     }else if ScreenName == "Live Katha Video"{
       //Live Katha Video
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "WebViewVC") as! WebViewVC
+      vc.screenDirection = .Live_Katha_Streaming_Video
+      vc.strTitle = "Live Katha Video"
+      navigationController?.pushViewController(vc, animated:  true)
       
     }
     else if ScreenName == "Media"{

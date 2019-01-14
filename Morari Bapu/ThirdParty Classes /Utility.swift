@@ -10,8 +10,10 @@ import SwiftyUserDefaults
 import SwiftyJSON
 import SwiftyUserDefaults
 import Kingfisher
+import SwiftyJSON
+import Alamofire
 
-//MARK: Table Header Message
+//MARK:- Table Header Message
 
 public enum DisplayMessageAlignment : Int {
     case Top
@@ -22,7 +24,7 @@ public enum DisplayMessageAlignment : Int {
 class Utility: NSObject
 {
 
-//    //MARK: Button
+//    //MARK:- Button
 //    static func logoutUI() -> Void {
 //
 //        DispatchQueue.main.async {
@@ -88,7 +90,7 @@ class Utility: NSObject
         
     }
     
-    //MARK: Table Header Message
+    //MARK:- Table Header Message
     static func collectionViewNoDataMessage(collectionView:UICollectionView, message:String, textColor:UIColor){
         
         let frame = CGRect(x: 0, y: 0,  width: collectionView.bounds.size.width, height: 200)
@@ -117,7 +119,7 @@ class Utility: NSObject
         }
     }
 
-    //MARK: Loader (Custom)
+    //MARK:- Loader (Custom)
     static func loader_Show(onViewController: UIViewController) {
         DispatchQueue.main.async {
             //let objVC = self.storyboard?.instantiateViewController(withIdentifier: "LoaderVC") as! LoaderVC
@@ -420,7 +422,7 @@ class Utility: NSObject
 
    
     
-    //MARK: Validation
+    //MARK:- Validation
     static func isValidEmail(testStr:String) -> Bool {
         // print("validate calendar: \(testStr)")
         let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
@@ -435,7 +437,7 @@ class Utility: NSObject
 
   }
   
-    //MARK: DropDown (Show Hide)
+    //MARK:- DropDown (Show Hide)
     static func menu_Show(onViewController: UIViewController) {
       DispatchQueue.main.async {
         //let objVC = self.storyboard?.instantiateViewController(withIdentifier: "LoaderVC") as! LoaderVC
@@ -455,14 +457,17 @@ class Utility: NSObject
         }
     }
   
-  //MARK: Hanuman Chalisha (Show Hide)
+  //MARK:- Hanuman Chalisha (Show Hide)
   static func hanuman_chalisha_Show(onViewController: UIViewController) {
     DispatchQueue.main.async {
-      //let objVC = self.storyboard?.instantiateViewController(withIdentifier: "LoaderVC") as! LoaderVC
+      
       let storyboardCustom : UIStoryboard = UIStoryboard(name: Custome_Storyboard, bundle: nil)
       let objVC = storyboardCustom.instantiateViewController(withIdentifier: "HanumanChalishaVC") as? HanumanChalishaVC
+      objVC?.modalPresentationStyle = .overCurrentContext
+      objVC?.modalTransitionStyle = .crossDissolve
       onViewController.present(objVC!, animated: false, completion: nil)
-      //UIApplication.shared.delegate?.window!?.rootViewController?.present(objVC, animated: true, completion: nil)
+      
+      
     }
   }
   
@@ -493,7 +498,34 @@ class Utility: NSObject
     }
   }
   
-   
+  static func backToHome(){
+    
+    let storyBoardMain = UIStoryboard(name: Main_Storyboard, bundle: nil)
+    
+    let objVC = storyBoardMain.instantiateViewController(withIdentifier: "DashboardVC") as! DashboardVC
+    let appNavigation: UINavigationController = UINavigationController(rootViewController: objVC)
+    appNavigation.navigationBar.isHidden = true
+    UIApplication.shared.delegate?.window??.rootViewController = appNavigation
+  }
+  
+  static func readUnread(api_Url:String, parameters:NSDictionary){
+    
+    WebServices().CallGlobalAPI(url: api_Url,headers: [:], parameters: parameters, HttpMethod: "POST", ProgressView: false) { ( _ jsonResponce:JSON? , _ strErrorMessage:String) in
+      
+      if(jsonResponce?.error != nil) {
+      }
+      else {
+        
+        if jsonResponce!["status"].stringValue == "true"{
+ 
+          
+        }
+        else {
+        }
+      }
+    }
+    
+  }
 
 }
 

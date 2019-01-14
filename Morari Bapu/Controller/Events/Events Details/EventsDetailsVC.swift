@@ -34,7 +34,7 @@ class EventsDetailsVC: UIViewController {
   }
 
   
-  //MARK: Button Event
+  //MARK:- Button Event
   @IBAction func btnMenu(_ sender: Any) {
     Utility.menu_Show(onViewController: self)
   }
@@ -55,7 +55,7 @@ class EventsDetailsVC: UIViewController {
 
 
 
-//MARK: Menu Navigation Delegate
+//MARK:- Menu Navigation Delegate
 extension EventsDetailsVC: MenuNavigationDelegate{
   
   func SelectedMenu(ScreenName: String?) {
@@ -98,17 +98,27 @@ extension EventsDetailsVC: MenuNavigationDelegate{
       
     }else if ScreenName == "Live Katha Audio"{
       //Live Katha Audio
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "WebViewVC") as! WebViewVC
+      vc.screenDirection = .Live_Katha_Streaming_Audio
+      vc.strTitle = "Live Katha Audio"
+      navigationController?.pushViewController(vc, animated:  true)
       
     }else if ScreenName == "You Tube Channel"{
       //You Tube Channel
       let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "WebViewVC") as! WebViewVC
       vc.screenDirection = .Moraribapu_Youtube_Channel
-      vc.strTitle = "Morari Bapu Youtube channel"
+      vc.strTitle = "Morari Bapu Youtube Channel"
       navigationController?.pushViewController(vc, animated:  true)
       
     }else if ScreenName == "Live Katha Video"{
       //Live Katha Video
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "WebViewVC") as! WebViewVC
+      vc.screenDirection = .Live_Katha_Streaming_Video
+      vc.strTitle = "Live Katha Video"
+      navigationController?.pushViewController(vc, animated:  true)
       
     }
     else if ScreenName == "Media"{

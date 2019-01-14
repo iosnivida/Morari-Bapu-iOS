@@ -23,7 +23,8 @@ class WhatsNewVideoVC: UIViewController {
   var arrVideo = [JSON]()
   @IBOutlet weak var lblTitle: UILabel!
   var screenDirection = WhatsNewVideoScreenIdentify.WhatsNew_Video
-
+  var idVideoCategory = String()
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     
@@ -41,6 +42,7 @@ class WhatsNewVideoVC: UIViewController {
       lblTitle.text = "Video"
     }else if screenDirection == .Other_Videos{
       lblTitle.text = "Other Video"
+      
     }else if screenDirection == .Daily_Katha_Clip{
       lblTitle.text = "Daily Katha Clip"
     }
@@ -48,19 +50,31 @@ class WhatsNewVideoVC: UIViewController {
   }
   
   
-  //MARK: Api Call
+  //MARK:- Api Call
   func getWhatsNewVideo(page:String){
     
-    let param = ["page" : page,
-                 "app_id":Utility.getDeviceID()] as NSDictionary
-    
     var api_url = String()
+    var param = NSDictionary()
     
     if screenDirection == .WhatsNew_Video{
+      
+      param = ["page" : page,
+                   "app_id":Utility.getDeviceID()] as NSDictionary
+      
       api_url = WebService_Whats_New_Video
     }else if screenDirection == .Other_Videos{
+      
+      param = ["page" : page,
+               "app_id":Utility.getDeviceID(),
+      "video_cat_id" : idVideoCategory] as NSDictionary
+      
       api_url = WebService_Other_Video_Media
+      
     }else if screenDirection == .Daily_Katha_Clip{
+      
+      param = ["page" : page,
+                   "app_id":Utility.getDeviceID()] as NSDictionary
+      
       api_url = WebService_Daily_Katha_Clip
     }
     
@@ -103,7 +117,7 @@ class WhatsNewVideoVC: UIViewController {
   }
   
   
-  //MARK: Button Event
+  //MARK:- Button Event
   @IBAction func btnMenu(_ sender: Any) {
     Utility.menu_Show(onViewController: self)
   }
@@ -124,7 +138,7 @@ class WhatsNewVideoVC: UIViewController {
 
 
 
-//MARK: Menu Navigation Delegate
+//MARK:- Menu Navigation Delegate
 extension WhatsNewVideoVC: MenuNavigationDelegate{
   
   func SelectedMenu(ScreenName: String?) {
@@ -167,17 +181,27 @@ extension WhatsNewVideoVC: MenuNavigationDelegate{
       
     }else if ScreenName == "Live Katha Audio"{
       //Live Katha Audio
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "WebViewVC") as! WebViewVC
+      vc.screenDirection = .Live_Katha_Streaming_Audio
+      vc.strTitle = "Live Katha Audio"
+      navigationController?.pushViewController(vc, animated:  true)
       
     }else if ScreenName == "You Tube Channel"{
       //You Tube Channel
       let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "WebViewVC") as! WebViewVC
       vc.screenDirection = .Moraribapu_Youtube_Channel
-      vc.strTitle = "Morari Bapu Youtube channel"
+      vc.strTitle = "Morari Bapu Youtube Channel"
       navigationController?.pushViewController(vc, animated:  true)
       
     }else if ScreenName == "Live Katha Video"{
       //Live Katha Video
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "WebViewVC") as! WebViewVC
+      vc.screenDirection = .Live_Katha_Streaming_Video
+      vc.strTitle = "Live Katha Video"
+      navigationController?.pushViewController(vc, animated:  true)
       
     }
     else if ScreenName == "Media"{
@@ -291,11 +315,25 @@ extension WhatsNewVideoVC : UITableViewDelegate, UITableViewDataSource{
     let buttonPosition:CGPoint = sender.convert(CGPoint.zero, to:self.tblVideo)
     let indexPath = self.tblVideo.indexPathForRow(at: buttonPosition)
     
-    // text to share
-    let text = "https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
+    var share_Content = String()
+
+    let data = arrVideo[indexPath!.row]
+
+    if screenDirection == .WhatsNew_Video{
+      
+      share_Content = "\(data["title"].stringValue) \n\n(Duration: \(data["video_duration"].stringValue)) \n\n \(Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd-MM-yyyy")) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
+      
+    }else if screenDirection == .Other_Videos{
+      
+       share_Content = "\(data["title"].stringValue) \n\n(Duration: \(data["video_duration"].stringValue)) \n\n \(Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd-MM-yyyy")) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
+      
+    }else if screenDirection == .Daily_Katha_Clip{
+      
+       share_Content = "\(data["title"].stringValue) \n(Duration: \(data["video_duration"].stringValue)) \n \(Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd-MM-yyyy")) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
+    }
     
     // set up activity view controller
-    let textToShare = [ text ]
+    let textToShare = [share_Content]
     let activityViewController = UIActivityViewController(activityItems: textToShare, applicationActivities: nil)
     activityViewController.popoverPresentationController?.sourceView = self.view // so that iPads won't crash
     
@@ -314,8 +352,34 @@ extension WhatsNewVideoVC : UITableViewDelegate, UITableViewDataSource{
     let buttonPosition:CGPoint = sender.convert(CGPoint.zero, to:self.tblVideo)
     let indexPath = self.tblVideo.indexPathForRow(at: buttonPosition)
     
+    let data = arrVideo[indexPath!.row]
+
     let link = arrVideo[indexPath!.row]
     let youtubeLink = link["youtube_link"].url
+    
+    if data["is_read"].intValue == 0{
+      
+      if screenDirection == .WhatsNew_Video{
+        
+        let param = ["app_id":Utility.getDeviceID(),
+                     "video_id":data["id"].stringValue] as NSDictionary
+        
+        Utility.readUnread(api_Url: WebService_Video_Whats_New_Read_Unread, parameters: param)
+      }else if screenDirection == .Other_Videos{
+        
+        let param = ["app_id":Utility.getDeviceID(),
+                     "kathavideo_other_id":data["id"].stringValue] as NSDictionary
+        
+        Utility.readUnread(api_Url: WebService_Katha_Other_Video_Read_Unread, parameters: param)
+      }else if screenDirection == .Daily_Katha_Clip{
+   
+        let param = ["app_id":Utility.getDeviceID(),
+                     "kathavideo_id":data["id"].stringValue] as NSDictionary
+        
+        Utility.readUnread(api_Url: WebService_Daily_Katha_Video_Read_Unread, parameters: param)
+      }
+      
+    }
     
     DispatchQueue.main.async {
       UIApplication.shared.open(youtubeLink!, options: [:])

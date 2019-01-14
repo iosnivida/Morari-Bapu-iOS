@@ -32,7 +32,7 @@ class BapuThoughtsVC: UIViewController {
   }
   
   
-  //MARK: Api Call
+  //MARK:- Api Call
   func getShayri(){
     
     let param = ["page" : "1",
@@ -77,7 +77,7 @@ class BapuThoughtsVC: UIViewController {
   }
   
   
-  //MARK: Button Event
+  //MARK:- Button Event
   @IBAction func btnMenu(_ sender: Any) {
     Utility.menu_Show(onViewController: self)
   }
@@ -120,7 +120,9 @@ extension BapuThoughtsVC : UITableViewDelegate, UITableViewDataSource{
     
     cell.lblTitle.text = data["title"].stringValue
     cell.lblDescription.text = data["thought"].stringValue
-    
+    cell.btnShare.tag  = indexPath.row
+    cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
+
     return cell
     
     
@@ -134,9 +136,43 @@ extension BapuThoughtsVC : UITableViewDelegate, UITableViewDataSource{
     return UITableView.automaticDimension
   }
   
+  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    
+    let data = arrThought[indexPath.row]
+
+    if data["is_read"].intValue == 0{
+
+      let param = ["app_id":Utility.getDeviceID(),
+                   "bapu_thought_id":data["id"].stringValue] as NSDictionary
+      
+      Utility.readUnread(api_Url: WebService_Bapu_Thoughts_Read_Unread, parameters: param)
+      
+    }
+    
+  }
+  
+  @IBAction func btnShare(_ sender: UIButton) {
+    
+    let data = arrThought[sender.tag]
+    
+    let share_Content = "Thought \n\(data["title"].stringValue) \n\(data["thought"].stringValue)  \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
+    
+    let textToShare = [share_Content]
+    let activityViewController = UIActivityViewController(activityItems: textToShare, applicationActivities: nil)
+    activityViewController.popoverPresentationController?.sourceView = self.view // so that iPads won't crash
+    
+    // exclude some activity types from the list (optional)
+    activityViewController.excludedActivityTypes = [ UIActivity.ActivityType.airDrop, UIActivity.ActivityType.postToFacebook ]
+    
+    DispatchQueue.main.async {
+      self.present(activityViewController, animated: true, completion: nil)
+    }
+    
+  }
+  
 }
 
-//MARK: Menu Navigation Delegate
+//MARK:- Menu Navigation Delegate
 extension BapuThoughtsVC: MenuNavigationDelegate{
   
   func SelectedMenu(ScreenName: String?) {
@@ -179,17 +215,27 @@ extension BapuThoughtsVC: MenuNavigationDelegate{
       
     }else if ScreenName == "Live Katha Audio"{
       //Live Katha Audio
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "WebViewVC") as! WebViewVC
+      vc.screenDirection = .Live_Katha_Streaming_Audio
+      vc.strTitle = "Live Katha Audio"
+      navigationController?.pushViewController(vc, animated:  true)
       
     }else if ScreenName == "You Tube Channel"{
       //You Tube Channel
       let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "WebViewVC") as! WebViewVC
       vc.screenDirection = .Moraribapu_Youtube_Channel
-      vc.strTitle = "Morari Bapu Youtube channel"
+      vc.strTitle = "Morari Bapu Youtube Channel"
       navigationController?.pushViewController(vc, animated:  true)
       
     }else if ScreenName == "Live Katha Video"{
       //Live Katha Video
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "WebViewVC") as! WebViewVC
+      vc.screenDirection = .Live_Katha_Streaming_Video
+      vc.strTitle = "Live Katha Video"
+      navigationController?.pushViewController(vc, animated:  true)
       
     }
     else if ScreenName == "Media"{

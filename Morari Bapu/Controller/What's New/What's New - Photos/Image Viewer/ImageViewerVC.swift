@@ -43,7 +43,7 @@ class ImageViewerVC: UIViewController, UIScrollViewDelegate {
       }
     }
 
-  //MARK:- Button Event
+  //MARK:-- Button Event
   @IBAction func btnBack(_ sender: Any) {
     self.navigationController?.popViewController(animated:true)
   }

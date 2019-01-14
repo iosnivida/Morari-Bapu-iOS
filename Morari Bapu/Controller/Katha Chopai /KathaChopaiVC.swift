@@ -54,7 +54,7 @@ class KathaChopaiVC: UIViewController {
       
   }
 
-  //MARK: Api Call
+  //MARK:- Api Call
   func getKathaChopai(){
     
     let param = ["page" : "1",
@@ -114,7 +114,7 @@ class KathaChopaiVC: UIViewController {
   }
   
   
-  //MARK: Button Event
+  //MARK:- Button Event
   @IBAction func btnMenu(_ sender: Any) {
     Utility.menu_Show(onViewController: self)
 
@@ -159,7 +159,7 @@ extension KathaChopaiVC : UITableViewDelegate, UITableViewDataSource{
     if screenDirection == .Katha_Chopai {
       
       cell.lblTitle.text = "\(data["title"].stringValue)-\(data["title_no"].stringValue)"
-      cell.lblDate.text = Utility.dateToString(dateStr: data["to_date"].stringValue, strDateFormat: "dd MMM yyyy")
+      cell.lblDate.text = Utility.dateToString(dateStr: data["from_date"].stringValue, strDateFormat: "dd MMM yyyy")
       cell.lblDescription1.text = data["katha_hindi"].stringValue
       
     }else if screenDirection == .Ram_Charit_Manas{
@@ -190,20 +190,57 @@ extension KathaChopaiVC : UITableViewDelegate, UITableViewDataSource{
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
    
-    if screenDirection == .Katha_Chopai || screenDirection == .Ram_Charit_Manas{
+    let data = arrKathaChopia[indexPath.row]
+    
+    if data["is_read"].intValue == 0{
       
+      if screenDirection == .Katha_Chopai{
+        
+        let param = ["app_id":Utility.getDeviceID(),
+                     "katha_chopai_id":data["id"].stringValue] as NSDictionary
+        
+        Utility.readUnread(api_Url: WebService_Katha_Chopai_Read_Unread, parameters: param)
+     
+      }
+      else if screenDirection == .Ram_Charit_Manas{
+        
+        let param = ["app_id":Utility.getDeviceID(),
+                     "ram_charit_manas_id":data["id"].stringValue] as NSDictionary
+        
+        Utility.readUnread(api_Url: WebService_Ram_Charit_Manas_Read_Unread, parameters: param)
+     
+      }else{
+        
+        let param = ["app_id":Utility.getDeviceID(),
+                     "quote_id":data["id"].stringValue] as NSDictionary
+        
+        Utility.readUnread(api_Url: WebService_Quotes_Read_Unread, parameters: param)
+  
+      }
+    }
+    if screenDirection == .Katha_Chopai{
+    
       let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "KathaChopaiDetailsVC") as! KathaChopaiDetailsVC
       vc.strTitle = lblTitle.text!
-      vc.arrKathaDetails = arrKathaChopia[indexPath.row].dictionaryValue
+      vc.arrKathaDetails = data.dictionaryValue
+      navigationController?.pushViewController(vc, animated:  true)
+      
+    }
+    else if screenDirection == .Ram_Charit_Manas{
+    
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "KathaChopaiDetailsVC") as! KathaChopaiDetailsVC
+      vc.strTitle = lblTitle.text!
+      vc.arrKathaDetails = data.dictionaryValue
       navigationController?.pushViewController(vc, animated:  true)
       
     }else{
-      
+    
       let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "KathaChopaiDetailsVC") as! KathaChopaiDetailsVC
       vc.strTitle = lblTitle.text!
-      vc.arrKathaDetails = arrKathaChopia[indexPath.row].dictionaryValue
+      vc.arrKathaDetails = data.dictionaryValue
       navigationController?.pushViewController(vc, animated:  true)
       
     }
@@ -212,7 +249,7 @@ extension KathaChopaiVC : UITableViewDelegate, UITableViewDataSource{
   }
 }
 
-//MARK: Menu Navigation Delegate
+//MARK:- Menu Navigation Delegate
 extension KathaChopaiVC : MenuNavigationDelegate{
   
   func SelectedMenu(ScreenName: String?) {
@@ -255,17 +292,27 @@ extension KathaChopaiVC : MenuNavigationDelegate{
       
     }else if ScreenName == "Live Katha Audio"{
       //Live Katha Audio
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "WebViewVC") as! WebViewVC
+      vc.screenDirection = .Live_Katha_Streaming_Audio
+      vc.strTitle = "Live Katha Audio"
+      navigationController?.pushViewController(vc, animated:  true)
       
     }else if ScreenName == "You Tube Channel"{
       //You Tube Channel
       let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "WebViewVC") as! WebViewVC
       vc.screenDirection = .Moraribapu_Youtube_Channel
-      vc.strTitle = "Morari Bapu Youtube channel"
+      vc.strTitle = "Morari Bapu Youtube Channel"
       navigationController?.pushViewController(vc, animated:  true)
       
     }else if ScreenName == "Live Katha Video"{
       //Live Katha Video
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "WebViewVC") as! WebViewVC
+      vc.screenDirection = .Live_Katha_Streaming_Video
+      vc.strTitle = "Live Katha Video"
+      navigationController?.pushViewController(vc, animated:  true)
       
     }
     else if ScreenName == "Media"{

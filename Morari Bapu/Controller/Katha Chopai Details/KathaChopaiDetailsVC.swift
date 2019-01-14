@@ -32,7 +32,7 @@ class KathaChopaiDetailsVC: UIViewController {
       if lblTitle.text == "Katha Chopai"{
        
         lblSubTitle.text = "\(arrKathaDetails["title"]!.stringValue)-\(arrKathaDetails["title_no"]!.stringValue)"
-        lblDate.text = Utility.dateToString(dateStr: arrKathaDetails["to_date"]?.stringValue ?? "", strDateFormat: "dd MMM yyyy")
+        lblDate.text = Utility.dateToString(dateStr: arrKathaDetails["from_date"]?.stringValue ?? "", strDateFormat: "dd MMM yyyy")
         lblDescription1.text = arrKathaDetails["katha_gujarati"]!.stringValue
         lblDescription2.text = arrKathaDetails["katha_hindi"]!.stringValue
         lblDescription3.text = arrKathaDetails["katha_english"]!.stringValue
@@ -78,9 +78,45 @@ class KathaChopaiDetailsVC: UIViewController {
     Utility.hanuman_chalisha_Show(onViewController: self)
     
   }
+  
+  @IBAction func btnShare(_ sender: Any) {
+    
+    var share_Content = String()
+    
+    if lblTitle.text == "Katha Chopai"{
+      
+      share_Content = "\(arrKathaDetails["title"]!.stringValue)-\(arrKathaDetails["title_no"]!.stringValue) \n\nDate: \(Utility.dateToString(dateStr: arrKathaDetails["from_date"]?.stringValue ?? "", strDateFormat: "dd MMM yyyy")) \n\n \(arrKathaDetails["katha_gujarati"]!.stringValue) \n\n\(arrKathaDetails["katha_hindi"]!.stringValue) \n\n\(arrKathaDetails["katha_english"]!.stringValue) \n\n\(arrKathaDetails["description"]!.stringValue) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
+      
+      
+    }else if lblTitle.text == "Ram Charit Manas"{
+      
+        share_Content = "\(arrKathaDetails["title"]!.stringValue)-\(arrKathaDetails["title_no"]!.stringValue) \n\nDate: \(Utility.dateToString(dateStr: arrKathaDetails["date"]?.stringValue ?? "", strDateFormat: "dd MMM yyyy")) \n\n \(arrKathaDetails["katha_gujarati"]!.stringValue) \n\n\(arrKathaDetails["katha_hindi"]!.stringValue) \n\n\(arrKathaDetails["katha_english"]!.stringValue) \n\n\(arrKathaDetails["description"]!.stringValue) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
+    }
+    else{
+      
+        share_Content = "\(arrKathaDetails["title"]!.stringValue) \n\nDate: \(Utility.dateToString(dateStr: arrKathaDetails["quotes_date"]?.stringValue ?? "", strDateFormat: "dd MMM yyyy")) \n\n \(arrKathaDetails["quotes_gujarati"]!.stringValue) \n\n\(arrKathaDetails["quotes_hindi"]!.stringValue) \n\n\(arrKathaDetails["quotes_english"]!.stringValue) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
+    }
+    
+    let textToShare = [share_Content]
+    let activityViewController = UIActivityViewController(activityItems: textToShare, applicationActivities: nil)
+    activityViewController.popoverPresentationController?.sourceView = self.view // so that iPads won't crash
+    
+    // exclude some activity types from the list (optional)
+    activityViewController.excludedActivityTypes = [ UIActivity.ActivityType.airDrop, UIActivity.ActivityType.postToFacebook ]
+    
+    DispatchQueue.main.async {
+      self.present(activityViewController, animated: true, completion: nil)
+    }
+    
+  }
+  
+  @IBAction func btnFavourite(_ sender: Any) {
+    
+  }
+  
 }
 
-//MARK: Menu Navigation Delegate
+//MARK:- Menu Navigation Delegate
 extension KathaChopaiDetailsVC: MenuNavigationDelegate{
   
   func SelectedMenu(ScreenName: String?) {
@@ -123,17 +159,35 @@ extension KathaChopaiDetailsVC: MenuNavigationDelegate{
       
     }else if ScreenName == "Live Katha Audio"{
       //Live Katha Audio
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "WebViewVC") as! WebViewVC
+      vc.screenDirection = .Live_Katha_Streaming_Audio
+      vc.strTitle = "Live Katha Audio"
+      navigationController?.pushViewController(vc, animated:  true)
       
     }else if ScreenName == "You Tube Channel"{
       //You Tube Channel
       let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "WebViewVC") as! WebViewVC
       vc.screenDirection = .Moraribapu_Youtube_Channel
-      vc.strTitle = "Morari Bapu Youtube channel"
+      vc.strTitle = "Morari Bapu Youtube Channel"
       navigationController?.pushViewController(vc, animated:  true)
       
     }else if ScreenName == "Live Katha Video"{
       //Live Katha Video
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "WebViewVC") as! WebViewVC
+      vc.screenDirection = .Live_Katha_Streaming_Video
+      vc.strTitle = "Live Katha Video"
+      navigationController?.pushViewController(vc, animated:  true)
+      
+    }else if ScreenName == "Live Katha Video"{
+      //Live Katha Video
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "WebViewVC") as! WebViewVC
+      vc.screenDirection = .Live_Katha_Streaming_Video
+      vc.strTitle = "Live Katha Video"
+      navigationController?.pushViewController(vc, animated:  true)
       
     }
     else if ScreenName == "Media"{

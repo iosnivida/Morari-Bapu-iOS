@@ -216,7 +216,11 @@ class HanumanChalishaVC: UIViewController {
   }
   
   @IBAction func backToHome(_ sender: Any) {
-    self.navigationController?.popToRootViewController(animated: true)
+    
+    self.dismiss(animated: true, completion: nil)
+    Utility.backToHome()
+    
+    
   }
   
   

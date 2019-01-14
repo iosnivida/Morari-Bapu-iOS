@@ -33,7 +33,7 @@ class KathaEBookVC: UIViewController {
     
     }
     
-  //MARK: Api Call
+  //MARK:- Api Call
   func getKathaEBook(){
     
     let param = ["id" : "1",
@@ -78,7 +78,7 @@ class KathaEBookVC: UIViewController {
     }
   }
   
-  //MARK: Button Event
+  //MARK:- Button Event
   @IBAction func btnMenu(_ sender: Any) {
     Utility.menu_Show(onViewController: self)
 
@@ -135,10 +135,7 @@ extension KathaEBookVC : UITableViewDelegate, UITableViewDataSource{
     cell.btnHindi.addTarget(self, action: #selector(btnHindiEbookDetails), for: UIControl.Event.touchUpInside)
     cell.btnGujarati.addTarget(self, action: #selector(btnGujaratiEbookDetails), for: UIControl.Event.touchUpInside)
 
-    
     return cell
-    
-    
   }
   
   func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -151,11 +148,11 @@ extension KathaEBookVC : UITableViewDelegate, UITableViewDataSource{
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     
-    let data = arrKathaEBook[indexPath.row]
-
-    if let url = data["android_gujarati"].url {
-      UIApplication.shared.open(url, options: [:])
-    }
+//    let data = arrKathaEBook[indexPath.row]
+//
+//    if let url = data["android_gujarati"].url {
+//      UIApplication.shared.open(url, options: [:])
+//    }
     
   }
   
@@ -163,7 +160,15 @@ extension KathaEBookVC : UITableViewDelegate, UITableViewDataSource{
 
     let data = arrKathaEBook[sender.tag]
 
-    let urlStr = "\(BASE_URL)\(data["android_gujarati"].stringValue)"
+    if data["is_read"].intValue == 0{
+
+      let param = ["app_id":Utility.getDeviceID(),
+                   "katha_ebook_id":data["id"].stringValue] as NSDictionary
+      
+        Utility.readUnread(api_Url: WebService_Katha_E_Book_Read_Unread, parameters: param)
+    }
+      
+    let urlStr = "\(BASE_URL_IMAGE)\(data["android_gujarati"].stringValue)"
     
     if #available(iOS 10.0, *) {
       UIApplication.shared.open(URL(string: urlStr)!, options: [:], completionHandler: nil)
@@ -179,7 +184,14 @@ extension KathaEBookVC : UITableViewDelegate, UITableViewDataSource{
     
     let data = arrKathaEBook[sender.tag]
    
-    let urlStr = "\(BASE_URL)\(data["android_gujarati"].stringValue)"
+    if data["is_read"].intValue == 0{
+      
+      let param = ["app_id":Utility.getDeviceID(),
+                   "katha_ebook_id":data["id"].stringValue] as NSDictionary
+      Utility.readUnread(api_Url: WebService_Katha_E_Book_Read_Unread, parameters: param)
+    }
+    
+    let urlStr = "\(BASE_URL_IMAGE)\(data["android_gujarati"].stringValue)"
     
     if #available(iOS 10.0, *) {
       UIApplication.shared.open(URL(string: urlStr)!, options: [:], completionHandler: nil)
@@ -194,7 +206,15 @@ extension KathaEBookVC : UITableViewDelegate, UITableViewDataSource{
     
     let data = arrKathaEBook[sender.tag]
     
-    let urlStr = "\(BASE_URL)\(data["android_hindi"].stringValue)"
+    if data["is_read"].intValue == 0{
+      
+      let param = ["app_id":Utility.getDeviceID(),
+                   "katha_ebook_id":data["id"].stringValue] as NSDictionary
+      
+      Utility.readUnread(api_Url: WebService_Katha_E_Book_Read_Unread, parameters: param)
+    }
+    
+    let urlStr = "\(BASE_URL_IMAGE)\(data["android_hindi"].stringValue)"
     
     if #available(iOS 10.0, *) {
       UIApplication.shared.open(URL(string: urlStr)!, options: [:], completionHandler: nil)
@@ -207,7 +227,7 @@ extension KathaEBookVC : UITableViewDelegate, UITableViewDataSource{
 
 }
 
-//MARK: Menu Navigation Delegate
+//MARK:- Menu Navigation Delegate
 extension KathaEBookVC: MenuNavigationDelegate{
   
   func SelectedMenu(ScreenName: String?) {
@@ -250,17 +270,27 @@ extension KathaEBookVC: MenuNavigationDelegate{
       
     }else if ScreenName == "Live Katha Audio"{
       //Live Katha Audio
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "WebViewVC") as! WebViewVC
+      vc.screenDirection = .Live_Katha_Streaming_Audio
+      vc.strTitle = "Live Katha Audio"
+      navigationController?.pushViewController(vc, animated:  true)
       
     }else if ScreenName == "You Tube Channel"{
       //You Tube Channel
       let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "WebViewVC") as! WebViewVC
       vc.screenDirection = .Moraribapu_Youtube_Channel
-      vc.strTitle = "Morari Bapu Youtube channel"
+      vc.strTitle = "Morari Bapu Youtube Channel"
       navigationController?.pushViewController(vc, animated:  true)
       
     }else if ScreenName == "Live Katha Video"{
       //Live Katha Video
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "WebViewVC") as! WebViewVC
+      vc.screenDirection = .Live_Katha_Streaming_Video
+      vc.strTitle = "Live Katha Video"
+      navigationController?.pushViewController(vc, animated:  true)
       
     }
     else if ScreenName == "Media"{

@@ -42,7 +42,7 @@ class MenuVC: UIViewController {
 
   }
   
-  //MARK: Api Call
+  //MARK:- Api Call
   func getUnreadCounter(){
     
     let param = ["id" : "1",
@@ -114,7 +114,10 @@ extension MenuVC: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, 
         
         cell.lblCounter.isHidden = false
         
-        if arrMenu["KathaChopai"]?.intValue ?? 0 < 99{
+        if arrMenu["KathaChopai"]?.stringValue == ""{
+          cell.lblCounter.isHidden = true
+        }
+        else if arrMenu["KathaChopai"]?.intValue ?? 0 < 99{
             cell.lblCounter.text = arrMenu["KathaChopai"]?.stringValue
         }else{
             cell.lblCounter.text = " 99+ "
@@ -126,7 +129,10 @@ extension MenuVC: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, 
         //Ram Charitra Manas
         cell.lblCounter.isHidden = false
        
-        if arrMenu["Ramcharit"]?.intValue ?? 0 < 99{
+        if arrMenu["Ramcharit"]?.stringValue == ""{
+          cell.lblCounter.isHidden = true
+        }
+        else if arrMenu["Ramcharit"]?.intValue ?? 0 < 99{
           cell.lblCounter.text = arrMenu["Ramcharit"]?.stringValue
         }else{
           cell.lblCounter.text = " 99+ "
@@ -136,7 +142,10 @@ extension MenuVC: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, 
         //Upcoing Katha
           cell.lblCounter.isHidden = false
         
-        if arrMenu["UpcomingKatha"]?.intValue ?? 0 < 99{
+        if arrMenu["UpcomingKatha"]?.stringValue == ""{
+          cell.lblCounter.isHidden = true
+        }
+        else if arrMenu["UpcomingKatha"]?.intValue ?? 0 < 99{
           cell.lblCounter.text = arrMenu["UpcomingKatha"]?.stringValue
         }else{
           cell.lblCounter.text = " 99+ "
@@ -147,7 +156,10 @@ extension MenuVC: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, 
         //Quotes
           cell.lblCounter.isHidden = false
         
-        if arrMenu["Quotes"]?.intValue ?? 0 < 99{
+        if arrMenu["Quotes"]?.stringValue == ""{
+          cell.lblCounter.isHidden = true
+        }
+        else if arrMenu["Quotes"]?.intValue ?? 0 < 99{
           cell.lblCounter.text = arrMenu["Quotes"]?.stringValue
         }else{
           cell.lblCounter.text = " 99+ "
@@ -156,7 +168,10 @@ extension MenuVC: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, 
       }else if indexPath.row == 5{
         //Daily Katha Clip
         cell.lblCounter.isHidden = false
-        if arrMenu["DailyKathaVideo"]?.intValue ?? 0 < 99{
+        if arrMenu["DailyKathaVideo"]?.stringValue == ""{
+          cell.lblCounter.isHidden = true
+        }
+        else if arrMenu["DailyKathaVideo"]?.intValue ?? 0 < 99{
           cell.lblCounter.text = arrMenu["DailyKathaVideo"]?.stringValue
         }else{
           cell.lblCounter.text = " 99+ "
@@ -166,7 +181,10 @@ extension MenuVC: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, 
         //Media
         
         cell.lblCounter.isHidden = false
-        if arrMenu["Media"]?.intValue ?? 0 < 99{
+        if arrMenu["Media"]?.stringValue == ""{
+          cell.lblCounter.isHidden = true
+        }
+        else if arrMenu["Media"]?.intValue ?? 0 < 99{
           cell.lblCounter.text = arrMenu["Media"]?.stringValue
         }else{
           cell.lblCounter.text = " 99+ "
@@ -177,7 +195,10 @@ extension MenuVC: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, 
         
           cell.lblCounter.isHidden = false
         
-        if arrMenu["WhatsNew"]?.intValue ?? 0 < 99{
+        if arrMenu["WhatsNew"]?.stringValue == ""{
+          cell.lblCounter.isHidden = true
+        }
+        else if arrMenu["WhatsNew"]?.intValue ?? 0 < 99{
           cell.lblCounter.text = arrMenu["WhatsNew"]?.stringValue
         }else{
           cell.lblCounter.text = " 99+ "
@@ -187,7 +208,10 @@ extension MenuVC: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, 
         //Events
       
           cell.lblCounter.isHidden = false
-        if arrMenu["Event"]?.intValue ?? 0 < 99{
+        if arrMenu["Event"]?.stringValue == ""{
+          cell.lblCounter.isHidden = true
+        }
+        else if arrMenu["Event"]?.intValue ?? 0 < 99{
           cell.lblCounter.text = arrMenu["Event"]?.stringValue
         }else{
           cell.lblCounter.text = " 99+ "
@@ -198,7 +222,10 @@ extension MenuVC: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, 
       
           cell.lblCounter.isHidden = false
       
-        if arrMenu["KathaEBook"]?.intValue ?? 0 < 99{
+        if arrMenu["KathaEBook"]?.stringValue == ""{
+          cell.lblCounter.isHidden = true
+        }
+        else if arrMenu["KathaEBook"]?.intValue ?? 0 < 99{
           cell.lblCounter.text = arrMenu["KathaEBook"]?.stringValue
         }else{
           cell.lblCounter.text = " 99+ "

@@ -25,48 +25,106 @@ enum SettingScreenIdentify {
 
 
 class SettingsVC: UIViewController {
-
+  
   @IBOutlet weak var tblSettings: UITableView!
   var screenDirection = SettingScreenIdentify.Settings
   @IBOutlet weak var lblTitle: UILabel!
   var arrMediaUnReadCounts  = [String:JSON]()
+  var arrOtherVideo : [JSON] = []
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-      tblSettings.tableFooterView =  UIView.init(frame: .zero)
-      tblSettings.layoutMargins = .zero
-      
-      tblSettings.rowHeight = 60
-      tblSettings.estimatedRowHeight = UITableView.automaticDimension
-      
-      if screenDirection == .Settings{
-        lblTitle.text = "Settings"
-      }else if screenDirection == .About_Us{
-        lblTitle.text = "About Us"
-      }else if screenDirection == .Media{
-        lblTitle.text = "Media"
-        self.getUnreadCounter()
-      }else if screenDirection == .Audios{
-        lblTitle.text = "Audios"
-      }
-      else if screenDirection == .Other_Videos{
-        lblTitle.text = "Other Videos"
-      }else{
-        //What's New
-        lblTitle.text = "What's New"
-      }
-      
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    
+    tblSettings.tableFooterView =  UIView.init(frame: .zero)
+    tblSettings.layoutMargins = .zero
+    
+    tblSettings.rowHeight = 60
+    tblSettings.estimatedRowHeight = UITableView.automaticDimension
+    
+  }
+  
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+    
+    if screenDirection == .Settings{
+      lblTitle.text = "Settings"
+    }else if screenDirection == .About_Us{
+      lblTitle.text = "About Us"
+    }else if screenDirection == .Media{
+      lblTitle.text = "Media"
+      self.getUnreadCounter()
+    }else if screenDirection == .Audios{
+      lblTitle.text = "Audios"
     }
+    else if screenDirection == .Other_Videos{
+      lblTitle.text = "Other Videos"
+      self.getOtherVideosCategories()
+      
+    }else{
+      //What's New
+      lblTitle.text = "What's New"
+      self.getUnreadCounter()
+    }
+    
+  }
   
+  func getOtherVideosCategories(){
+    
+    let param = ["parent_id" : "0"]
+    
+    WebServices().CallGlobalAPI(url: WebService_Other_Videos_Categories,headers: [:], parameters: param as NSDictionary, HttpMethod: "POST", ProgressView: false) { ( _ jsonResponce:JSON? , _ strErrorMessage:String) in
+      
+      if(jsonResponce?.error != nil) {
+        
+        var errorMess = jsonResponce?.error?.localizedDescription
+        errorMess = MESSAGE_Err_Service
+        Utility().showAlertMessage(vc: self, titleStr: "", messageStr: errorMess!)
+      }
+      else {
+        
+        if jsonResponce!["status"].stringValue == "true"{
+          self.arrOtherVideo = jsonResponce!["data"].arrayValue
+          
+          if self.arrOtherVideo.count != 0{
+            
+            DispatchQueue.main.async {
+              self.tblSettings .reloadData()
+              Utility.tableNoDataMessage(tableView: self.tblSettings, message: "", messageColor: UIColor.black, displayMessage: .Center)
+            }
+          }
+          else
+          {
+            
+            DispatchQueue.main.async {
+              self.tblSettings .reloadData()
+              Utility.tableNoDataMessage(tableView: self.tblSettings, message: "No Other VideoS", messageColor: UIColor.black, displayMessage: .Center)
+              
+            }
+          }
+          
+        }
+        else {
+          Utility().showAlertMessage(vc: self, titleStr: "", messageStr: jsonResponce!["message"].stringValue)
+        }
+      }
+    }
+  }
   
-  //MARK: Api Call
+  //MARK:- Api Call
   func getUnreadCounter(){
     
     let param = ["id" : "1",
                  "app_id":Utility.getDeviceID()] as NSDictionary
     
-    WebServices().CallGlobalAPI(url: WebService_Media_Counts,headers: [:], parameters: param, HttpMethod: "POST", ProgressView: false) { ( _ jsonResponce:JSON? , _ strErrorMessage:String) in
+    var api_Url = String()
+    
+    if screenDirection == .Media{
+      api_Url = WebService_Media_Counts
+    }else if screenDirection == .Whats_New{
+      api_Url = WebService_Whats_New_Counts
+    }
+    
+    WebServices().CallGlobalAPI(url: api_Url,headers: [:], parameters: param, HttpMethod: "POST", ProgressView: false) { ( _ jsonResponce:JSON? , _ strErrorMessage:String) in
       
       if(jsonResponce?.error != nil) {
         
@@ -103,15 +161,15 @@ class SettingsVC: UIViewController {
     }
   }
   
-  //MARK: Button Event
+  //MARK:- Button Event
   @IBAction func btnMenu(_ sender: Any) {
     Utility.menu_Show(onViewController: self)
-
+    
   }
   
   @IBAction func btnHanumanChalisha(_ sender: Any) {
     Utility.hanuman_chalisha_Show(onViewController: self)
-
+    
   }
   
   @IBAction func btnBack(_ sender: Any) {
@@ -144,7 +202,7 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
       return 3
     }
     else if screenDirection == .Other_Videos{
-      return 3
+      return arrOtherVideo.count
     }else{
       //What's New
       return 4
@@ -160,11 +218,11 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
       fatalError("The dequeued cell is not an instance of MealTableViewCell.")
     }
     
-      cell.lblUnReadCount.isHidden = true
+    cell.lblUnReadCount.isHidden = true
     
-      cell.lblUnReadCount.layer.masksToBounds = true
-      cell.lblUnReadCount.layer.borderColor = UIColor.white.cgColor
-      cell.lblUnReadCount.layer.cornerRadius = cell.lblUnReadCount.frame.height / 2
+    cell.lblUnReadCount.layer.masksToBounds = true
+    cell.lblUnReadCount.layer.borderColor = UIColor.white.cgColor
+    cell.lblUnReadCount.layer.cornerRadius = cell.lblUnReadCount.frame.height / 2
     
     if screenDirection == .Settings{
       if indexPath.row == 0{
@@ -187,7 +245,7 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
         cell.lblTitle.text = "FAQ"
         
       }
-
+      
     }else if screenDirection == .About_Us{
       if indexPath.row == 0{
         cell.lblTitle.text = "About Bapu"
@@ -198,7 +256,10 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
         
         cell.lblUnReadCount.isHidden = false
         
-        if arrMediaUnReadCounts["BapuPhoto"]?.intValue ?? 0 < 99{
+        if arrMediaUnReadCounts["BapuPhoto"]?.stringValue == ""{
+          cell.lblUnReadCount.isHidden = true
+        }
+        else if arrMediaUnReadCounts["BapuPhoto"]?.intValue ?? 0 < 99{
           cell.lblUnReadCount.text = arrMediaUnReadCounts["BapuPhoto"]?.stringValue
         }else{
           cell.lblUnReadCount.text = " 99+ "
@@ -209,7 +270,10 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
         
         cell.lblUnReadCount.isHidden = false
         
-        if arrMediaUnReadCounts["BapuShayari"]?.intValue ?? 0 < 99{
+        if arrMediaUnReadCounts["BapuShayari"]?.stringValue == ""{
+          cell.lblUnReadCount.isHidden = true
+        }
+        else if arrMediaUnReadCounts["BapuShayari"]?.intValue ?? 0 < 99{
           cell.lblUnReadCount.text = arrMediaUnReadCounts["BapuShayari"]?.stringValue
         }else{
           cell.lblUnReadCount.text = " 99+ "
@@ -221,7 +285,10 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
         
         cell.lblUnReadCount.isHidden = false
         
-        if arrMediaUnReadCounts["BapuThought"]?.intValue ?? 0 < 99{
+        if arrMediaUnReadCounts["BapuThought"]?.stringValue == ""{
+          cell.lblUnReadCount.isHidden = true
+        }
+        else if arrMediaUnReadCounts["BapuThought"]?.intValue ?? 0 < 99{
           cell.lblUnReadCount.text = arrMediaUnReadCounts["BapuThought"]?.stringValue
         }else{
           cell.lblUnReadCount.text = " 99+ "
@@ -233,7 +300,10 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
         
         cell.lblUnReadCount.isHidden = false
         
-        if arrMediaUnReadCounts["OtherVideo"]?.intValue ?? 0 < 99{
+        if arrMediaUnReadCounts["OtherVideo"]?.stringValue == ""{
+          cell.lblUnReadCount.isHidden = true
+        }
+        else if arrMediaUnReadCounts["OtherVideo"]?.intValue ?? 0 < 99{
           cell.lblUnReadCount.text = arrMediaUnReadCounts["OtherVideo"]?.stringValue
         }else{
           cell.lblUnReadCount.text = " 99+ "
@@ -245,19 +315,24 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
         
         cell.lblUnReadCount.isHidden = false
         
-        if arrMediaUnReadCounts["Audio"]?.intValue ?? 0 < 99{
+        if arrMediaUnReadCounts["Audio"]?.stringValue == ""{
+          cell.lblUnReadCount.isHidden = true
+        }
+        else if arrMediaUnReadCounts["Audio"]?.intValue ?? 0 < 99{
           cell.lblUnReadCount.text = arrMediaUnReadCounts["Audio"]?.stringValue
         }else{
           cell.lblUnReadCount.text = " 99+ "
         }
-        
         
       }else if indexPath.row == 5{
         cell.lblTitle.text = "Press Articles"
         
         cell.lblUnReadCount.isHidden = false
         
-        if arrMediaUnReadCounts["Article"]?.intValue ?? 0 < 99{
+        if arrMediaUnReadCounts["Article"]?.stringValue == ""{
+          cell.lblUnReadCount.isHidden = true
+        }
+        else if arrMediaUnReadCounts["Article"]?.intValue ?? 0 < 99{
           cell.lblUnReadCount.text = arrMediaUnReadCounts["Article"]?.stringValue
         }else{
           cell.lblUnReadCount.text = " 99+ "
@@ -267,9 +342,9 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
       }
       else {
         cell.lblTitle.text = "SND Internet Radio"
-
+        
       }
-
+      
     }else if screenDirection == .Audios{
       if indexPath.row == 0{
         cell.lblTitle.text = "Stuti"
@@ -283,31 +358,71 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
       }
     }
     else if screenDirection == .Other_Videos{
-      if indexPath.row == 0{
-        cell.lblTitle.text = "Interview"
-        
-      }else if indexPath.row == 1{
-        cell.lblTitle.text = "Prasang"
-        
-      }
-      else {
-        cell.lblTitle.text = "Speech"
-      }
+      
+      var dict = arrOtherVideo[indexPath.row]
+      
+      cell.lblTitle.text = dict["name"].stringValue
+      
     }else{
       //What's New
       if indexPath.row == 0{
         cell.lblTitle.text = "Text"
         
+        cell.lblUnReadCount.isHidden = false
+        
+        if arrMediaUnReadCounts["NewText"]?.stringValue == ""{
+          cell.lblUnReadCount.isHidden = true
+        }
+        else if arrMediaUnReadCounts["NewText"]?.intValue ?? 0 < 99{
+          cell.lblUnReadCount.text = arrMediaUnReadCounts["NewText"]?.stringValue
+        }else{
+          cell.lblUnReadCount.text = " 99+ "
+        }
+        
       }else if indexPath.row == 1{
         cell.lblTitle.text = "Photo"
+        
+        cell.lblUnReadCount.isHidden = false
+        
+        if arrMediaUnReadCounts["NewImage"]?.stringValue == ""{
+          cell.lblUnReadCount.isHidden = true
+        }
+        else if arrMediaUnReadCounts["NewImage"]?.intValue ?? 0 < 99{
+          cell.lblUnReadCount.text = arrMediaUnReadCounts["NewImage"]?.stringValue
+        }else{
+          cell.lblUnReadCount.text = " 99+ "
+        }
         
       }
       else if indexPath.row == 2{
         cell.lblTitle.text = "Video"
         
+        cell.lblUnReadCount.isHidden = false
+        
+        if arrMediaUnReadCounts["NewVideo"]?.stringValue == ""{
+          cell.lblUnReadCount.isHidden = true
+        }
+        else if arrMediaUnReadCounts["NewVideo"]?.intValue ?? 0 < 99{
+          cell.lblUnReadCount.text = arrMediaUnReadCounts["NewVideo"]?.stringValue
+        }else{
+          cell.lblUnReadCount.text = " 99+ "
+        }
+        
       }
       else {
         cell.lblTitle.text = "Audio"
+        
+        cell.lblUnReadCount.isHidden = false
+        
+        if arrMediaUnReadCounts["NewAudio"]?.stringValue == ""{
+          cell.lblUnReadCount.isHidden = true
+        }
+        else if arrMediaUnReadCounts["NewAudio"]?.intValue ?? 0 < 99{
+          cell.lblUnReadCount.text = arrMediaUnReadCounts["NewAudio"]?.stringValue
+        }else{
+          cell.lblUnReadCount.text = " 99+ "
+        }
+        
       }
     }
     
@@ -349,7 +464,7 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
         navigationController?.pushViewController(vc, animated:  true)
         
       }else if indexPath.row == 3{
-       
+        
         DispatchQueue.main.async {
           // text to share
           let text = "This message has been sent via the Morari Bapu App.\nYou can download it too from this link: https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
@@ -362,10 +477,10 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
           // exclude some activity types from the list (optional)
           activityViewController.excludedActivityTypes = [ UIActivity.ActivityType.airDrop, UIActivity.ActivityType.postToFacebook ]
           
-            self.present(activityViewController, animated: true, completion: nil)
+          self.present(activityViewController, animated: true, completion: nil)
           
         }
-       
+        
       }else if indexPath.row == 4{
         self.view.makeToast("Coming Soon...", duration: 3.0, position: .bottom)
       }
@@ -385,7 +500,7 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
     }else if screenDirection == .Media{
       
       if indexPath.row == 0{
-      
+        
         //Photos
         
         let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
@@ -435,7 +550,7 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
         
         //SND Internet Radio
         self.view.makeToast("Coming Soon...", duration: 3.0, position: .bottom)
-
+        
       }
       
     }else if screenDirection == .Audios{
@@ -448,18 +563,26 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
         
       }
       else {
-      
+        
       }
       
     }
     else if screenDirection == .Other_Videos{
       
+      var dict = arrOtherVideo[indexPath.row]
+      
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "WhatsNewVideoVC") as! WhatsNewVideoVC
+      vc.idVideoCategory = dict["id"].stringValue
+      vc.screenDirection = .Other_Videos
+      
+      navigationController?.pushViewController(vc, animated:  true)
       
     }else{
       //What's New
       
       if indexPath.row == 0{
-          //Text
+        //Text
         
         let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "WhatsNewTextVC") as! WhatsNewTextVC
@@ -492,12 +615,12 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
       }
       
     }
-  
+    
   }
 }
 
 
-//MARK: Menu Navigation Delegate
+//MARK:- Menu Navigation Delegate
 extension SettingsVC: MenuNavigationDelegate{
   
   func SelectedMenu(ScreenName: String?) {
@@ -540,17 +663,27 @@ extension SettingsVC: MenuNavigationDelegate{
       
     }else if ScreenName == "Live Katha Audio"{
       //Live Katha Audio
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "WebViewVC") as! WebViewVC
+      vc.screenDirection = .Live_Katha_Streaming_Audio
+      vc.strTitle = "Live Katha Audio"
+      navigationController?.pushViewController(vc, animated:  true)
       
     }else if ScreenName == "You Tube Channel"{
       //You Tube Channel
       let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "WebViewVC") as! WebViewVC
       vc.screenDirection = .Moraribapu_Youtube_Channel
-      vc.strTitle = "Morari Bapu Youtube channel"
+      vc.strTitle = "Morari Bapu Youtube Channel"
       navigationController?.pushViewController(vc, animated:  true)
       
     }else if ScreenName == "Live Katha Video"{
       //Live Katha Video
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "WebViewVC") as! WebViewVC
+      vc.screenDirection = .Live_Katha_Streaming_Video
+      vc.strTitle = "Live Katha Video"
+      navigationController?.pushViewController(vc, animated:  true)
       
     }
     else if ScreenName == "Media"{
@@ -605,3 +738,4 @@ extension SettingsVC: MenuNavigationDelegate{
     }
   }
 }
+

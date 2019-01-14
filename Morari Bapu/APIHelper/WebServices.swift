@@ -196,7 +196,7 @@ class WebServices: NSObject
         }
     }
     
-    //MARK: Internet Avilability
+    //MARK:- Internet Avilability
     func internetChecker(reachability: Reachability) -> Bool {
         // print("\(reachability.description) - \(reachability.connection)")
         var check:Bool = false

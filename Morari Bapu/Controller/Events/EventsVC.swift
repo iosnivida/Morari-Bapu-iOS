@@ -26,7 +26,7 @@ class EventsVC: UIViewController {
     
   }
   
-  //MARK: Api Call
+  //MARK:- Api Call
   func getKathaEBook(){
     
     let param = ["id" : "1",
@@ -69,7 +69,7 @@ class EventsVC: UIViewController {
     }
   }
   
-  //MARK: Button Event
+  //MARK:- Button Event
   @IBAction func btnMenu(_ sender: Any) {
     Utility.menu_Show(onViewController: self)
     
@@ -125,6 +125,16 @@ extension EventsVC: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate
   
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     
+    var data = arrEvents[indexPath.row]
+
+    if data["is_read"].intValue == 0{
+      
+      let param = ["app_id":Utility.getDeviceID(),
+                   "event_id":data["id"].stringValue] as NSDictionary
+      
+      Utility.readUnread(api_Url: WebService_Event_Read_Unread, parameters: param)
+    }
+    
     let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
     let vc = storyboard.instantiateViewController(withIdentifier: "EventsDetailsVC") as! EventsDetailsVC
     vc.arrEvents = arrEvents[indexPath.row].dictionaryValue
@@ -138,7 +148,7 @@ extension EventsVC: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate
 
 
 
-//MARK: Menu Navigation Delegate
+//MARK:- Menu Navigation Delegate
 extension EventsVC: MenuNavigationDelegate{
   
   func SelectedMenu(ScreenName: String?) {
@@ -181,17 +191,27 @@ extension EventsVC: MenuNavigationDelegate{
       
     }else if ScreenName == "Live Katha Audio"{
       //Live Katha Audio
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "WebViewVC") as! WebViewVC
+      vc.screenDirection = .Live_Katha_Streaming_Audio
+      vc.strTitle = "Live Katha Audio"
+      navigationController?.pushViewController(vc, animated:  true)
       
     }else if ScreenName == "You Tube Channel"{
       //You Tube Channel
       let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "WebViewVC") as! WebViewVC
       vc.screenDirection = .Moraribapu_Youtube_Channel
-      vc.strTitle = "Morari Bapu Youtube channel"
+      vc.strTitle = "Morari Bapu Youtube Channel"
       navigationController?.pushViewController(vc, animated:  true)
       
     }else if ScreenName == "Live Katha Video"{
       //Live Katha Video
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "WebViewVC") as! WebViewVC
+      vc.screenDirection = .Live_Katha_Streaming_Video
+      vc.strTitle = "Live Katha Video"
+      navigationController?.pushViewController(vc, animated:  true)
       
     }
     else if ScreenName == "Media"{
