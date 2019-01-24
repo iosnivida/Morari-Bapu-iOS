@@ -10,7 +10,13 @@ import UIKit
 
 class Articles1TableViewCell: UITableViewCell {
 
-    override func awakeFromNib() {
+  @IBOutlet weak var lblTitle: UILabel!
+  @IBOutlet weak var lblLink: UILabel!
+  @IBOutlet weak var lblDate: UILabel!
+  @IBOutlet weak var lblFavourite: UIButton!
+  @IBOutlet weak var lblShare: UIButton!
+
+  override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
     }

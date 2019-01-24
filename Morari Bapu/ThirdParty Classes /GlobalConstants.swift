@@ -48,8 +48,6 @@ let WebService_Live_Katha_Video                     = "\(BASE_URL)LiveKathaVideo
 let WebService_Bapus_Photos_Media                   = "\(BASE_URL)BapuDarshan/App_GetBapuDarshan"
 let WebService_Other_Video_Media                    = "\(BASE_URL)Kathavideo/App_GetOtherVideo"
 
-let WebService_Sankirtan_Media_Audio                = "\(BASE_URL)Sankirtan/App_GetSankirtan"
-
 
 let WebService_Feedback                             = "\(BASE_URL)Feedback/App_Add_Feedback"
 
@@ -63,19 +61,24 @@ let WebService_Whats_New_Video                      = "\(BASE_URL)NewVideo/App_G
 let WebService_Whats_New_Audio                      = "\(BASE_URL)NewAudio/App_GetAudio"
 let WebService_Whats_New_Photos                     = "\(BASE_URL)NewImage/App_GetImage"
 
+let WebService_Stuti_Audio                          = "\(BASE_URL)Stuti/App_GetStuti"
+let WebService_Sankirtan_Audio                      = "\(BASE_URL)Sankirtan/App_GetSankirtan"
+let WebService_Other_Audio                          = "\(BASE_URL)NewAudio/App_GetAudio"
 
 //Media
 let WebService_Media_Photos                         = "\(BASE_URL)BapuDarshan/App_GetBapuDarshan"
 let WebService_Media_Video                          = "\(BASE_URL)Kathavideo/App_GetOtherVideo"
 let WebService_Media_Sayri                          = "\(BASE_URL)Bapufavouriteshayari/App_GetBapufavouriteshayari"
 let WebService_Media_Thought                        = "\(BASE_URL)BapuThought/App_GetBapuThought"
-let WebService_Media_Articles                       = "\(BASE_URL)moraribapu/Article/App_GetArticle"
+let WebService_Media_Articles                       = "\(BASE_URL)Article/App_GetArticle"
 let WebService_Other_Videos_Categories              = "\(BASE_URL)OtherVideoCategory/App_GetOtherVideoCategory"
 let WebService_Other_Categories_Videos_List         = "\(BASE_URL)Kathavideo/App_GetOtherVideo"
 
 //Favourite
 let WebService_Favourite                            = "\(BASE_URL)MyFavourite/App_Favourite"
 let WebService_Katha_EBook                          = "\(BASE_URL)KathaEBook/App_GetKathaEBook"
+let WebService_Favourite_List                       = "\(BASE_URL)MyFavourite/App_Get_Favourite"
+
 
 //Read Unread Count
 let WebService_Menu_Counts                          = "\(BASE_URL)HomeApi/App_GetMenuCount"

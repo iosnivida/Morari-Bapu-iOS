@@ -238,8 +238,12 @@ extension WhatsNewVideoVC: MenuNavigationDelegate{
       
     }else if ScreenName == "Search"{
       //Search
-    }else if ScreenName == "Favourites"{
+       }else if ScreenName == "Favourites"{
       //Favourites
+      
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "FavouriteVC") as! FavouriteVC
+      navigationController?.pushViewController(vc, animated:  true)
     }else if ScreenName == "Events"{
       //Events
       let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
@@ -394,25 +398,21 @@ extension WhatsNewVideoVC : UITableViewDelegate, UITableViewDataSource{
     
     let data = arrVideo[indexPath!.row]
     var favourite_for = String()
-    let favourite_id = data["id"].stringValue
+    var favourite_id = String()
     
-    
-    if data["youtube_link"].stringValue.count != 0{
-      //Youtube
+    if screenDirection == .WhatsNew_Video{
+      
+      
+    }else if screenDirection == .Other_Videos{
+      
+    }else if screenDirection == .Daily_Katha_Clip{
       favourite_for = "4"
+      favourite_id = data["id"].stringValue
     }
-    else if data["quotes_english"].stringValue.count != 0{
-      //Quotes
-      favourite_for = "1"
-    } else{
-      // Upcoming
-      favourite_for = "6"
-    }
-    
     
     let paramater = ["app_id":Utility.getDeviceID(),
                      "favourite_for":favourite_for,
-                     "favourite_id":"1"]
+                     "favourite_id":favourite_id]
     
     WebServices().CallGlobalAPI(url: WebService_Favourite,headers: [:], parameters: paramater as NSDictionary, HttpMethod: "POST", ProgressView: true) { ( _ jsonResponce:JSON? , _ strErrorMessage:String) in
       

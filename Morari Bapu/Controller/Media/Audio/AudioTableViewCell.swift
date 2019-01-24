@@ -7,12 +7,23 @@
 //
 
 import UIKit
+import ESTMusicIndicator
 
 class AudioTableViewCell: UITableViewCell {
 
+  
+  @IBOutlet weak var viewMusicIndicator: ESTMusicIndicatorView!
+  @IBOutlet weak var lblbTitle: UILabel!
+  @IBOutlet weak var lblDuration: UILabel!
+  @IBOutlet weak var btnShare: UIButton!
+  @IBOutlet weak var btnFavourite: UIButton!
+  
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+      
+      viewMusicIndicator.state = .playing
+      viewMusicIndicator.tintColor = .red
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

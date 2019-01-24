@@ -13,6 +13,9 @@
         <array key="Montserrat-Medium.ttf">
             <string>Montserrat-Medium</string>
         </array>
+        <array key="MontserratAlternates-Regular.otf">
+            <string>MontserratAlternates-Regular</string>
+        </array>
         <array key="MontserratAlternates-SemiBold.otf">
             <string>MontserratAlternates-SemiBold</string>
         </array>
@@ -258,7 +261,7 @@
                                 <rect key="frame" x="0.0" y="114" width="375" height="553"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gjR-3k-rPN">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="553"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="566"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="hanuman" translatesAutoresizingMaskIntoConstraints="NO" id="GDr-zJ-wZ3">
                                                 <rect key="frame" x="0.0" y="10" width="375" height="450"/>
@@ -267,30 +270,76 @@
                                                 </constraints>
                                             </imageView>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aYJ-o1-Scj" userLabel="Audio Player">
-                                                <rect key="frame" x="16" y="468" width="343" height="42"/>
+                                                <rect key="frame" x="16" y="468" width="343" height="60"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hanuman Chalisha" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ARg-m6-KcN">
+                                                        <rect key="frame" x="8" y="8" width="278" height="20"/>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <fontDescription key="fontDescription" name="MontserratAlternates-SemiBold" family="Montserrat Alternates" pointSize="16"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="249" text="(Duration: 6:35)" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZV5-Aj-rnK">
+                                                        <rect key="frame" x="8" y="32" width="278" height="20"/>
+                                                        <fontDescription key="fontDescription" name="MontserratAlternates-Regular" family="Montserrat Alternates" pointSize="16"/>
+                                                        <color key="textColor" red="0.44947445390000001" green="0.19829207660000001" blue="0.22867149110000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZE4-hi-6T0" customClass="ESTMusicIndicatorView" customModule="ESTMusicIndicator">
+                                                        <rect key="frame" x="294" y="8" width="44" height="44"/>
+                                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="44" id="YMB-nu-s2S"/>
+                                                            <constraint firstAttribute="height" constant="44" id="c3j-QJ-DPY"/>
+                                                        </constraints>
+                                                    </view>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YRS-Zj-PA4">
+                                                        <rect key="frame" x="0.0" y="0.0" width="343" height="60"/>
+                                                        <connections>
+                                                            <action selector="btnHanumanChalishaPlay:" destination="evS-Wh-Ny3" eventType="touchUpInside" id="Hix-Gw-THG"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="42" id="XsR-S5-MWP"/>
+                                                    <constraint firstItem="ZV5-Aj-rnK" firstAttribute="top" secondItem="ARg-m6-KcN" secondAttribute="bottom" constant="4" id="7Fm-2I-Pio"/>
+                                                    <constraint firstItem="ARg-m6-KcN" firstAttribute="leading" secondItem="aYJ-o1-Scj" secondAttribute="leading" constant="8" id="Jr3-d5-K5F"/>
+                                                    <constraint firstAttribute="trailing" secondItem="YRS-Zj-PA4" secondAttribute="trailing" id="L4I-He-Wmw"/>
+                                                    <constraint firstAttribute="trailing" secondItem="ZE4-hi-6T0" secondAttribute="trailing" constant="5" id="Qa5-t3-d0E"/>
+                                                    <constraint firstItem="YRS-Zj-PA4" firstAttribute="top" secondItem="aYJ-o1-Scj" secondAttribute="top" id="Qnn-ym-3a6"/>
+                                                    <constraint firstItem="YRS-Zj-PA4" firstAttribute="leading" secondItem="aYJ-o1-Scj" secondAttribute="leading" id="Tdu-ci-d7Q"/>
+                                                    <constraint firstItem="ZE4-hi-6T0" firstAttribute="leading" secondItem="ZV5-Aj-rnK" secondAttribute="trailing" constant="8" id="XeG-lp-MUe"/>
+                                                    <constraint firstAttribute="height" constant="60" id="XsR-S5-MWP"/>
+                                                    <constraint firstAttribute="bottom" secondItem="YRS-Zj-PA4" secondAttribute="bottom" id="a3N-hp-rVq"/>
+                                                    <constraint firstItem="ZV5-Aj-rnK" firstAttribute="leading" secondItem="aYJ-o1-Scj" secondAttribute="leading" constant="8" id="c7M-nU-Dqy"/>
+                                                    <constraint firstItem="ZE4-hi-6T0" firstAttribute="leading" secondItem="ARg-m6-KcN" secondAttribute="trailing" constant="8" id="eMn-rc-VWg"/>
+                                                    <constraint firstAttribute="bottom" secondItem="ZE4-hi-6T0" secondAttribute="bottom" constant="8" id="oHv-KH-le9"/>
+                                                    <constraint firstItem="ZE4-hi-6T0" firstAttribute="top" secondItem="aYJ-o1-Scj" secondAttribute="top" constant="8" id="sAX-0Q-gN6"/>
+                                                    <constraint firstItem="ARg-m6-KcN" firstAttribute="top" secondItem="aYJ-o1-Scj" secondAttribute="top" constant="8" id="yaN-Tl-MCQ"/>
                                                 </constraints>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                        <integer key="value" value="8"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
                                             </view>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="juS-hF-wvY">
-                                                <rect key="frame" x="16" y="525" width="343" height="20"/>
+                                                <rect key="frame" x="16" y="538" width="343" height="20"/>
                                                 <fontDescription key="fontDescription" name="MontserratAlternates-SemiBold" family="Montserrat Alternates" pointSize="16"/>
                                                 <color key="textColor" red="0.35294117650000001" green="0.35294117650000001" blue="0.35294117650000001" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                         </subviews>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="bottom" secondItem="juS-hF-wvY" secondAttribute="bottom" constant="8" id="23J-fW-xOj"/>
                                             <constraint firstAttribute="trailing" secondItem="GDr-zJ-wZ3" secondAttribute="trailing" id="6QO-dh-fhR"/>
                                             <constraint firstItem="GDr-zJ-wZ3" firstAttribute="leading" secondItem="gjR-3k-rPN" secondAttribute="leading" id="7Dj-7A-g9L"/>
-                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="210" id="HsJ-9S-9k7"/>
+                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="553" id="HsJ-9S-9k7"/>
                                             <constraint firstAttribute="trailing" secondItem="aYJ-o1-Scj" secondAttribute="trailing" constant="16" id="VJR-5D-d53"/>
                                             <constraint firstAttribute="trailing" secondItem="juS-hF-wvY" secondAttribute="trailing" constant="16" id="bA7-43-lSQ"/>
                                             <constraint firstItem="GDr-zJ-wZ3" firstAttribute="top" secondItem="gjR-3k-rPN" secondAttribute="top" constant="10" id="eS2-Xs-O5L"/>
                                             <constraint firstItem="aYJ-o1-Scj" firstAttribute="top" secondItem="GDr-zJ-wZ3" secondAttribute="bottom" constant="8" id="mAh-jS-gvC"/>
-                                            <constraint firstItem="juS-hF-wvY" firstAttribute="top" secondItem="aYJ-o1-Scj" secondAttribute="bottom" constant="15" id="pF0-dl-WFI"/>
+                                            <constraint firstItem="juS-hF-wvY" firstAttribute="top" secondItem="aYJ-o1-Scj" secondAttribute="bottom" constant="10" id="pF0-dl-WFI"/>
                                             <constraint firstItem="juS-hF-wvY" firstAttribute="leading" secondItem="gjR-3k-rPN" secondAttribute="leading" constant="16" id="pWs-4r-Tu8"/>
                                             <constraint firstItem="aYJ-o1-Scj" firstAttribute="leading" secondItem="gjR-3k-rPN" secondAttribute="leading" constant="16" id="t89-r5-VV1"/>
                                         </constraints>
@@ -328,6 +377,7 @@
                     <navigationItem key="navigationItem" id="u0r-b5-6aX"/>
                     <connections>
                         <outlet property="lblDescription" destination="juS-hF-wvY" id="Ahc-P9-7kc"/>
+                        <outlet property="viewMusicIndicator" destination="ZE4-hi-6T0" id="YAQ-1m-0EX"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GVx-Ee-MzQ" sceneMemberID="firstResponder"/>
@@ -453,15 +503,127 @@
             </objects>
             <point key="canvasLocation" x="1437.5999999999999" y="-741.67916041979015"/>
         </scene>
+        <!--Music PlayerVC-->
+        <scene sceneID="Mun-yx-SsR">
+            <objects>
+                <viewController storyboardIdentifier="MusicPlayerVC" id="gNy-do-QpI" customClass="MusicPlayerVC" customModule="Morari_Bapu" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="3ui-Ri-bui">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="S8k-Yn-rmQ">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GvV-Qv-ZEo">
+                                        <rect key="frame" x="0.0" y="617" width="375" height="50"/>
+                                        <subviews>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="favorite" translatesAutoresizingMaskIntoConstraints="NO" id="gos-mp-dOp">
+                                                <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="50" id="Wd1-O8-1jW"/>
+                                                    <constraint firstAttribute="width" constant="50" id="gKD-TR-rqW"/>
+                                                </constraints>
+                                            </imageView>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hanuman Chalisha" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uRb-vV-dMF">
+                                                <rect key="frame" x="58" y="3" width="204" height="20"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <fontDescription key="fontDescription" name="MontserratAlternates-SemiBold" family="Montserrat Alternates" pointSize="16"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="249" text="(Duration: 6:35)" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JTX-5U-FPi">
+                                                <rect key="frame" x="58" y="27" width="204" height="20"/>
+                                                <fontDescription key="fontDescription" name="MontserratAlternates-SemiBold" family="Montserrat Alternates" pointSize="12"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fnj-ds-p57">
+                                                <rect key="frame" x="340" y="7" width="35" height="35"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="35" id="EJZ-9R-KHv"/>
+                                                </constraints>
+                                                <inset key="imageEdgeInsets" minX="5" minY="5" maxX="5" maxY="5"/>
+                                                <state key="normal" image="rewind_forword"/>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KbQ-4j-BAD">
+                                                <rect key="frame" x="305" y="7" width="35" height="35"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="35" id="3zL-n0-hqr"/>
+                                                </constraints>
+                                                <inset key="imageEdgeInsets" minX="5" minY="5" maxX="5" maxY="5"/>
+                                                <state key="normal" backgroundImage="play"/>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vEt-kI-Ky0">
+                                                <rect key="frame" x="270" y="7" width="35" height="35"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="35" id="hzp-yh-ffQ"/>
+                                                </constraints>
+                                                <inset key="imageEdgeInsets" minX="5" minY="5" maxX="5" maxY="5"/>
+                                                <state key="normal" image="rewind_back"/>
+                                            </button>
+                                        </subviews>
+                                        <color key="backgroundColor" red="0.25882352941176467" green="0.25882352941176467" blue="0.25882352941176467" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="bottom" secondItem="JTX-5U-FPi" secondAttribute="bottom" constant="3" id="02m-JE-TiL"/>
+                                            <constraint firstAttribute="trailing" secondItem="Fnj-ds-p57" secondAttribute="trailing" id="88a-dy-na0"/>
+                                            <constraint firstAttribute="height" constant="50" id="98b-r1-XaP"/>
+                                            <constraint firstItem="uRb-vV-dMF" firstAttribute="leading" secondItem="gos-mp-dOp" secondAttribute="trailing" constant="8" id="BVx-Br-tcQ"/>
+                                            <constraint firstAttribute="bottom" secondItem="KbQ-4j-BAD" secondAttribute="bottom" constant="8" id="EpJ-tJ-xFZ"/>
+                                            <constraint firstAttribute="bottom" secondItem="Fnj-ds-p57" secondAttribute="bottom" constant="8" id="Guu-9I-nSU"/>
+                                            <constraint firstItem="gos-mp-dOp" firstAttribute="top" secondItem="GvV-Qv-ZEo" secondAttribute="top" id="LDT-6G-F71"/>
+                                            <constraint firstItem="KbQ-4j-BAD" firstAttribute="top" secondItem="GvV-Qv-ZEo" secondAttribute="top" constant="7" id="UYJ-tx-wgM"/>
+                                            <constraint firstItem="gos-mp-dOp" firstAttribute="leading" secondItem="GvV-Qv-ZEo" secondAttribute="leading" id="Wlb-go-A7X"/>
+                                            <constraint firstItem="vEt-kI-Ky0" firstAttribute="leading" secondItem="JTX-5U-FPi" secondAttribute="trailing" constant="8" id="WsZ-fp-DAH"/>
+                                            <constraint firstItem="vEt-kI-Ky0" firstAttribute="top" secondItem="GvV-Qv-ZEo" secondAttribute="top" constant="7" id="YJ2-a1-oK5"/>
+                                            <constraint firstAttribute="bottom" secondItem="gos-mp-dOp" secondAttribute="bottom" id="YwU-js-cNd"/>
+                                            <constraint firstItem="JTX-5U-FPi" firstAttribute="top" secondItem="uRb-vV-dMF" secondAttribute="bottom" constant="4" id="a81-HI-4o0"/>
+                                            <constraint firstAttribute="bottom" secondItem="vEt-kI-Ky0" secondAttribute="bottom" constant="8" id="apa-xa-1AC"/>
+                                            <constraint firstItem="vEt-kI-Ky0" firstAttribute="leading" secondItem="uRb-vV-dMF" secondAttribute="trailing" constant="8" id="bDI-ts-7NS"/>
+                                            <constraint firstItem="vEt-kI-Ky0" firstAttribute="leading" secondItem="gos-mp-dOp" secondAttribute="trailing" constant="220" id="g0C-J1-BHl"/>
+                                            <constraint firstItem="JTX-5U-FPi" firstAttribute="leading" secondItem="gos-mp-dOp" secondAttribute="trailing" constant="8" id="h8c-VC-ZI8"/>
+                                            <constraint firstItem="Fnj-ds-p57" firstAttribute="leading" secondItem="KbQ-4j-BAD" secondAttribute="trailing" id="jdN-7O-YVK"/>
+                                            <constraint firstItem="uRb-vV-dMF" firstAttribute="top" secondItem="GvV-Qv-ZEo" secondAttribute="top" constant="3" id="vYz-vC-Qfs"/>
+                                            <constraint firstItem="Fnj-ds-p57" firstAttribute="top" secondItem="GvV-Qv-ZEo" secondAttribute="top" constant="7" id="yJe-v8-uhg"/>
+                                            <constraint firstItem="KbQ-4j-BAD" firstAttribute="leading" secondItem="vEt-kI-Ky0" secondAttribute="trailing" id="zB6-4l-a6N"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="GvV-Qv-ZEo" firstAttribute="leading" secondItem="S8k-Yn-rmQ" secondAttribute="leading" id="2WQ-nG-BmY"/>
+                                    <constraint firstAttribute="trailing" secondItem="GvV-Qv-ZEo" secondAttribute="trailing" id="K94-0j-TNi"/>
+                                    <constraint firstAttribute="bottom" secondItem="GvV-Qv-ZEo" secondAttribute="bottom" id="eGN-jK-VIj"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="S8k-Yn-rmQ" firstAttribute="leading" secondItem="4ww-DI-2zc" secondAttribute="leading" id="DyY-IS-pkv"/>
+                            <constraint firstItem="S8k-Yn-rmQ" firstAttribute="trailing" secondItem="4ww-DI-2zc" secondAttribute="trailing" id="HKo-y7-oD0"/>
+                            <constraint firstItem="S8k-Yn-rmQ" firstAttribute="top" secondItem="3ui-Ri-bui" secondAttribute="top" id="PTX-Mk-hm5"/>
+                            <constraint firstItem="S8k-Yn-rmQ" firstAttribute="bottom" secondItem="4ww-DI-2zc" secondAttribute="bottom" id="lBg-xc-4Yz"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="4ww-DI-2zc"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="oQV-F2-KBr"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gAe-Sj-A3i" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2152.8000000000002" y="-741.67916041979015"/>
+        </scene>
     </scenes>
     <resources>
         <image name="back" width="9" height="14"/>
         <image name="close" width="96" height="96"/>
         <image name="download" width="96" height="96"/>
+        <image name="favorite" width="1200" height="1200"/>
         <image name="hanuman" width="927" height="1188"/>
         <image name="header_title" width="200" height="50"/>
         <image name="home" width="150" height="150"/>
         <image name="menu_1" width="512" height="512"/>
+        <image name="play" width="48" height="48"/>
+        <image name="rewind_back" width="15" height="24"/>
+        <image name="rewind_forword" width="14" height="24"/>
         <image name="share_white" width="96" height="96"/>
     </resources>
 </document>

@@ -10,6 +10,15 @@ import UIKit
 
 class Articles2TableViewCell: UITableViewCell {
 
+  @IBOutlet weak var lblTitle: UILabel!
+  @IBOutlet weak var lblLink: UILabel!
+  @IBOutlet weak var lblDate: UILabel!
+  @IBOutlet weak var imgVideo: UIImageView!
+  @IBOutlet weak var btnYoutube: UIButton!
+  @IBOutlet weak var btnShare: UIButton!
+  @IBOutlet weak var btnFavourite: UIButton!
+  @IBOutlet weak var btnLink: UIButton!
+  
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

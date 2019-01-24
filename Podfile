@@ -27,6 +27,9 @@ target 'Morari Bapu' do
 
     # Keychain Access
     pod 'SwiftyGif'
+    
+    pod 'ESTMusicIndicator'
+
   # Pods for Doggie
 
   pod 'iCarousel', '~> 1.8'

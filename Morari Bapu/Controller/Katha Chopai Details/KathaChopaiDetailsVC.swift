@@ -112,8 +112,36 @@ class KathaChopaiDetailsVC: UIViewController {
   
   @IBAction func btnFavourite(_ sender: Any) {
     
-  }
+    if lblTitle.text == "Katha Chopai"{
   
+      let paramater = ["app_id":Utility.getDeviceID(),
+                       "favourite_for":"2",
+                       "favourite_id":arrKathaDetails["id"]?.stringValue]
+      
+      WebServices().CallGlobalAPI(url: WebService_Favourite,headers: [:], parameters: paramater as NSDictionary, HttpMethod: "POST", ProgressView: true) { ( _ jsonResponce:JSON? , _ strErrorMessage:String) in
+        
+        if(jsonResponce?.error != nil) {
+          
+          var errorMess = jsonResponce?.error?.localizedDescription
+          errorMess = MESSAGE_Err_Service
+          Utility().showAlertMessage(vc: self, titleStr: "", messageStr: errorMess!)
+        }
+        else {
+          
+          if jsonResponce!["status"].stringValue == "true"{
+            
+            self.btnFavourite.setImage(UIImage(named: "unfavorite"), for: .normal)
+            self.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
+
+            
+          }
+          else {
+            Utility().showAlertMessage(vc: self, titleStr: "", messageStr: jsonResponce!["message"].stringValue)
+          }
+        }
+      }
+    }
+  }
 }
 
 //MARK:- Menu Navigation Delegate
@@ -224,8 +252,12 @@ extension KathaChopaiDetailsVC: MenuNavigationDelegate{
       
     }else if ScreenName == "Search"{
       //Search
-    }else if ScreenName == "Favourites"{
+       }else if ScreenName == "Favourites"{
       //Favourites
+      
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "FavouriteVC") as! FavouriteVC
+      navigationController?.pushViewController(vc, animated:  true)
     }else if ScreenName == "Events"{
       //Events
       let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)

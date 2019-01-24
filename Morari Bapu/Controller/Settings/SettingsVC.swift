@@ -544,6 +544,9 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
       }else if indexPath.row == 5{
         
         //Press Article
+        let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "ArticlesVC") as! ArticlesVC
+        navigationController?.pushViewController(vc, animated:  true)
         
       }
       else {
@@ -557,12 +560,28 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
       
       if indexPath.row == 0{
         
+        //Stuti
+        let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "AudioVC") as! AudioVC
+        vc.screenDirection = .Stuti
+        navigationController?.pushViewController(vc, animated:  true)
         
       }else if indexPath.row == 1{
         
+        //Sankirtan
+        let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "AudioVC") as! AudioVC
+        vc.screenDirection = .Sankirtan
+        navigationController?.pushViewController(vc, animated:  true)
         
       }
       else {
+        
+        //Other Audio
+        let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "AudioVC") as! AudioVC
+        vc.screenDirection = .Others
+        navigationController?.pushViewController(vc, animated:  true)
         
       }
       
@@ -720,8 +739,12 @@ extension SettingsVC: MenuNavigationDelegate{
       
     }else if ScreenName == "Search"{
       //Search
-    }else if ScreenName == "Favourites"{
+       }else if ScreenName == "Favourites"{
       //Favourites
+      
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "FavouriteVC") as! FavouriteVC
+      navigationController?.pushViewController(vc, animated:  true)
     }else if ScreenName == "Events"{
       //Events
       let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)

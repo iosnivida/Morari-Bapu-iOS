@@ -2,6 +2,7 @@ PODS:
   - Alamofire (4.7.3)
   - Crashlytics (3.10.8):
     - Fabric (~> 1.7.12)
+  - ESTMusicIndicator (0.2.0)
   - Fabric (1.7.12)
   - Firebase/Core (5.9.0):
     - Firebase/CoreOnly
@@ -79,6 +80,7 @@ PODS:
 DEPENDENCIES:
   - Alamofire (~> 4.7.2)
   - Crashlytics (~> 3.10.1)
+  - ESTMusicIndicator
   - Fabric (~> 1.7.6)
   - Firebase/Core
   - Firebase/RemoteConfig
@@ -95,6 +97,7 @@ SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - Alamofire
     - Crashlytics
+    - ESTMusicIndicator
     - Fabric
     - Firebase
     - FirebaseABTesting
@@ -118,6 +121,7 @@ SPEC REPOS:
 SPEC CHECKSUMS:
   Alamofire: c7287b6e5d7da964a70935e5db17046b7fde6568
   Crashlytics: 058dc1ba579f6c100bc60a6878703779bff383c4
+  ESTMusicIndicator: 80a123b51a7de3caa44dc91829b9619185dad0f6
   Fabric: d7387db9a31aadff63b147a4b91d982c53afaa4f
   Firebase: 383fa29aca93e371cab776b48a5c66544d3c2003
   FirebaseABTesting: 1f50b8d50f5e3469eea54e7463a7b7fe221d1f5e
@@ -138,6 +142,6 @@ SPEC CHECKSUMS:
   SwiftyUserDefaults: 3d273b1739b68ada3145dc754a70ec775bc5c8be
   Toast-Swift: ba0b01b095aada709d915f9beb1d38184a2721c3
 
-PODFILE CHECKSUM: e8be40dfa464501ba7cd9db18f88bb641961386c
+PODFILE CHECKSUM: 35129e60b9ec296f2be5ff29210b29f77c44ab8a
 
 COCOAPODS: 1.5.3

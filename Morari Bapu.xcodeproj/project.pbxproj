@@ -49,6 +49,13 @@
 		07443DF42165220C00F39CCD /* YoutubeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07443DF32165220C00F39CCD /* YoutubeTableViewCell.swift */; };
 		07443DF62165223400F39CCD /* QuotesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07443DF52165223400F39CCD /* QuotesTableViewCell.swift */; };
 		07443DF82165228900F39CCD /* UpcomingKathaTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07443DF72165228900F39CCD /* UpcomingKathaTableViewCell.swift */; };
+		075675F221ED06F700915946 /* MusicPlayerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 075675F121ED06F700915946 /* MusicPlayerVC.swift */; };
+		0766437C21E79F2700B15520 /* FavouriteVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0766437B21E79F2700B15520 /* FavouriteVC.swift */; };
+		0766437F21E7AC3B00B15520 /* ArticlesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0766437E21E7AC3B00B15520 /* ArticlesVC.swift */; };
+		0766438121E7AC7F00B15520 /* Articles1TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0766438021E7AC7F00B15520 /* Articles1TableViewCell.swift */; };
+		0766438321E7AC9500B15520 /* Articles2TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0766438221E7AC9500B15520 /* Articles2TableViewCell.swift */; };
+		0766438521EA495600B15520 /* AudioTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0766438421EA495600B15520 /* AudioTableViewCell.swift */; };
+		0766438821EA497000B15520 /* AudioVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0766438721EA497000B15520 /* AudioVC.swift */; };
 		076BA35C21632A48004BD807 /* KathaChopaiVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 076BA35B21632A48004BD807 /* KathaChopaiVC.swift */; };
 		07A7551721624BC400793232 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 07A7551621624BC400793232 /* Default-568h@2x.png */; };
 		07A755192162592100793232 /* Custom.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 07A755182162592000793232 /* Custom.storyboard */; };
@@ -128,6 +135,13 @@
 		07443DF32165220C00F39CCD /* YoutubeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YoutubeTableViewCell.swift; sourceTree = "<group>"; };
 		07443DF52165223400F39CCD /* QuotesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuotesTableViewCell.swift; sourceTree = "<group>"; };
 		07443DF72165228900F39CCD /* UpcomingKathaTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpcomingKathaTableViewCell.swift; sourceTree = "<group>"; };
+		075675F121ED06F700915946 /* MusicPlayerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicPlayerVC.swift; sourceTree = "<group>"; };
+		0766437B21E79F2700B15520 /* FavouriteVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouriteVC.swift; sourceTree = "<group>"; };
+		0766437E21E7AC3B00B15520 /* ArticlesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticlesVC.swift; sourceTree = "<group>"; };
+		0766438021E7AC7F00B15520 /* Articles1TableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Articles1TableViewCell.swift; sourceTree = "<group>"; };
+		0766438221E7AC9500B15520 /* Articles2TableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Articles2TableViewCell.swift; sourceTree = "<group>"; };
+		0766438421EA495600B15520 /* AudioTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioTableViewCell.swift; sourceTree = "<group>"; };
+		0766438721EA497000B15520 /* AudioVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioVC.swift; sourceTree = "<group>"; };
 		076BA35B21632A48004BD807 /* KathaChopaiVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KathaChopaiVC.swift; sourceTree = "<group>"; };
 		07A7551621624BC400793232 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		07A755182162592000793232 /* Custom.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Custom.storyboard; sourceTree = "<group>"; };
@@ -269,6 +283,8 @@
 		07094A812161DA5C00B5B08C /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				0766437D21E7AC2B00B15520 /* Articles */,
+				0766437A21E79F0500B15520 /* Favourite */,
 				070A9F0921E116C300E8628F /* Media */,
 				074029DC21DE69E000E4DE4B /* What's New */,
 				0702110921DB8ABA006B6472 /* Events */,
@@ -389,6 +405,7 @@
 		070A9F0921E116C300E8628F /* Media */ = {
 			isa = PBXGroup;
 			children = (
+				0766438621EA495C00B15520 /* Audio */,
 				070A9F0F21E1175E00E8628F /* Bapu Thoughts */,
 				070A9F0A21E1171C00E8628F /* Shayri */,
 				070A9F1421E11CA900E8628F /* Shayri Details */,
@@ -497,6 +514,42 @@
 				074029F021DF228C00E4DE4B /* ImageViewerCollectionViewCell.swift */,
 			);
 			path = "Image Viewer";
+			sourceTree = "<group>";
+		};
+		075675F321ED06FD00915946 /* Music Player */ = {
+			isa = PBXGroup;
+			children = (
+				075675F121ED06F700915946 /* MusicPlayerVC.swift */,
+			);
+			path = "Music Player";
+			sourceTree = "<group>";
+		};
+		0766437A21E79F0500B15520 /* Favourite */ = {
+			isa = PBXGroup;
+			children = (
+				0766437B21E79F2700B15520 /* FavouriteVC.swift */,
+			);
+			path = Favourite;
+			sourceTree = "<group>";
+		};
+		0766437D21E7AC2B00B15520 /* Articles */ = {
+			isa = PBXGroup;
+			children = (
+				0766437E21E7AC3B00B15520 /* ArticlesVC.swift */,
+				0766438021E7AC7F00B15520 /* Articles1TableViewCell.swift */,
+				0766438221E7AC9500B15520 /* Articles2TableViewCell.swift */,
+			);
+			path = Articles;
+			sourceTree = "<group>";
+		};
+		0766438621EA495C00B15520 /* Audio */ = {
+			isa = PBXGroup;
+			children = (
+				0766438721EA497000B15520 /* AudioVC.swift */,
+				0766438421EA495600B15520 /* AudioTableViewCell.swift */,
+				075675F321ED06FD00915946 /* Music Player */,
+			);
+			path = Audio;
 			sourceTree = "<group>";
 		};
 		076BA35A21632A14004BD807 /* Katha Chopai  */ = {
@@ -740,6 +793,7 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Morari Bapu/Pods-Morari Bapu-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/ESTMusicIndicator/ESTMusicIndicator.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
 				"${BUILT_PRODUCTS_DIR}/IQKeyboardManagerSwift/IQKeyboardManagerSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/Kingfisher/Kingfisher.framework",
@@ -757,6 +811,7 @@
 			);
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ESTMusicIndicator.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IQKeyboardManagerSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Kingfisher.framework",
@@ -806,17 +861,21 @@
 				074029F121DF228C00E4DE4B /* ImageViewerCollectionViewCell.swift in Sources */,
 				0708F70A216D132A00A4B079 /* HanumanChalishaVC.swift in Sources */,
 				0709A8D4216A809600371E06 /* SettingsVC.swift in Sources */,
+				0766438321E7AC9500B15520 /* Articles2TableViewCell.swift in Sources */,
 				074029E821DE6A5700E4DE4B /* WhatsNewTextVC.swift in Sources */,
 				0709A8DB216B1D5800371E06 /* KathaChopaiTableViewCell.swift in Sources */,
 				0709A8D9216B1A4000371E06 /* QuotesVC.swift in Sources */,
 				070A9F1121E1177600E8628F /* BapuThoughtsVC.swift in Sources */,
+				0766438521EA495600B15520 /* AudioTableViewCell.swift in Sources */,
 				074029EA21DE6C9900E4DE4B /* WhatsNewTextTableViewCell.swift in Sources */,
 				07443DF62165223400F39CCD /* QuotesTableViewCell.swift in Sources */,
+				0766438821EA497000B15520 /* AudioVC.swift in Sources */,
 				070A9F1621E11CBC00E8628F /* ShayriDetailsVC.swift in Sources */,
 				0709A8D6216A80C300371E06 /* SettingsTableViewCell.swift in Sources */,
 				074029EF21DF227000E4DE4B /* ImageViewerVC.swift in Sources */,
 				074029E421DE6A3D00E4DE4B /* WhatsNewVideoVC.swift in Sources */,
 				076BA35C21632A48004BD807 /* KathaChopaiVC.swift in Sources */,
+				075675F221ED06F700915946 /* MusicPlayerVC.swift in Sources */,
 				070AD48121661A14007E6149 /* WebViewVC.swift in Sources */,
 				07094A8D2161DB6500B5B08C /* Reachability.swift in Sources */,
 				0702111521DBA88C006B6472 /* FaqTableViewCell.swift in Sources */,
@@ -832,10 +891,12 @@
 				07094A592161C32E00B5B08C /* Morari_Bapu.xcdatamodeld in Sources */,
 				0702111321DBA879006B6472 /* FaqVC.swift in Sources */,
 				07094A8A2161DAB400B5B08C /* Utility.swift in Sources */,
+				0766437F21E7AC3B00B15520 /* ArticlesVC.swift in Sources */,
 				0709A8CE216A6B7000371E06 /* KathaEBookVC.swift in Sources */,
 				07094A892161DAB400B5B08C /* GlobalConstants.swift in Sources */,
 				07A7551D21625A1800793232 /* MenuVC.swift in Sources */,
 				07443DF42165220C00F39CCD /* YoutubeTableViewCell.swift in Sources */,
+				0766438121E7AC7F00B15520 /* Articles1TableViewCell.swift in Sources */,
 				0709A8DD216B255700371E06 /* KathaChopaiDetailsVC.swift in Sources */,
 				070A9F0C21E1174900E8628F /* ShayriVC.swift in Sources */,
 				0702110C21DB8AFB006B6472 /* EventsDetailsVC.swift in Sources */,
@@ -843,6 +904,7 @@
 				07094A852161DA9200B5B08C /* WebServices.swift in Sources */,
 				07094A512161C32E00B5B08C /* AppDelegate.swift in Sources */,
 				0702110E21DB8B0A006B6472 /* EventsVC.swift in Sources */,
+				0766437C21E79F2700B15520 /* FavouriteVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

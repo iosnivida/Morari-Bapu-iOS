@@ -23,10 +23,11 @@ class DashboardVC: UIViewController {
   @IBOutlet weak var lblSliderTitle: UILabel!
   @IBOutlet weak var vwCarousel: iCarousel!
   @IBOutlet weak var scrollView: UIScrollView!
-    @IBOutlet var btnDown: UIButton!
-    @IBOutlet weak var pageControl: UIPageControl!
-    @IBOutlet weak var constraintHeightTableView: NSLayoutConstraint!
+  @IBOutlet var btnDown: UIButton!
+  @IBOutlet weak var pageControl: UIPageControl!
+  @IBOutlet weak var constraintHeightTableView: NSLayoutConstraint!
   @IBOutlet weak var carouselHeight: NSLayoutConstraint!
+  @IBOutlet weak var imgViewMain: UIImageView!
   
   @IBOutlet weak var tblHome: UITableView!
   
@@ -35,6 +36,7 @@ class DashboardVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+      lblSliderTitle.isHidden = true
       currentPageNo = 1
       
       let screenHeight = screenSize.height
@@ -95,13 +97,13 @@ class DashboardVC: UIViewController {
                         DispatchQueue.main.async {
                             self.pageControl.numberOfPages = self.arrSlider.count
                         
-                          let title = self.arrSlider[0]
+                         /* let title = self.arrSlider[0]
                           
                           if title["link"].stringValue.count != 0 {
                             self.lblSliderTitle.text = "Video"
                           }else{
                             self.lblSliderTitle.text = "Image"
-                          }
+                          }*/
                           
                           
                           self.vwCarousel.type = iCarouselType.coverFlow2
@@ -209,16 +211,17 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
       
       let data = arrHome[indexPath.row]
     
-      if data["youtube_link"].stringValue.count != 0{
-
-        let cellIdentifier = "YoutubeTableViewCell"
-        
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? YoutubeTableViewCell  else {
-          fatalError("The dequeued cell is not an instance of MealTableViewCell.")
-        }
-        
+    if data["youtube_link"].stringValue.count != 0{
+      
+      let cellIdentifier = "YoutubeTableViewCell"
+      
+      guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? YoutubeTableViewCell  else {
+        fatalError("The dequeued cell is not an instance of MealTableViewCell.")
+      }
+      
+      
       cell.lblTitle.text = data["title"].stringValue
-        cell.lblDuration.text = "Duration: \(data["video_duration"].stringValue)"
+      cell.lblDuration.text = "(Duration: \(data["video_duration"].stringValue))"
       cell.lblDate.text = Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd-MM-yyyy")
       
       let placeHolder = UIImage(named: "youtube_placeholder")
@@ -226,21 +229,18 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
       cell.imgVideo.kf.indicatorType = .activity
       cell.imgVideo.kf.setImage(with: URL(string: "\(BASE_URL_IMAGE)\(data["video_image"].stringValue)"), placeholder: placeHolder, options: [.transition(ImageTransition.fade(1))])
       
-      cell.btnMoveToCatrgoryLink.setTitle(data["list_heading"].stringValue, for: .normal)
-        
-        if data["is_favourite"].boolValue == true{
-          cell.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
-        }else{
-          cell.btnFavourite.setImage(UIImage(named: "unfavorite"), for: .normal)
-        }
-        
-        cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
-        cell.btnYoutube.addTarget(self, action: #selector(btnYoutube), for: UIControl.Event.touchUpInside)
-        cell.btnFavourite.addTarget(self, action: #selector(btnFavourite), for: UIControl.Event.touchUpInside)
-
-
-        return cell
-
+      if data["is_favourite"].boolValue == true{
+        cell.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
+      }else{
+        cell.btnFavourite.setImage(UIImage(named: "unfavorite"), for: .normal)
+      }
+      
+      cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
+      cell.btnYoutube.addTarget(self, action: #selector(btnYoutube), for: UIControl.Event.touchUpInside)
+      cell.btnFavourite.addTarget(self, action: #selector(btnFavourite), for: UIControl.Event.touchUpInside)
+      
+      return cell
+      
     }
     else if data["quotes_english"].stringValue.count != 0{
       
@@ -447,13 +447,18 @@ extension DashboardVC : iCarouselDataSource, iCarouselDelegate{
   func carouselCurrentItemIndexDidChange(_ carousel: iCarousel) {
  
     if arrSlider.count != 0{
-      let title = arrSlider[carousel.currentItemIndex]
-      
+     
+       /*let title = arrSlider[carousel.currentItemIndex]
+     
       if title["link"].stringValue.count != 0 {
         lblSliderTitle.text = "Video"
       }else{
         lblSliderTitle.text = "Image"
-      }
+      }*/
+      
+      let image = arrSlider[carousel.currentItemIndex]
+      let placeHolder = UIImage(named: "placeholder_doc")
+      self.imgViewMain.kf.setImage(with: URL(string: "\(BASE_URL_IMAGE)\(image["image"].stringValue)"), placeholder: placeHolder, options: [.transition(ImageTransition.fade(1))])
       
       self.pageControl.currentPage = carousel.currentItemIndex
     }
@@ -570,6 +575,11 @@ extension DashboardVC: MenuNavigationDelegate{
       //Search
     }else if ScreenName == "Favourites"{
       //Favourites
+      
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "FavouriteVC") as! FavouriteVC
+      navigationController?.pushViewController(vc, animated:  true)
+      
     }else if ScreenName == "Events"{
       //Events
       let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)

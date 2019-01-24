@@ -7,15 +7,19 @@
 //
 
 import UIKit
+import ESTMusicIndicator
 
 class HanumanChalishaVC: UIViewController {
 
   @IBOutlet weak var lblDescription: UILabel!
   
+  @IBOutlet weak var viewMusicIndicator: ESTMusicIndicatorView!
+  
   override func viewDidLoad() {
         super.viewDidLoad()
 
-    
+    viewMusicIndicator.state = .stopped
+
     let strHanumanchalisha = "<h2>हनुमान   चालीसा</h2><h2>Hanuman Chalisa</h2><p> શ્રી ગુરુ ચરણ સરોજ રજ નિજમન મુકુર સુધારિ |\n" +
     "વરણૌ રઘુવર વિમલયશ જો દાયક ફલચારિ ||</p><p>श्रीगुरु चरण् सरोजरज, निजमनमुकुर सुधार ।\n" +
       "बरणौ रघुबर बिमल यश, जो दायक फलचार ॥</p><p>Shrii-Guru Carann Saroja-Raja, Nija-Mana-Mukura Sudhaara |\n" +
@@ -220,9 +224,15 @@ class HanumanChalishaVC: UIViewController {
     self.dismiss(animated: true, completion: nil)
     Utility.backToHome()
     
-    
   }
   
+  @IBAction func btnHanumanChalishaPlay(_ sender: Any){
+    
+    viewMusicIndicator.state = .playing
+    viewMusicIndicator.tintColor = .red
+    
+    
+  }
   
 }
 

@@ -327,8 +327,12 @@ extension KathaEBookVC: MenuNavigationDelegate{
       
     }else if ScreenName == "Search"{
       //Search
-    }else if ScreenName == "Favourites"{
+       }else if ScreenName == "Favourites"{
       //Favourites
+      
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "FavouriteVC") as! FavouriteVC
+      navigationController?.pushViewController(vc, animated:  true)
     }else if ScreenName == "Events"{
       //Events
       let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
