@@ -37,6 +37,7 @@ class ArticlesVC: UIViewController {
   func getArticlesList(){
     
     let param = ["page" : "1",
+                 "favourite_for":"7",
                  "app_id":Utility.getDeviceID()] as NSDictionary
     
     WebServices().CallGlobalAPI(url: WebService_Media_Articles,headers: [:], parameters: param, HttpMethod: "POST", ProgressView: true) { ( _ jsonResponce:JSON? , _ strErrorMessage:String) in
@@ -138,10 +139,15 @@ extension ArticlesVC : UITableViewDelegate, UITableViewDataSource{
     }else{
       cell.btnFavourite.setImage(UIImage(named: "unfavorite"), for: .normal)
     }
+      
+      cell.btnShare.tag = indexPath.row
+      cell.btnYoutube.tag = indexPath.row
+      cell.btnFavourite.tag = indexPath.row
     
-//    cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
-//    cell.btnYoutube.addTarget(self, action: #selector(btnYoutube), for: UIControl.Event.touchUpInside)
-//    cell.btnFavourite.addTarget(self, action: #selector(btnFavourite), for: UIControl.Event.touchUpInside)
+    cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
+    cell.btnYoutube.addTarget(self, action: #selector(btnYoutube), for: UIControl.Event.touchUpInside)
+    cell.btnFavourite.addTarget(self, action: #selector(btnFavourite), for: UIControl.Event.touchUpInside)
+      
       return cell
 
     }else if data["image"].stringValue != "" && data["video"].stringValue != "" || data["link"].stringValue != ""{
@@ -156,10 +162,13 @@ extension ArticlesVC : UITableViewDelegate, UITableViewDataSource{
       cell.lblLink.text = data["link"].stringValue
       cell.lblDate.text = Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd-MMM-yyyy")
       
+      cell.btnShare.tag = indexPath.row
+      //cell.btnYoutube.tag = indexPath.row
+      cell.btnFavourite.tag = indexPath.row
       
-      //    cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
-      //    cell.btnYoutube.addTarget(self, action: #selector(btnYoutube), for: UIControl.Event.touchUpInside)
-      //    cell.btnFavourite.addTarget(self, action: #selector(btnFavourite), for: UIControl.Event.touchUpInside)
+      cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
+      //cell.btnYoutube.addTarget(self, action: #selector(btnYoutube), for: UIControl.Event.touchUpInside)
+      cell.btnFavourite.addTarget(self, action: #selector(btnFavourite), for: UIControl.Event.touchUpInside)
       return cell
       
      
@@ -187,14 +196,17 @@ extension ArticlesVC : UITableViewDelegate, UITableViewDataSource{
         cell.btnFavourite.setImage(UIImage(named: "unfavorite"), for: .normal)
       }
       
-      //    cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
-      //    cell.btnYoutube.addTarget(self, action: #selector(btnYoutube), for: UIControl.Event.touchUpInside)
-      //    cell.btnFavourite.addTarget(self, action: #selector(btnFavourite), for: UIControl.Event.touchUpInside)
+      cell.btnShare.tag = indexPath.row
+      cell.btnYoutube.tag = indexPath.row
+      cell.btnFavourite.tag = indexPath.row
+      
+      cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
+      cell.btnYoutube.addTarget(self, action: #selector(btnYoutube), for: UIControl.Event.touchUpInside)
+      cell.btnFavourite.addTarget(self, action: #selector(btnFavourite), for: UIControl.Event.touchUpInside)
+      
       return cell
 
     }
-
-    
   }
   
   func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -217,6 +229,88 @@ extension ArticlesVC : UITableViewDelegate, UITableViewDataSource{
       Utility.readUnread(api_Url: WebService_Article_Read_Unread, parameters: param)
     }
   }
+  
+  @IBAction func btnShare(_ sender: UIButton) {
+    
+    let buttonPosition:CGPoint = sender.convert(CGPoint.zero, to:self.tblArticles)
+    let indexPath = self.tblArticles.indexPathForRow(at: buttonPosition)
+    
+    let data = arrArticles[indexPath!.row]
+
+    let share_Content = "\(data["article"].stringValue) \n\nThis message has been sent via the Morari Bapu App. You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
+  
+    // set up activity view controller
+    let textToShare = [share_Content]
+    let activityViewController = UIActivityViewController(activityItems: textToShare, applicationActivities: nil)
+    activityViewController.popoverPresentationController?.sourceView = self.view // so that iPads won't crash
+    
+    // exclude some activity types from the list (optional)
+    activityViewController.excludedActivityTypes = [ UIActivity.ActivityType.airDrop, UIActivity.ActivityType.postToFacebook ]
+    
+    // present the view controller
+    
+    DispatchQueue.main.async {
+      self.present(activityViewController, animated: true, completion: nil)
+    }
+  }
+  
+  @IBAction func btnYoutube(_ sender: UIButton) {
+    
+    let buttonPosition:CGPoint = sender.convert(CGPoint.zero, to:self.tblArticles)
+    let indexPath = self.tblArticles.indexPathForRow(at: buttonPosition)
+
+    let data = arrArticles[indexPath!.row]
+
+    
+    if data["is_read"].intValue == 0{
+      
+      let param = ["app_id":Utility.getDeviceID(),
+                   "article_id":data["id"].stringValue] as NSDictionary
+      
+      Utility.readUnread(api_Url: WebService_Article_Read_Unread, parameters: param)
+    }
+    
+    let youtubeLink = data["link"].url
+    
+    DispatchQueue.main.async {
+      UIApplication.shared.open(youtubeLink!, options: [:])
+    }
+
+  }
+  
+  @IBAction func btnFavourite(_ sender: UIButton) {
+    
+    let buttonPosition:CGPoint = sender.convert(CGPoint.zero, to:self.tblArticles)
+    let indexPath = self.tblArticles.indexPathForRow(at: buttonPosition)
+    
+    let data = arrArticles[indexPath!.row]
+
+  
+    let paramater = ["app_id":Utility.getDeviceID(),
+                     "favourite_for":"7",
+                     "favourite_id":data["id"].stringValue]
+    
+    WebServices().CallGlobalAPI(url: WebService_Favourite,headers: [:], parameters: paramater as NSDictionary, HttpMethod: "POST", ProgressView: true) { ( _ jsonResponce:JSON? , _ strErrorMessage:String) in
+      
+      if(jsonResponce?.error != nil) {
+        
+        var errorMess = jsonResponce?.error?.localizedDescription
+        errorMess = MESSAGE_Err_Service
+        Utility().showAlertMessage(vc: self, titleStr: "", messageStr: errorMess!)
+      }
+      else {
+        
+        if jsonResponce!["status"].stringValue == "true"{
+          self.getArticlesList()
+        }
+        else {
+          Utility().showAlertMessage(vc: self, titleStr: "", messageStr: jsonResponce!["message"].stringValue)
+        }
+      }
+    }
+  }
+  
+  
 }
 
 //MARK:- Menu Navigation Delegate
@@ -243,8 +337,12 @@ extension ArticlesVC : MenuNavigationDelegate{
       vc.screenDirection = .Ram_Charit_Manas
       navigationController?.pushViewController(vc, animated:  true)
       
-    }else if ScreenName == "Upcoing Katha"{
+     }else if ScreenName == "Upcoing Katha"{
       //Upcoing Katha
+      
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "UpComingKathasVC") as! UpComingKathasVC
+      navigationController?.pushViewController(vc, animated:  true)
       
     }else if ScreenName == "Quotes"{
       //Quotes

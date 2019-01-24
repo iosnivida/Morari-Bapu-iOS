@@ -15,7 +15,8 @@ class ShayriVC: UIViewController {
   
   @IBOutlet weak var tblShayri: UITableView!
   var arrShayri = [JSON]()
-  
+  var arrFavourite = NSArray()
+
   override func viewDidLoad() {
     super.viewDidLoad()
     
@@ -24,6 +25,13 @@ class ShayriVC: UIViewController {
     
     tblShayri.rowHeight = 110
     tblShayri.estimatedRowHeight = UITableView.automaticDimension
+
+    
+  }
+  
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+    
     
     DispatchQueue.main.async {
       self.getShayri()
@@ -36,6 +44,7 @@ class ShayriVC: UIViewController {
   func getShayri(){
     
     let param = ["page" : "1",
+                 "favourite_for":"9",
                  "app_id":Utility.getDeviceID()] as NSDictionary
     
     WebServices().CallGlobalAPI(url: WebService_Media_Sayri,headers: [:], parameters: param, HttpMethod: "POST", ProgressView: true) { ( _ jsonResponce:JSON? , _ strErrorMessage:String) in
@@ -50,7 +59,8 @@ class ShayriVC: UIViewController {
         
         if jsonResponce!["status"].stringValue == "true"{
           self.arrShayri = jsonResponce!["data"].arrayValue
-          
+          self.arrFavourite = jsonResponce!["MyFavourite"].arrayObject! as NSArray
+
           if self.arrShayri.count != 0{
             
             DispatchQueue.main.async {
@@ -141,6 +151,7 @@ extension ShayriVC : UITableViewDelegate, UITableViewDataSource{
     let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
     let vc = storyboard.instantiateViewController(withIdentifier: "ShayriDetailsVC") as! ShayriDetailsVC
     vc.arrShayri = data.dictionaryValue
+    vc.arrFavourite = arrFavourite
     navigationController?.pushViewController(vc, animated:  true)
     
   }
@@ -179,8 +190,12 @@ extension ShayriVC: MenuNavigationDelegate{
       vc.screenDirection = .Ram_Charit_Manas
       navigationController?.pushViewController(vc, animated:  true)
       
-    }else if ScreenName == "Upcoing Katha"{
+     }else if ScreenName == "Upcoing Katha"{
       //Upcoing Katha
+      
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "UpComingKathasVC") as! UpComingKathasVC
+      navigationController?.pushViewController(vc, animated:  true)
       
     }else if ScreenName == "Quotes"{
       //Quotes

@@ -16,14 +16,17 @@ class AudioTableViewCell: UITableViewCell {
   @IBOutlet weak var lblbTitle: UILabel!
   @IBOutlet weak var lblDuration: UILabel!
   @IBOutlet weak var btnShare: UIButton!
+  @IBOutlet weak var btnTitle: UIButton!
   @IBOutlet weak var btnFavourite: UIButton!
+  @IBOutlet weak var constraintShareRight: NSLayoutConstraint!
   
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
       
-      viewMusicIndicator.state = .playing
+      //viewMusicIndicator.state = .playing
       viewMusicIndicator.tintColor = .red
+      viewMusicIndicator.backgroundColor = .clear
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

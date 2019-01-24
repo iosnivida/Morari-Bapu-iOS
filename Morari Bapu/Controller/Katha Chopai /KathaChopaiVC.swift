@@ -24,6 +24,7 @@ class KathaChopaiVC: UIViewController {
   @IBOutlet weak var lblTitle: UILabel!
 
   var arrKathaChopia : [JSON] = []
+  var arrFavourite = NSArray()
   
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,44 +35,64 @@ class KathaChopaiVC: UIViewController {
       tblKathaChopai.rowHeight = 150
       tblKathaChopai.estimatedRowHeight = UITableView.automaticDimension
       
-      if screenDirection == .Katha_Chopai{
-        //Katha Chopai
-
-        lblTitle.text = "Katha Chopai"
-        getKathaChopai()
-      }else if screenDirection == .Ram_Charit_Manas{
-        //Ram Charit Manas
-
-        lblTitle.text = "Ram Charit Manas"
-        getKathaChopai()
-      }
-      else{
-        //Quotes
-        
-        lblTitle.text = "Quotes"
-        getKathaChopai()
-      }
+  }
+  
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+    
+    if screenDirection == .Katha_Chopai{
+      //Katha Chopai
       
+      lblTitle.text = "Katha Chopai"
+      getKathaChopai()
+    }else if screenDirection == .Ram_Charit_Manas{
+      //Ram Charit Manas
+      
+      lblTitle.text = "Ram Charit Manas"
+      getKathaChopai()
+    }
+    else{
+      //Quotes
+      
+      lblTitle.text = "Quotes"
+      getKathaChopai()
+    }
+    
   }
 
   //MARK:- Api Call
   func getKathaChopai(){
     
-    let param = ["page" : "1",
-                 "app_id":Utility.getDeviceID(),
-                 "favourite_for":"1"] as NSDictionary
+    
     
     var api_Url = String()
+    var param = NSDictionary()
     
     if screenDirection == .Katha_Chopai{
       //Katha Chopai
+      
+      param = ["page" : "1",
+                   "app_id":Utility.getDeviceID(),
+                   "favourite_for":"2"] as NSDictionary
+      
       api_Url = WebService_Chopai_List
+      
     }else if screenDirection == .Ram_Charit_Manas{
       //Ram Charit Manas
+      
+      param = ["page" : "1",
+                   "app_id":Utility.getDeviceID(),
+                   "favourite_for":"3"] as NSDictionary
+      
       api_Url = WebService_Ram_Charit_Manas_List
     }
     else{
       //Quotes
+      
+      param = ["page" : "1",
+                   "app_id":Utility.getDeviceID(),
+                   "favourite_for":"1"] as NSDictionary
+      
       api_Url = WebService_Quotes_List
     }
     
@@ -87,7 +108,8 @@ class KathaChopaiVC: UIViewController {
         
         if jsonResponce!["status"].stringValue == "true"{
           self.arrKathaChopia = jsonResponce!["data"].arrayValue
-          
+          self.arrFavourite = jsonResponce!["MyFavourite"].arrayObject! as NSArray
+
           if self.arrKathaChopia.count != 0{
               DispatchQueue.main.async {
               
@@ -160,13 +182,13 @@ extension KathaChopaiVC : UITableViewDelegate, UITableViewDataSource{
       
     if screenDirection == .Katha_Chopai {
       
-      cell.lblTitle.text = "\(data["title"].stringValue)-\(data["title_no"].stringValue)"
+      cell.lblTitle.text = "\(data["title"].stringValue) - \(data["title_no"].stringValue)"
       cell.lblDate.text = Utility.dateToString(dateStr: data["from_date"].stringValue, strDateFormat: "dd MMM yyyy")
       cell.lblDescription1.text = data["katha_hindi"].stringValue
       
     }else if screenDirection == .Ram_Charit_Manas{
       
-      cell.lblTitle.text = "\(data["title"].stringValue)-\(data["title_no"].stringValue)"
+      cell.lblTitle.text = "\(data["title"].stringValue) - Doha \(data["title_no"].stringValue)"
       cell.lblDate.text = Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd MMM yyyy")
       cell.lblDescription1.text = data["katha_hindi"].stringValue
       
@@ -174,6 +196,7 @@ extension KathaChopaiVC : UITableViewDelegate, UITableViewDataSource{
     else{
       
       cell.lblTitle.text = data["title"].stringValue
+      cell.lblTitle.numberOfLines = 1
       cell.lblDate.text = Utility.dateToString(dateStr: data["quotes_date"].stringValue, strDateFormat: "dd MMM yyyy")
       cell.lblDescription1.text = data["quotes_hindi"].stringValue
       
@@ -226,6 +249,7 @@ extension KathaChopaiVC : UITableViewDelegate, UITableViewDataSource{
       let vc = storyboard.instantiateViewController(withIdentifier: "KathaChopaiDetailsVC") as! KathaChopaiDetailsVC
       vc.strTitle = lblTitle.text!
       vc.arrKathaDetails = data.dictionaryValue
+      vc.arrFavourite = arrFavourite
       navigationController?.pushViewController(vc, animated:  true)
       
     }
@@ -235,6 +259,7 @@ extension KathaChopaiVC : UITableViewDelegate, UITableViewDataSource{
       let vc = storyboard.instantiateViewController(withIdentifier: "KathaChopaiDetailsVC") as! KathaChopaiDetailsVC
       vc.strTitle = lblTitle.text!
       vc.arrKathaDetails = data.dictionaryValue
+      vc.arrFavourite = arrFavourite
       navigationController?.pushViewController(vc, animated:  true)
       
     }else{
@@ -243,6 +268,8 @@ extension KathaChopaiVC : UITableViewDelegate, UITableViewDataSource{
       let vc = storyboard.instantiateViewController(withIdentifier: "KathaChopaiDetailsVC") as! KathaChopaiDetailsVC
       vc.strTitle = lblTitle.text!
       vc.arrKathaDetails = data.dictionaryValue
+      vc.arrFavourite = arrFavourite
+
       navigationController?.pushViewController(vc, animated:  true)
       
     }

@@ -119,7 +119,8 @@ extension BapuThoughtsVC : UITableViewDelegate, UITableViewDataSource{
     let data = arrThought[indexPath.row]
     
     cell.lblTitle.text = data["title"].stringValue
-    cell.lblDescription.text = data["thought"].stringValue
+    
+    cell.lblDescription.attributedText = NSAttributedString(html: data["thought"].stringValue)
     cell.btnShare.tag  = indexPath.row
     cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
 
@@ -196,8 +197,12 @@ extension BapuThoughtsVC: MenuNavigationDelegate{
       vc.screenDirection = .Ram_Charit_Manas
       navigationController?.pushViewController(vc, animated:  true)
       
-    }else if ScreenName == "Upcoing Katha"{
+     }else if ScreenName == "Upcoing Katha"{
       //Upcoing Katha
+      
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "UpComingKathasVC") as! UpComingKathasVC
+      navigationController?.pushViewController(vc, animated:  true)
       
     }else if ScreenName == "Quotes"{
       //Quotes

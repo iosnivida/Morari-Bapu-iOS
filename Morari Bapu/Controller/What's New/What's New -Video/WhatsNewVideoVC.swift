@@ -59,7 +59,8 @@ class WhatsNewVideoVC: UIViewController {
     if screenDirection == .WhatsNew_Video{
       
       param = ["page" : page,
-                   "app_id":Utility.getDeviceID()] as NSDictionary
+               "favourite_for":"2",
+               "app_id":Utility.getDeviceID()] as NSDictionary
       
       api_url = WebService_Whats_New_Video
     }else if screenDirection == .Other_Videos{
@@ -73,7 +74,8 @@ class WhatsNewVideoVC: UIViewController {
     }else if screenDirection == .Daily_Katha_Clip{
       
       param = ["page" : page,
-                   "app_id":Utility.getDeviceID()] as NSDictionary
+               "favourite_for":"4",
+               "app_id":Utility.getDeviceID()] as NSDictionary
       
       api_url = WebService_Daily_Katha_Clip
     }
@@ -162,8 +164,12 @@ extension WhatsNewVideoVC: MenuNavigationDelegate{
       vc.screenDirection = .Ram_Charit_Manas
       navigationController?.pushViewController(vc, animated:  true)
       
-    }else if ScreenName == "Upcoing Katha"{
+     }else if ScreenName == "Upcoing Katha"{
       //Upcoing Katha
+      
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "UpComingKathasVC") as! UpComingKathasVC
+      navigationController?.pushViewController(vc, animated:  true)
       
     }else if ScreenName == "Quotes"{
       //Quotes
@@ -297,6 +303,17 @@ extension WhatsNewVideoVC : UITableViewDelegate, UITableViewDataSource{
       cell.btnFavourite.setImage(UIImage(named: "unfavorite"), for: .normal)
     }
     
+    if screenDirection == .WhatsNew_Video{
+      cell.btnFavourite.isHidden = true
+      cell.constraintRightShare.constant = -39
+    }else{
+      cell.btnFavourite.isHidden = false
+    }
+    
+    cell.btnShare.tag = indexPath.row
+    cell.btnYoutube.tag = indexPath.row
+    cell.btnFavourite.tag = indexPath.row
+    
     cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
     cell.btnYoutube.addTarget(self, action: #selector(btnYoutube), for: UIControl.Event.touchUpInside)
     cell.btnFavourite.addTarget(self, action: #selector(btnFavourite), for: UIControl.Event.touchUpInside)
@@ -375,6 +392,7 @@ extension WhatsNewVideoVC : UITableViewDelegate, UITableViewDataSource{
                      "kathavideo_other_id":data["id"].stringValue] as NSDictionary
         
         Utility.readUnread(api_Url: WebService_Katha_Other_Video_Read_Unread, parameters: param)
+        
       }else if screenDirection == .Daily_Katha_Clip{
    
         let param = ["app_id":Utility.getDeviceID(),
@@ -404,7 +422,8 @@ extension WhatsNewVideoVC : UITableViewDelegate, UITableViewDataSource{
       
       
     }else if screenDirection == .Other_Videos{
-      
+      favourite_for = "4"
+      favourite_id = data["id"].stringValue
     }else if screenDirection == .Daily_Katha_Clip{
       favourite_for = "4"
       favourite_id = data["id"].stringValue

@@ -207,8 +207,6 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     
-  
-      
       let data = arrHome[indexPath.row]
     
     if data["youtube_link"].stringValue.count != 0{
@@ -244,28 +242,17 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
     }
     else if data["quotes_english"].stringValue.count != 0{
       
-        let cellIdentifier = "QuotesTableViewCell"
-        
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? QuotesTableViewCell  else {
-          fatalError("The dequeued cell is not an instance of MealTableViewCell.")
-        }
-        
-        cell.lblQuotes.text = data["quotes_english"].stringValue
-        cell.lblDate.text = Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd-MM-yyyy")
-        cell.btnCategories.setTitle(data["list_heading"].stringValue, for: .normal)
-        
-        if data["is_favourite"].boolValue == true{
-          cell.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
-        }else{
-          cell.btnFavourite.setImage(UIImage(named: "unfavorite"), for: .normal)
-        }
-        
-        cell.btnFavourite.addTarget(self, action: #selector(btnFavourite), for: UIControl.Event.touchUpInside)
-
-        cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
-
-        
-        return cell
+      
+      let cellIdentifier = "KathaChopaiTableViewCell"
+      
+      guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? KathaChopaiTableViewCell  else {
+        fatalError("The dequeued cell is not an instance of MealTableViewCell.")
+      }
+      
+        cell.lblTitle.text = "\(data["title"].stringValue) - \(data["title_no"].stringValue)"
+        cell.lblDate.text = Utility.dateToString(dateStr: data["from_date"].stringValue, strDateFormat: "dd MMM yyyy")
+        cell.lblDescription1.text = data["katha_hindi"].stringValue
+              return cell
         
       } else{
         
@@ -276,11 +263,11 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
         }
         
         
-        cell.lblDay.text = Utility.dateToString(dateStr: data["from_date"].stringValue, strDateFormat: "d")
+        cell.lblDay.text = Utility.dateToString(dateStr: data["from_date"].stringValue, strDateFormat: "dd")
         cell.lblTitle.text = data["title"].stringValue
         cell.lblDate.text = Utility.dateToString(dateStr: data["from_date"].stringValue, strDateFormat: "MM,yyyy")
         cell.lblScheduleDate.text = "\(Utility.dateToString(dateStr: data["from_date"].stringValue, strDateFormat: "dd-MM-yyyy")) to \(Utility.dateToString(dateStr: data["to_date"].stringValue, strDateFormat: "dd-MM-yyyy"))"
-        cell.btnCategoryName.setTitle(data["list_heading"].stringValue, for: .normal)
+        //cell.btnCategoryName.setTitle(data["list_heading"].stringValue, for: .normal)
         
         return cell
 
@@ -497,8 +484,12 @@ extension DashboardVC: MenuNavigationDelegate{
       vc.screenDirection = .Ram_Charit_Manas
       navigationController?.pushViewController(vc, animated:  true)
       
-    }else if ScreenName == "Upcoing Katha"{
+     }else if ScreenName == "Upcoing Katha"{
       //Upcoing Katha
+      
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "UpComingKathasVC") as! UpComingKathasVC
+      navigationController?.pushViewController(vc, animated:  true)
       
     }else if ScreenName == "Quotes"{
       //Quotes

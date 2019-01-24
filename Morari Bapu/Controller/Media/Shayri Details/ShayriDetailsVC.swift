@@ -14,7 +14,8 @@ import Kingfisher
 class ShayriDetailsVC: UIViewController {
   
   var arrShayri = [String:JSON]()
-  
+  var arrFavourite = NSArray()
+
   @IBOutlet weak var lblDescription1: UILabel!
   @IBOutlet weak var lblDescription2: UILabel!
   @IBOutlet weak var lblDescription3: UILabel!
@@ -28,8 +29,14 @@ class ShayriDetailsVC: UIViewController {
     self.lblDescription2.text = "\(self.arrShayri["shayari_gujarati"]!.stringValue)"
     self.lblDescription3.text = "\(self.arrShayri["shayari_english"]!.stringValue)"
 
+    let predicate: NSPredicate = NSPredicate(format: "SELF contains[cd] %@", arrShayri["id"]!.stringValue)
+    let result = self.arrFavourite.filtered(using: predicate)
     
-    
+    if result.count != 0{
+      self.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
+    }else{
+      self.btnFavourite.setImage(UIImage(named: "unfavorite"), for: .normal)
+    }
   }
   
   
@@ -51,6 +58,34 @@ class ShayriDetailsVC: UIViewController {
   }
   
   @IBAction func btnFavourite(_ sender: Any) {
+    
+    let paramater = ["app_id":Utility.getDeviceID(),
+                     "favourite_for":"9",
+                     "favourite_id":self.arrShayri["id"]!.stringValue]
+    
+    WebServices().CallGlobalAPI(url: WebService_Favourite,headers: [:], parameters: paramater as NSDictionary, HttpMethod: "POST", ProgressView: true) { ( _ jsonResponce:JSON? , _ strErrorMessage:String) in
+      
+      if(jsonResponce?.error != nil) {
+        
+        var errorMess = jsonResponce?.error?.localizedDescription
+        errorMess = MESSAGE_Err_Service
+        Utility().showAlertMessage(vc: self, titleStr: "", messageStr: errorMess!)
+      }
+      else {
+        
+        if jsonResponce!["status"].stringValue == "true"{
+          if jsonResponce!["message"].stringValue == "Added in your favourite list"{
+            self.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
+          }else{
+            self.btnFavourite.setImage(UIImage(named: "unfavorite"), for: .normal)
+          }
+        }
+        else {
+          Utility().showAlertMessage(vc: self, titleStr: "", messageStr: jsonResponce!["message"].stringValue)
+        }
+      }
+    }
+    
   }
   
   @IBAction func btnShare(_ sender: Any) {
@@ -98,8 +133,12 @@ extension ShayriDetailsVC: MenuNavigationDelegate{
       vc.screenDirection = .Ram_Charit_Manas
       navigationController?.pushViewController(vc, animated:  true)
       
-    }else if ScreenName == "Upcoing Katha"{
+     }else if ScreenName == "Upcoing Katha"{
       //Upcoing Katha
+      
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "UpComingKathasVC") as! UpComingKathasVC
+      navigationController?.pushViewController(vc, animated:  true)
       
     }else if ScreenName == "Quotes"{
       //Quotes

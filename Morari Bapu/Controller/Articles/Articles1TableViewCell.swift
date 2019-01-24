@@ -13,8 +13,8 @@ class Articles1TableViewCell: UITableViewCell {
   @IBOutlet weak var lblTitle: UILabel!
   @IBOutlet weak var lblLink: UILabel!
   @IBOutlet weak var lblDate: UILabel!
-  @IBOutlet weak var lblFavourite: UIButton!
-  @IBOutlet weak var lblShare: UIButton!
+  @IBOutlet weak var btnFavourite: UIButton!
+  @IBOutlet weak var btnShare: UIButton!
 
   override func awakeFromNib() {
         super.awakeFromNib()

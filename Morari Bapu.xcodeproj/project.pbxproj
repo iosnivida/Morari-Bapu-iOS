@@ -64,6 +64,8 @@
 		07A755252162869100793232 /* MontserratAlternates-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 07A755222162869100793232 /* MontserratAlternates-SemiBold.otf */; };
 		07A755262162869100793232 /* MontserratAlternates-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 07A755232162869100793232 /* MontserratAlternates-Light.otf */; };
 		07A755272162869100793232 /* MontserratAlternates-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 07A755242162869100793232 /* MontserratAlternates-Regular.otf */; };
+		07D9394921F62B7B003F847D /* UpComingKathasVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07D9394821F62B7B003F847D /* UpComingKathasVC.swift */; };
+		07D9394B21F62CE9003F847D /* UpComingKathaDetailsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07D9394A21F62CE9003F847D /* UpComingKathaDetailsVC.swift */; };
 		B4EEC5909677DC647695E296 /* Pods_Morari_BapuTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC4BD43BCEDC5FD94AD884CF /* Pods_Morari_BapuTests.framework */; };
 		DA8CD2ED06F8BF46F430A842 /* Pods_Morari_Bapu.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF96C55420CE8AEB3492FBD9 /* Pods_Morari_Bapu.framework */; };
 		FCCB5EC9D7AF0C4135855622 /* Pods_Morari_BapuUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C7EC3ED81FE47D190032489 /* Pods_Morari_BapuUITests.framework */; };
@@ -85,6 +87,19 @@
 			remoteInfo = "Morari Bapu";
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		07D9396521F72D26003F847D /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		0702110B21DB8AFB006B6472 /* EventsDetailsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsDetailsVC.swift; sourceTree = "<group>"; };
@@ -150,6 +165,8 @@
 		07A755222162869100793232 /* MontserratAlternates-SemiBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MontserratAlternates-SemiBold.otf"; sourceTree = "<group>"; };
 		07A755232162869100793232 /* MontserratAlternates-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MontserratAlternates-Light.otf"; sourceTree = "<group>"; };
 		07A755242162869100793232 /* MontserratAlternates-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MontserratAlternates-Regular.otf"; sourceTree = "<group>"; };
+		07D9394821F62B7B003F847D /* UpComingKathasVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpComingKathasVC.swift; sourceTree = "<group>"; };
+		07D9394A21F62CE9003F847D /* UpComingKathaDetailsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpComingKathaDetailsVC.swift; sourceTree = "<group>"; };
 		4C7EC3ED81FE47D190032489 /* Pods_Morari_BapuUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Morari_BapuUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A88026A43A3E43A2EF17F46 /* Pods-Morari Bapu.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Morari Bapu.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Morari Bapu/Pods-Morari Bapu.debug.xcconfig"; sourceTree = "<group>"; };
 		6903C3D27825025CE29FD0C2 /* Pods-Morari BapuUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Morari BapuUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Morari BapuUITests/Pods-Morari BapuUITests.release.xcconfig"; sourceTree = "<group>"; };
@@ -283,6 +300,7 @@
 		07094A812161DA5C00B5B08C /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				07D9394721F62B33003F847D /* Up Coming Kathas */,
 				0766437D21E7AC2B00B15520 /* Articles */,
 				0766437A21E79F0500B15520 /* Favourite */,
 				070A9F0921E116C300E8628F /* Media */,
@@ -580,6 +598,23 @@
 			path = Fonts;
 			sourceTree = "<group>";
 		};
+		07D9394721F62B33003F847D /* Up Coming Kathas */ = {
+			isa = PBXGroup;
+			children = (
+				07D9394821F62B7B003F847D /* UpComingKathasVC.swift */,
+				07D9394C21F62CEC003F847D /* Up Coming Katha Details */,
+			);
+			path = "Up Coming Kathas";
+			sourceTree = "<group>";
+		};
+		07D9394C21F62CEC003F847D /* Up Coming Katha Details */ = {
+			isa = PBXGroup;
+			children = (
+				07D9394A21F62CE9003F847D /* UpComingKathaDetailsVC.swift */,
+			);
+			path = "Up Coming Katha Details";
+			sourceTree = "<group>";
+		};
 		8DF30DBF619FC95482207BBC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -615,6 +650,7 @@
 				07094A4A2161C32E00B5B08C /* Frameworks */,
 				07094A4B2161C32E00B5B08C /* Resources */,
 				938FF903B861E6FC99B11B66 /* [CP] Embed Pods Frameworks */,
+				07D9396521F72D26003F847D /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -893,11 +929,13 @@
 				07094A8A2161DAB400B5B08C /* Utility.swift in Sources */,
 				0766437F21E7AC3B00B15520 /* ArticlesVC.swift in Sources */,
 				0709A8CE216A6B7000371E06 /* KathaEBookVC.swift in Sources */,
+				07D9394B21F62CE9003F847D /* UpComingKathaDetailsVC.swift in Sources */,
 				07094A892161DAB400B5B08C /* GlobalConstants.swift in Sources */,
 				07A7551D21625A1800793232 /* MenuVC.swift in Sources */,
 				07443DF42165220C00F39CCD /* YoutubeTableViewCell.swift in Sources */,
 				0766438121E7AC7F00B15520 /* Articles1TableViewCell.swift in Sources */,
 				0709A8DD216B255700371E06 /* KathaChopaiDetailsVC.swift in Sources */,
+				07D9394921F62B7B003F847D /* UpComingKathasVC.swift in Sources */,
 				070A9F0C21E1174900E8628F /* ShayriVC.swift in Sources */,
 				0702110C21DB8AFB006B6472 /* EventsDetailsVC.swift in Sources */,
 				074029E221DE6A2900E4DE4B /* WhatsNewPhotosVC.swift in Sources */,
@@ -1079,7 +1117,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5A88026A43A3E43A2EF17F46 /* Pods-Morari Bapu.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = BPETUWNAYE;
 				INFOPLIST_FILE = "Morari Bapu/Info.plist";
@@ -1090,6 +1130,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "Nivida-Web-Solutions-Pvt.-Ltd.Morari-Bapu";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1099,7 +1140,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 758D1A5C898793BC3048DC78 /* Pods-Morari Bapu.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = BPETUWNAYE;
 				INFOPLIST_FILE = "Morari Bapu/Info.plist";
@@ -1110,6 +1153,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "Nivida-Web-Solutions-Pvt.-Ltd.Morari-Bapu";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

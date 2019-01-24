@@ -372,7 +372,7 @@ class Utility: NSObject
         dateFormatter.timeZone = TimeZone.current
 
         let date = dateFormatter.date(from:date)!
-        dateFormatter.dateFormat = "EEEE, MMMM d'th' 'at' hh:mm a"
+        dateFormatter.dateFormat = "EEEE, MMMM dd'th' 'at' hh:mm a"
         dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
 
         let dateString = dateFormatter.string(from:date)
@@ -497,6 +497,27 @@ class Utility: NSObject
       onViewController.dismiss(animated: false, completion: nil)
     }
   }
+  
+  static func music_Player_Show(onViewController: UIViewController, position:Int, listOfAudio:[JSON]) {
+    DispatchQueue.main.async {
+      //let objVC = self.storyboard?.instantiateViewController(withIdentifier: "LoaderVC") as! LoaderVC
+      let storyboardCustom : UIStoryboard = UIStoryboard(name: Custome_Storyboard, bundle: nil)
+      let objVC = storyboardCustom.instantiateViewController(withIdentifier: "MusicPlayerVC") as? MusicPlayerVC
+      objVC?.modalPresentationStyle = .overCurrentContext
+      objVC?.modalTransitionStyle = .crossDissolve
+      objVC?.arrAudioList = listOfAudio
+      objVC?.playPosition = position
+      onViewController.present(objVC!, animated: false, completion: nil)
+      //UIApplication.shared.delegate?.window!?.rootViewController?.present(objVC, animated: true, completion: nil)
+    }
+  }
+  
+  static func music_Player_Hide(onViewController: UIViewController) {
+    DispatchQueue.main.async {
+      onViewController.dismiss(animated: false, completion: nil)
+    }
+  }
+  
   
   static func backToHome(){
     

@@ -16,7 +16,8 @@ class KathaChopaiTableViewCell: UITableViewCell {
   @IBOutlet weak var lblDate: UILabel!
   @IBOutlet weak var lblDescription1: UILabel!
   @IBOutlet weak var lblDescription2: UILabel!
-
+  @IBOutlet weak var btnTitle: UIButton!
+  
   
   
   override func awakeFromNib() {

@@ -22,6 +22,8 @@ class KathaChopaiDetailsVC: UIViewController {
   @IBOutlet weak var lblDescription4: UILabel!
 
   var arrKathaDetails = [String:JSON]()
+  var arrFavourite = NSArray()
+
   var strTitle = String()
   
     override func viewDidLoad() {
@@ -37,6 +39,16 @@ class KathaChopaiDetailsVC: UIViewController {
         lblDescription2.text = arrKathaDetails["katha_hindi"]!.stringValue
         lblDescription3.text = arrKathaDetails["katha_english"]!.stringValue
         lblDescription4.text = arrKathaDetails["description"]!.stringValue
+    
+        let predicate: NSPredicate = NSPredicate(format: "SELF contains[cd] %@", arrKathaDetails["id"]!.stringValue)
+        let result = self.arrFavourite.filtered(using: predicate)
+
+        if result.count != 0{
+          self.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
+        }else{
+          self.btnFavourite.setImage(UIImage(named: "unfavorite"), for: .normal)
+        }
+        
 
       }else if lblTitle.text == "Ram Charit Manas"{
         
@@ -47,6 +59,15 @@ class KathaChopaiDetailsVC: UIViewController {
         lblDescription3.text = arrKathaDetails["katha_english"]!.stringValue
         lblDescription4.text = arrKathaDetails["description"]!.stringValue
         
+        let predicate: NSPredicate = NSPredicate(format: "SELF contains[cd] %@", arrKathaDetails["id"]!.stringValue)
+        let result = self.arrFavourite.filtered(using: predicate)
+        
+        if result.count != 0{
+          self.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
+        }else{
+          self.btnFavourite.setImage(UIImage(named: "unfavorite"), for: .normal)
+        }
+        
       }
       else{
         
@@ -55,6 +76,15 @@ class KathaChopaiDetailsVC: UIViewController {
         lblDescription1.text = arrKathaDetails["quotes_gujarati"]!.stringValue
         lblDescription2.text = arrKathaDetails["quotes_hindi"]!.stringValue
         lblDescription3.text = arrKathaDetails["quotes_english"]!.stringValue
+        
+        let predicate: NSPredicate = NSPredicate(format: "SELF contains[cd] %@", arrKathaDetails["id"]!.stringValue)
+        let result = self.arrFavourite.filtered(using: predicate)
+        
+        if result.count != 0{
+          self.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
+        }else{
+          self.btnFavourite.setImage(UIImage(named: "unfavorite"), for: .normal)
+        }
 
       }
       
@@ -112,32 +142,50 @@ class KathaChopaiDetailsVC: UIViewController {
   
   @IBAction func btnFavourite(_ sender: Any) {
     
+    var paramater = NSDictionary()
+    
     if lblTitle.text == "Katha Chopai"{
-  
-      let paramater = ["app_id":Utility.getDeviceID(),
-                       "favourite_for":"2",
-                       "favourite_id":arrKathaDetails["id"]?.stringValue]
       
-      WebServices().CallGlobalAPI(url: WebService_Favourite,headers: [:], parameters: paramater as NSDictionary, HttpMethod: "POST", ProgressView: true) { ( _ jsonResponce:JSON? , _ strErrorMessage:String) in
+      paramater = ["app_id":Utility.getDeviceID(),
+                       "favourite_for":"2",
+                       "favourite_id":arrKathaDetails["id"]!.stringValue]
+      
+      
+      }else if lblTitle.text == "Ram Charit Manas"{
+      
+          paramater = ["app_id":Utility.getDeviceID(),
+                       "favourite_for":"3",
+                       "favourite_id":arrKathaDetails["id"]!.stringValue]
+      
+      }
+      else{
+      
+          paramater = ["app_id":Utility.getDeviceID(),
+                       "favourite_for":"1",
+                       "favourite_id":arrKathaDetails["id"]!.stringValue]
+      
+      }
+    
+    WebServices().CallGlobalAPI(url: WebService_Favourite,headers: [:], parameters: paramater as NSDictionary, HttpMethod: "POST", ProgressView: true) { ( _ jsonResponce:JSON? , _ strErrorMessage:String) in
+      
+      if(jsonResponce?.error != nil) {
         
-        if(jsonResponce?.error != nil) {
+        var errorMess = jsonResponce?.error?.localizedDescription
+        errorMess = MESSAGE_Err_Service
+        Utility().showAlertMessage(vc: self, titleStr: "", messageStr: errorMess!)
+      }
+      else {
+        
+        if jsonResponce!["status"].stringValue == "true"{
           
-          var errorMess = jsonResponce?.error?.localizedDescription
-          errorMess = MESSAGE_Err_Service
-          Utility().showAlertMessage(vc: self, titleStr: "", messageStr: errorMess!)
+          if jsonResponce!["message"].stringValue == "Added in your favourite list"{
+            self.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
+          }else{
+            self.btnFavourite.setImage(UIImage(named: "unfavorite"), for: .normal)
+          }
         }
         else {
-          
-          if jsonResponce!["status"].stringValue == "true"{
-            
-            self.btnFavourite.setImage(UIImage(named: "unfavorite"), for: .normal)
-            self.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
-
-            
-          }
-          else {
-            Utility().showAlertMessage(vc: self, titleStr: "", messageStr: jsonResponce!["message"].stringValue)
-          }
+          Utility().showAlertMessage(vc: self, titleStr: "", messageStr: jsonResponce!["message"].stringValue)
         }
       }
     }
@@ -168,8 +216,12 @@ extension KathaChopaiDetailsVC: MenuNavigationDelegate{
       vc.screenDirection = .Ram_Charit_Manas
       navigationController?.pushViewController(vc, animated:  true)
       
-    }else if ScreenName == "Upcoing Katha"{
+     }else if ScreenName == "Upcoing Katha"{
       //Upcoing Katha
+      
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "UpComingKathasVC") as! UpComingKathasVC
+      navigationController?.pushViewController(vc, animated:  true)
       
     }else if ScreenName == "Quotes"{
       //Quotes

@@ -130,9 +130,10 @@ class FeedbackVC: UIViewController {
   
   @IBAction func btnRateThisApp(_ sender: Any) {
     
-    let reviewURL = "itms-apps://itunes.apple.com/us/app/apple-store/id1050576066?mt=8"
-
+    let reviewURL = "https://itunes.apple.com/in/app/morari-bapu/id1050576066?mt=8&action=write-review"
+//itms-apps://itunes.apple.com/us/app/itunes-u/id123456789?action=write-review
     
+      
     if let url = URL(string: reviewURL), UIApplication.shared.canOpenURL(url) {
       if #available(iOS 10.0, *) {
         UIApplication.shared.open(url, options: [:], completionHandler: nil)
@@ -169,8 +170,12 @@ extension FeedbackVC: MenuNavigationDelegate{
       vc.screenDirection = .Ram_Charit_Manas
       navigationController?.pushViewController(vc, animated:  true)
       
-    }else if ScreenName == "Upcoing Katha"{
+     }else if ScreenName == "Upcoing Katha"{
       //Upcoing Katha
+      
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "UpComingKathasVC") as! UpComingKathasVC
+      navigationController?.pushViewController(vc, animated:  true)
       
     }else if ScreenName == "Quotes"{
       //Quotes
