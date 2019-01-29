@@ -54,6 +54,23 @@ class UpComingKathaDetailsVC: UIViewController {
     
   }
   
+  @IBAction func btnShare(_ sender: Any) {
+    
+     let share_Content = "\(self.arrUpcomingKathaDetails["title"]!.stringValue) \n\nDate: \(self.arrUpcomingKathaDetails["location"]!.stringValue) \n\n \(self.arrUpcomingKathaDetails["language"]!.stringValue) \n\n\(Utility.dateToString(dateStr: (self.arrUpcomingKathaDetails["from_date"]?.stringValue)!, strDateFormat: "EEEE MMM dd'th', yyyy")) - \(Utility.dateToString(dateStr: (self.arrUpcomingKathaDetails["to_date"]?.stringValue)!, strDateFormat: "EEEE MMM dd'th', yyyy")) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
+    
+    let textToShare = [share_Content]
+    let activityViewController = UIActivityViewController(activityItems: textToShare, applicationActivities: nil)
+    activityViewController.popoverPresentationController?.sourceView = self.view // so that iPads won't crash
+    
+    // exclude some activity types from the list (optional)
+    activityViewController.excludedActivityTypes = [ UIActivity.ActivityType.airDrop, UIActivity.ActivityType.postToFacebook ]
+    
+    DispatchQueue.main.async {
+      self.present(activityViewController, animated: true, completion: nil)
+    }
+    
+  }
+  
 }
 
 //MARK:- Menu Navigation Delegate

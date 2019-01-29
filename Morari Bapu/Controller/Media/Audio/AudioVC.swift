@@ -266,7 +266,7 @@ extension AudioVC : UITableViewDelegate, UITableViewDataSource{
     }
     
     
-    Utility.music_Player_Show(onViewController: self, position: indexPath.row, listOfAudio: arrAudio)
+   // Utility.music_Player_Show(onViewController: self, position: indexPath.row, listOfAudio: arrAudio)
 
     
   }

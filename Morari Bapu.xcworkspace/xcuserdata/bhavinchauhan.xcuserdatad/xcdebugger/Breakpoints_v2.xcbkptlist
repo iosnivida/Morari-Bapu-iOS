@@ -2,4 +2,54 @@
 <Bucket
    type = "0"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Morari Bapu/Controller/Up Coming Kathas/Up Coming Katha Details/UpComingKathaDetailsVC.swift"
+            timestampString = "570046256.436373"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "25"
+            endingLineNumber = "25"
+            landmarkName = "viewDidLoad()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Morari_Bapu.UpComingKathaDetailsVC.viewDidLoad() -&gt; ()"
+                  moduleName = "Morari Bapu"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Volumes/Bhavin%20Bytes/Freelance%20Work/Nivida%20Apps/Morari%20Bapu/Morari%20Bapu/Morari%20Bapu/Controller/Up%20Coming%20Kathas/Up%20Coming%20Katha%20Details/UpComingKathaDetailsVC.swift"
+                  timestampString = "570043206.117926"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "26"
+                  endingLineNumber = "26"
+                  offsetFromSymbolStart = "116">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; () in Morari_Bapu.UpComingKathaDetailsVC.viewDidLoad() -&gt; ()"
+                  moduleName = "Morari Bapu"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Volumes/Bhavin%20Bytes/Freelance%20Work/Nivida%20Apps/Morari%20Bapu/Morari%20Bapu/Morari%20Bapu/Controller/Up%20Coming%20Kathas/Up%20Coming%20Katha%20Details/UpComingKathaDetailsVC.swift"
+                  timestampString = "570043206.121389"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "28"
+                  endingLineNumber = "28"
+                  offsetFromSymbolStart = "36">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>

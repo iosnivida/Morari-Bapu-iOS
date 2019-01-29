@@ -118,44 +118,16 @@ extension ArticlesVC : UITableViewDelegate, UITableViewDataSource{
     
     if data["image"].stringValue == "" && data["video"].stringValue == ""{
       
-    
-    let cellIdentifier = "YoutubeTableViewCell"
-    
-    guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? YoutubeTableViewCell  else {
-      fatalError("The dequeued cell is not an instance of MealTableViewCell.")
-    }
-
-      cell.lblTitle.text = data["article"].stringValue
-      cell.lblDuration.text = data["link"].stringValue
-      cell.lblDate.text = Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd-MMM-yyyy")
-      
-    let placeHolder = UIImage(named: "youtube_placeholder")
-    
-    cell.imgVideo.kf.indicatorType = .activity
-    cell.imgVideo.kf.setImage(with: URL(string: "\(BASE_URL_IMAGE)\(data["video_image"].stringValue)"), placeholder: placeHolder, options: [.transition(ImageTransition.fade(1))])
-    
-    if data["is_favourite"].boolValue == true{
-      cell.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
-    }else{
-      cell.btnFavourite.setImage(UIImage(named: "unfavorite"), for: .normal)
-    }
-      
-      cell.btnShare.tag = indexPath.row
-      cell.btnYoutube.tag = indexPath.row
-      cell.btnFavourite.tag = indexPath.row
-    
-    cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
-    cell.btnYoutube.addTarget(self, action: #selector(btnYoutube), for: UIControl.Event.touchUpInside)
-    cell.btnFavourite.addTarget(self, action: #selector(btnFavourite), for: UIControl.Event.touchUpInside)
-      
-      return cell
-
-    }else if data["image"].stringValue != "" && data["video"].stringValue != "" || data["link"].stringValue != ""{
-      
       let cellIdentifier = "Articles1TableViewCell"
       
       guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? Articles1TableViewCell  else {
         fatalError("The dequeued cell is not an instance of MealTableViewCell.")
+      }
+      
+      if data["is_favourite"].boolValue == true{
+        cell.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
+      }else{
+        cell.btnFavourite.setImage(UIImage(named: "unfavorite"), for: .normal)
       }
       
       cell.lblTitle.text = data["article"].stringValue
@@ -171,6 +143,41 @@ extension ArticlesVC : UITableViewDelegate, UITableViewDataSource{
       cell.btnFavourite.addTarget(self, action: #selector(btnFavourite), for: UIControl.Event.touchUpInside)
       return cell
       
+   
+
+    }else if data["image"].stringValue != "" && data["video"].stringValue != "" || data["link"].stringValue != ""{
+      
+
+      let cellIdentifier = "YoutubeTableViewCell"
+      
+      guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? YoutubeTableViewCell  else {
+        fatalError("The dequeued cell is not an instance of MealTableViewCell.")
+      }
+      
+      cell.lblTitle.text = data["article"].stringValue
+      cell.lblDuration.text = data["link"].stringValue
+      cell.lblDate.text = Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd-MMM-yyyy")
+      
+      let placeHolder = UIImage(named: "youtube_placeholder")
+      
+      cell.imgVideo.kf.indicatorType = .activity
+      cell.imgVideo.kf.setImage(with: URL(string: "\(BASE_URL_IMAGE)\(data["video_image"].stringValue)"), placeholder: placeHolder, options: [.transition(ImageTransition.fade(1))])
+      
+      if data["is_favourite"].boolValue == true{
+        cell.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
+      }else{
+        cell.btnFavourite.setImage(UIImage(named: "unfavorite"), for: .normal)
+      }
+      
+      cell.btnShare.tag = indexPath.row
+      cell.btnYoutube.tag = indexPath.row
+      cell.btnFavourite.tag = indexPath.row
+      
+      cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
+      cell.btnYoutube.addTarget(self, action: #selector(btnYoutube), for: UIControl.Event.touchUpInside)
+      cell.btnFavourite.addTarget(self, action: #selector(btnFavourite), for: UIControl.Event.touchUpInside)
+      
+      return cell
      
 
     }else{
@@ -224,7 +231,7 @@ extension ArticlesVC : UITableViewDelegate, UITableViewDataSource{
     if data["is_read"].intValue == 0{
       
       let param = ["app_id":Utility.getDeviceID(),
-                   "katha_chopai_id":data["id"].stringValue] as NSDictionary
+                   "article_id":data["id"].stringValue] as NSDictionary
       
       Utility.readUnread(api_Url: WebService_Article_Read_Unread, parameters: param)
     }
@@ -272,9 +279,15 @@ extension ArticlesVC : UITableViewDelegate, UITableViewDataSource{
     
     let youtubeLink = data["link"].url
     
-    DispatchQueue.main.async {
-      UIApplication.shared.open(youtubeLink!, options: [:])
+    if Utility.canOpenURL(data["link"].stringValue){
+      DispatchQueue.main.async {
+        UIApplication.shared.open(youtubeLink!, options: [:])
+      }
+    }else{
+      
     }
+    
+  
 
   }
   

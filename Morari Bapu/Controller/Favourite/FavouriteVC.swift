@@ -240,39 +240,39 @@ extension FavouriteVC : UITableViewDelegate, UITableViewDataSource{
       return cell
       
     }
-    else if data["list_heading"].stringValue == "Bapu Articles"{
-      //Bapu Articles
-
-      let cellIdentifier = "YoutubeTableViewCell"
-      
-      guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? YoutubeTableViewCell  else {
-        fatalError("The dequeued cell is not an instance of MealTableViewCell.")
-      }
-      
-      cell.lblTitle.text = data["article"].stringValue
-      cell.lblDuration.text = data["link"].stringValue
-      cell.lblDate.text = Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd-MMM-yyyy")
-      
-      let placeHolder = UIImage(named: "youtube_placeholder")
-      
-      cell.imgVideo.kf.indicatorType = .activity
-      cell.imgVideo.kf.setImage(with: URL(string: "\(BASE_URL_IMAGE)\(data["video_image"].stringValue)"), placeholder: placeHolder, options: [.transition(ImageTransition.fade(1))])
-      
-      cell.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
-     
-      cell.btnShare.tag = indexPath.row
-      cell.btnYoutube.tag = indexPath.row
-      cell.btnFavourite.tag = indexPath.row
-      cell.btnTitle.tag = indexPath.row
-
-      cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
-      cell.btnYoutube.addTarget(self, action: #selector(btnYoutube), for: UIControl.Event.touchUpInside)
-      cell.btnFavourite.addTarget(self, action: #selector(btnFavourite), for: UIControl.Event.touchUpInside)
-      cell.btnTitle.addTarget(self, action: #selector(btnToSpecificScreen(_:)), for: UIControl.Event.touchUpInside)
-
-      return cell
-      
-    }
+//    else if data["list_heading"].stringValue == "Bapu Articles"{
+//      //Bapu Articles
+//
+//      let cellIdentifier = "YoutubeTableViewCell"
+//
+//      guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? YoutubeTableViewCell  else {
+//        fatalError("The dequeued cell is not an instance of MealTableViewCell.")
+//      }
+//
+//      cell.lblTitle.text = data["article"].stringValue
+//      cell.lblDuration.text = data["link"].stringValue
+//      cell.lblDate.text = Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd-MMM-yyyy")
+//
+//      let placeHolder = UIImage(named: "youtube_placeholder")
+//
+//      cell.imgVideo.kf.indicatorType = .activity
+//      cell.imgVideo.kf.setImage(with: URL(string: "\(BASE_URL_IMAGE)\(data["video_image"].stringValue)"), placeholder: placeHolder, options: [.transition(ImageTransition.fade(1))])
+//
+//      cell.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
+//
+//      cell.btnShare.tag = indexPath.row
+//      cell.btnYoutube.tag = indexPath.row
+//      cell.btnFavourite.tag = indexPath.row
+//      cell.btnTitle.tag = indexPath.row
+//
+//      cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
+//      cell.btnYoutube.addTarget(self, action: #selector(btnYoutube), for: UIControl.Event.touchUpInside)
+//      cell.btnFavourite.addTarget(self, action: #selector(btnFavourite), for: UIControl.Event.touchUpInside)
+//      cell.btnTitle.addTarget(self, action: #selector(btnToSpecificScreen(_:)), for: UIControl.Event.touchUpInside)
+//
+//      return cell
+//
+//    }
      else if data["list_heading"].stringValue == "Stuti" || data["list_heading"].stringValue == "Other Stuti" || data["list_heading"].stringValue == "Sankirtan"{
       //Sankirtan
       
@@ -313,7 +313,7 @@ extension FavouriteVC : UITableViewDelegate, UITableViewDataSource{
       
       cell.lblbTitle.text = data["title"].stringValue
       cell.lblDuration.text = "\(data["quotes_english"].stringValue)\n\(data["quotes_hindi"].stringValue)"
-      cell.lblDuration.numberOfLines = 4
+      //cell.lblDuration.numberOfLines = 4
       cell.btnTitle.setTitle("Shayari", for: .normal)
       
       cell.btnShare.tag  = indexPath.row
@@ -536,9 +536,15 @@ extension FavouriteVC : UITableViewDelegate, UITableViewDataSource{
       youtubeLink = data["youtube_link"].stringValue
     }
     
-    DispatchQueue.main.async {
-      UIApplication.shared.open(URL(string: youtubeLink)!, options: [:])
+    if Utility.canOpenURL(data["youtube_link"].stringValue){
+      DispatchQueue.main.async {
+        UIApplication.shared.open(URL(string: youtubeLink)!, options: [:])
+      }
+    }else{
+      
     }
+    
+ 
     
   }
   

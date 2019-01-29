@@ -15,6 +15,7 @@ class UpcomingKathaTableViewCell: UITableViewCell {
   @IBOutlet weak var lblDate: UILabel!
   @IBOutlet weak var lblScheduleDate: UILabel!
   @IBOutlet weak var lblDay: UILabel!
+  @IBOutlet weak var btnTitle: UIButton!
   
   override func awakeFromNib() {
         super.awakeFromNib()

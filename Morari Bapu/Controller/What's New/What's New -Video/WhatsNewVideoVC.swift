@@ -403,9 +403,14 @@ extension WhatsNewVideoVC : UITableViewDelegate, UITableViewDataSource{
       
     }
     
-    DispatchQueue.main.async {
-      UIApplication.shared.open(youtubeLink!, options: [:])
+    if Utility.canOpenURL(link["youtube_link"].stringValue){
+      DispatchQueue.main.async {
+        UIApplication.shared.open(youtubeLink!, options: [:])
+      }
+    }else{
+      
     }
+    
     
   }
   
