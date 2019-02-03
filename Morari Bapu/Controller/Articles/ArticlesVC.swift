@@ -10,6 +10,9 @@ import UIKit
 import Alamofire
 import SwiftyJSON
 import Kingfisher
+import MediaPlayer
+import AVKit
+import AVFoundation
 
 class ArticlesVC: UIViewController {
   
@@ -18,9 +21,15 @@ class ArticlesVC: UIViewController {
   
   var arrArticles : [JSON] = []
   
+  var currentPageNo = Int()
+  var totalPageNo = Int()
+  var is_Api_Being_Called : Bool = false
+
   override func viewDidLoad() {
     super.viewDidLoad()
     
+    currentPageNo = 1
+
     tblArticles.tableFooterView =  UIView.init(frame: .zero)
     tblArticles.layoutMargins = .zero
     
@@ -29,14 +38,15 @@ class ArticlesVC: UIViewController {
     
     lblTitle.text = "Articles"
     
-    self.getArticlesList()
+    self.arrArticles.removeAll()
+    self.getArticlesList(page:currentPageNo)
     
   }
   
   //MARK:- Api Call
-  func getArticlesList(){
+  func getArticlesList(page:Int){
     
-    let param = ["page" : "1",
+    let param = ["page" : page,
                  "favourite_for":"7",
                  "app_id":Utility.getDeviceID()] as NSDictionary
     
@@ -51,8 +61,14 @@ class ArticlesVC: UIViewController {
       else {
         
         if jsonResponce!["status"].stringValue == "true"{
-          self.arrArticles = jsonResponce!["data"].arrayValue
           
+          for result in jsonResponce!["data"].arrayValue {
+            self.arrArticles.append(result)
+          }
+          
+          self.totalPageNo = jsonResponce!["total_page"].intValue
+          self.is_Api_Being_Called = false
+
           if self.arrArticles.count != 0{
             DispatchQueue.main.async {
               
@@ -72,6 +88,8 @@ class ArticlesVC: UIViewController {
           
         }
         else {
+          self.is_Api_Being_Called = false
+
           Utility().showAlertMessage(vc: self, titleStr: "", messageStr: jsonResponce!["message"].stringValue)
         }
       }
@@ -132,56 +150,23 @@ extension ArticlesVC : UITableViewDelegate, UITableViewDataSource{
       
       cell.lblTitle.text = data["article"].stringValue
       cell.lblLink.text = data["link"].stringValue
+      cell.lblLink.useUnderlineLabel(line_Color: UIColor.black)
       cell.lblDate.text = Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd-MMM-yyyy")
-      
-      cell.btnShare.tag = indexPath.row
-      //cell.btnYoutube.tag = indexPath.row
-      cell.btnFavourite.tag = indexPath.row
-      
-      cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
-      //cell.btnYoutube.addTarget(self, action: #selector(btnYoutube), for: UIControl.Event.touchUpInside)
-      cell.btnFavourite.addTarget(self, action: #selector(btnFavourite), for: UIControl.Event.touchUpInside)
-      return cell
-      
-   
-
-    }else if data["image"].stringValue != "" && data["video"].stringValue != "" || data["link"].stringValue != ""{
-      
-
-      let cellIdentifier = "YoutubeTableViewCell"
-      
-      guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? YoutubeTableViewCell  else {
-        fatalError("The dequeued cell is not an instance of MealTableViewCell.")
-      }
-      
-      cell.lblTitle.text = data["article"].stringValue
-      cell.lblDuration.text = data["link"].stringValue
-      cell.lblDate.text = Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd-MMM-yyyy")
-      
-      let placeHolder = UIImage(named: "youtube_placeholder")
-      
-      cell.imgVideo.kf.indicatorType = .activity
-      cell.imgVideo.kf.setImage(with: URL(string: "\(BASE_URL_IMAGE)\(data["video_image"].stringValue)"), placeholder: placeHolder, options: [.transition(ImageTransition.fade(1))])
-      
-      if data["is_favourite"].boolValue == true{
-        cell.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
-      }else{
-        cell.btnFavourite.setImage(UIImage(named: "unfavorite"), for: .normal)
-      }
       
       cell.btnShare.tag = indexPath.row
       cell.btnYoutube.tag = indexPath.row
       cell.btnFavourite.tag = indexPath.row
       
       cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
-      cell.btnYoutube.addTarget(self, action: #selector(btnYoutube), for: UIControl.Event.touchUpInside)
+      cell.btnYoutube.addTarget(self, action: #selector(btnLinkWebSite), for: UIControl.Event.touchUpInside)
       cell.btnFavourite.addTarget(self, action: #selector(btnFavourite), for: UIControl.Event.touchUpInside)
-      
       return cell
-     
-
-    }else{
       
+   
+
+    }else {
+      
+
       let cellIdentifier = "Articles2TableViewCell"
       
       guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? Articles2TableViewCell  else {
@@ -190,12 +175,13 @@ extension ArticlesVC : UITableViewDelegate, UITableViewDataSource{
       
       cell.lblTitle.text = data["article"].stringValue
       cell.lblLink.text = data["link"].stringValue
+      cell.lblLink.useUnderlineLabel(line_Color: UIColor.black)
       cell.lblDate.text = Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd-MMM-yyyy")
       
       let placeHolder = UIImage(named: "youtube_placeholder")
       
       cell.imgVideo.kf.indicatorType = .activity
-      cell.imgVideo.kf.setImage(with: URL(string: "\(BASE_URL_IMAGE)\(data["video_image"].stringValue)"), placeholder: placeHolder, options: [.transition(ImageTransition.fade(1))])
+      cell.imgVideo.kf.setImage(with: URL(string: "\(BASE_URL_IMAGE)\(data["image"].stringValue)"), placeholder: placeHolder, options: [.transition(ImageTransition.fade(1))])
       
       if data["is_favourite"].boolValue == true{
         cell.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
@@ -205,15 +191,49 @@ extension ArticlesVC : UITableViewDelegate, UITableViewDataSource{
       
       cell.btnShare.tag = indexPath.row
       cell.btnYoutube.tag = indexPath.row
+      cell.btnLink.tag = indexPath.row
       cell.btnFavourite.tag = indexPath.row
       
       cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
       cell.btnYoutube.addTarget(self, action: #selector(btnYoutube), for: UIControl.Event.touchUpInside)
+      cell.btnLink.addTarget(self, action: #selector(btnLinkWebSite), for: UIControl.Event.touchUpInside)
       cell.btnFavourite.addTarget(self, action: #selector(btnFavourite), for: UIControl.Event.touchUpInside)
       
       return cell
-
+     
     }
+//      let cellIdentifier = "Articles2TableViewCell"
+//
+//      guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? Articles2TableViewCell  else {
+//        fatalError("The dequeued cell is not an instance of MealTableViewCell.")
+//      }
+//
+//      cell.lblTitle.text = data["article"].stringValue
+//      cell.lblLink.text = data["link"].stringValue
+//      cell.lblDate.text = Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd-MMM-yyyy")
+//
+//      let placeHolder = UIImage(named: "youtube_placeholder")
+//
+//      cell.imgVideo.kf.indicatorType = .activity
+//      cell.imgVideo.kf.setImage(with: URL(string: "\(BASE_URL_IMAGE)\(data["video_image"].stringValue)"), placeholder: placeHolder, options: [.transition(ImageTransition.fade(1))])
+//
+//      if data["is_favourite"].boolValue == true{
+//        cell.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
+//      }else{
+//        cell.btnFavourite.setImage(UIImage(named: "unfavorite"), for: .normal)
+//      }
+//
+//      cell.btnShare.tag = indexPath.row
+//      cell.btnYoutube.tag = indexPath.row
+//      cell.btnFavourite.tag = indexPath.row
+//
+//      cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
+//      cell.btnYoutube.addTarget(self, action: #selector(btnYoutube), for: UIControl.Event.touchUpInside)
+//      cell.btnFavourite.addTarget(self, action: #selector(btnFavourite), for: UIControl.Event.touchUpInside)
+//
+//      return cell
+//
+//    }
   }
   
   func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -236,6 +256,21 @@ extension ArticlesVC : UITableViewDelegate, UITableViewDataSource{
       Utility.readUnread(api_Url: WebService_Article_Read_Unread, parameters: param)
     }
   }
+  
+  func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+    
+    if indexPath.row == arrArticles.count - 1{
+      if is_Api_Being_Called == false{
+        if currentPageNo <  totalPageNo{
+          print("Page Load....")
+          is_Api_Being_Called = true
+          currentPageNo += 1
+          self.getArticlesList(page: 1)
+        }
+      }
+    }
+  }
+  
   
   @IBAction func btnShare(_ sender: UIButton) {
     
@@ -268,6 +303,24 @@ extension ArticlesVC : UITableViewDelegate, UITableViewDataSource{
 
     let data = arrArticles[indexPath!.row]
 
+    let videoURL = URL(string: "\(BASE_URL_IMAGE)\(data["video"].stringValue)")
+    let player = AVPlayer(url: videoURL!)
+    let playerViewController = AVPlayerViewController()
+    playerViewController.player = player
+    self.present(playerViewController, animated: true) {
+      playerViewController.player!.play()
+    }
+    
+   
+  }
+  
+  @IBAction func btnLinkWebSite(_ sender: UIButton) {
+    
+    let buttonPosition:CGPoint = sender.convert(CGPoint.zero, to:self.tblArticles)
+    let indexPath = self.tblArticles.indexPathForRow(at: buttonPosition)
+    
+    let data = arrArticles[indexPath!.row]
+    
     
     if data["is_read"].intValue == 0{
       
@@ -284,11 +337,7 @@ extension ArticlesVC : UITableViewDelegate, UITableViewDataSource{
         UIApplication.shared.open(youtubeLink!, options: [:])
       }
     }else{
-      
     }
-    
-  
-
   }
   
   @IBAction func btnFavourite(_ sender: UIButton) {
@@ -296,31 +345,36 @@ extension ArticlesVC : UITableViewDelegate, UITableViewDataSource{
     let buttonPosition:CGPoint = sender.convert(CGPoint.zero, to:self.tblArticles)
     let indexPath = self.tblArticles.indexPathForRow(at: buttonPosition)
     
-    let data = arrArticles[indexPath!.row]
-
-  
-    let paramater = ["app_id":Utility.getDeviceID(),
-                     "favourite_for":"7",
-                     "favourite_id":data["id"].stringValue]
-    
-    WebServices().CallGlobalAPI(url: WebService_Favourite,headers: [:], parameters: paramater as NSDictionary, HttpMethod: "POST", ProgressView: true) { ( _ jsonResponce:JSON? , _ strErrorMessage:String) in
+    if arrArticles.count != 0{
       
-      if(jsonResponce?.error != nil) {
+      let data = arrArticles[indexPath!.row]
+      
+      let paramater = ["app_id":Utility.getDeviceID(),
+                       "favourite_for":"7",
+                       "favourite_id":data["id"].stringValue]
+      
+      WebServices().CallGlobalAPI(url: WebService_Favourite,headers: [:], parameters: paramater as NSDictionary, HttpMethod: "POST", ProgressView: true) { ( _ jsonResponce:JSON? , _ strErrorMessage:String) in
         
-        var errorMess = jsonResponce?.error?.localizedDescription
-        errorMess = MESSAGE_Err_Service
-        Utility().showAlertMessage(vc: self, titleStr: "", messageStr: errorMess!)
-      }
-      else {
-        
-        if jsonResponce!["status"].stringValue == "true"{
-          self.getArticlesList()
+        if(jsonResponce?.error != nil) {
+          
+          var errorMess = jsonResponce?.error?.localizedDescription
+          errorMess = MESSAGE_Err_Service
+          Utility().showAlertMessage(vc: self, titleStr: "", messageStr: errorMess!)
         }
         else {
-          Utility().showAlertMessage(vc: self, titleStr: "", messageStr: jsonResponce!["message"].stringValue)
+          
+          if jsonResponce!["status"].stringValue == "true"{
+            self.arrArticles.removeAll()
+            self.getArticlesList(page: 1)
+          }
+          else {
+            Utility().showAlertMessage(vc: self, titleStr: "", messageStr: jsonResponce!["message"].stringValue)
+          }
         }
       }
+      
     }
+    
   }
   
   
@@ -430,6 +484,11 @@ extension ArticlesVC : MenuNavigationDelegate{
       
     }else if ScreenName == "Search"{
       //Search
+      
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "SearchVC") as! SearchVC
+      navigationController?.pushViewController(vc, animated:  true)
+      
     }else if ScreenName == "Favourites"{
       //Favourites
       

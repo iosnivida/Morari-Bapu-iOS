@@ -16,8 +16,11 @@ class UpComingKathaDetailsVC: UIViewController {
   @IBOutlet weak var lblKathaDates: UILabel!
   @IBOutlet weak var lblKathaLanguages: UILabel!
   @IBOutlet weak var lblKathaTimings: UILabel!
-
+  @IBOutlet weak var btnOtherInfo: UIButton!
+  @IBOutlet weak var lblOtherInfo: UILabel!
+  @IBOutlet weak var lblOtherInfoApi: UILabel!
   
+  @IBOutlet weak var imgOtherInfo: UIImageView!
   var arrUpcomingKathaDetails = [String:JSON]()
   
   override func viewDidLoad() {
@@ -25,13 +28,18 @@ class UpComingKathaDetailsVC: UIViewController {
     
     DispatchQueue.main.async {
       
+      self.btnOtherInfo.isHidden = false
+      self.lblOtherInfo.isHidden = true
+      self.lblOtherInfoApi.isHidden = true
+      self.imgOtherInfo.isHidden = true
+      
       self.lblTitle.text = self.arrUpcomingKathaDetails["title"]?.stringValue
       self.lblKathaLoction.text = self.arrUpcomingKathaDetails["location"]?.stringValue
       self.lblKathaLanguages.text = self.arrUpcomingKathaDetails["language"]?.stringValue
       self.lblKathaDates.text = "\(Utility.dateToString(dateStr: (self.arrUpcomingKathaDetails["from_date"]?.stringValue)!, strDateFormat: "EEEE MMM dd'th', yyyy")) - \(Utility.dateToString(dateStr: (self.arrUpcomingKathaDetails["to_date"]?.stringValue)!, strDateFormat: "EEEE MMM dd'th', yyyy"))"
       
       self.lblKathaTimings.text = "\(Utility.dateToString(dateStr: (self.arrUpcomingKathaDetails["from_date"]?.stringValue)!, strDateFormat: "EEEE MMM dd'th', yyyy")) - \(Utility.dateToString(dateStr: (self.arrUpcomingKathaDetails["to_date"]?.stringValue)!, strDateFormat: "EEEE MMM dd'th', yyyy"))"
-
+      
     }
   }
   
@@ -54,6 +62,17 @@ class UpComingKathaDetailsVC: UIViewController {
     
   }
   
+  @IBAction func btnOtherInfo(_ sender: Any) {
+    
+    
+    self.imgOtherInfo.isHidden = false
+    self.lblOtherInfoApi.isHidden = false
+    self.lblOtherInfo.isHidden = false
+    self.btnOtherInfo.isHidden = true
+    
+    self.lblOtherInfoApi.text = self.arrUpcomingKathaDetails["other"]?.stringValue
+    
+  }
   @IBAction func btnShare(_ sender: Any) {
     
      let share_Content = "\(self.arrUpcomingKathaDetails["title"]!.stringValue) \n\nDate: \(self.arrUpcomingKathaDetails["location"]!.stringValue) \n\n \(self.arrUpcomingKathaDetails["language"]!.stringValue) \n\n\(Utility.dateToString(dateStr: (self.arrUpcomingKathaDetails["from_date"]?.stringValue)!, strDateFormat: "EEEE MMM dd'th', yyyy")) - \(Utility.dateToString(dateStr: (self.arrUpcomingKathaDetails["to_date"]?.stringValue)!, strDateFormat: "EEEE MMM dd'th', yyyy")) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
@@ -183,8 +202,12 @@ extension UpComingKathaDetailsVC: MenuNavigationDelegate{
       vc.screenDirection = .Settings
       navigationController?.pushViewController(vc, animated:  true)
       
-    }else if ScreenName == "Search"{
+     }else if ScreenName == "Search"{
       //Search
+      
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "SearchVC") as! SearchVC
+      navigationController?.pushViewController(vc, animated:  true)
     }else if ScreenName == "Favourites"{
       //Favourites
       

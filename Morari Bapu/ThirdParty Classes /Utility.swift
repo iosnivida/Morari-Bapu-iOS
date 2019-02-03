@@ -559,6 +559,15 @@ class Utility: NSObject
     }
     
   }
+  
+ static func extractYouTubeId(from url: String) -> String? {
+    let typePattern = "(?:(?:\\.be\\/|embed\\/|v\\/|\\?v=|\\&v=|\\/videos\\/)|(?:[\\w+]+#\\w\\/\\w(?:\\/[\\w]+)?\\/\\w\\/))([\\w-_]+)"
+    let regex = try? NSRegularExpression(pattern: typePattern, options: .caseInsensitive)
+    return regex
+      .flatMap { $0.firstMatch(in: url, range: NSMakeRange(0, url.count)) }
+      .flatMap { Range($0.range(at: 1), in: url) }
+      .map { String(url[$0]) }
+  }
 
 }
 
@@ -663,13 +672,9 @@ extension UIButton {
 extension UILabel {
     
     func useUnderlineLabel(line_Color:UIColor) {
-        let border = CALayer()
-        let borderWidth = CGFloat(1.0)
-        border.borderColor = line_Color.cgColor
-        border.frame = CGRect(origin: CGPoint(x: 0,y :self.frame.size.height - borderWidth), size: CGSize(width: UIScreen.main.bounds.width, height: self.frame.size.height))
-        border.borderWidth = borderWidth
-        self.layer.addSublayer(border)
-        self.layer.masksToBounds = true
+      let underlineAttribute = [NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue]
+      let underlineAttributedString = NSAttributedString(string: self.text!, attributes: underlineAttribute)
+      self.attributedText = underlineAttributedString
     }
     
 }

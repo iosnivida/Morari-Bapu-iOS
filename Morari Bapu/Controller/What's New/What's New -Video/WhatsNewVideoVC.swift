@@ -25,9 +25,15 @@ class WhatsNewVideoVC: UIViewController {
   var screenDirection = WhatsNewVideoScreenIdentify.WhatsNew_Video
   var idVideoCategory = String()
   
+  var currentPageNo = Int()
+  var totalPageNo = Int()
+  var is_Api_Being_Called : Bool = false
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     
+    currentPageNo = 1
+
     tblVideo.tableFooterView =  UIView.init(frame: .zero)
     tblVideo.layoutMargins = .zero
     
@@ -35,7 +41,8 @@ class WhatsNewVideoVC: UIViewController {
     tblVideo.estimatedRowHeight = UITableView.automaticDimension
     
     DispatchQueue.main.async {
-      self.getWhatsNewVideo(page: "1")
+      self.arrVideo.removeAll()
+      self.getWhatsNewVideo(pageNo: 1)
     }
     
     if screenDirection == .WhatsNew_Video{
@@ -51,29 +58,30 @@ class WhatsNewVideoVC: UIViewController {
   
   
   //MARK:- Api Call
-  func getWhatsNewVideo(page:String){
+  func getWhatsNewVideo(pageNo:Int){
     
     var api_url = String()
     var param = NSDictionary()
     
     if screenDirection == .WhatsNew_Video{
       
-      param = ["page" : page,
+      param = ["page" : pageNo,
                "favourite_for":"2",
                "app_id":Utility.getDeviceID()] as NSDictionary
       
       api_url = WebService_Whats_New_Video
     }else if screenDirection == .Other_Videos{
       
-      param = ["page" : page,
+      param = ["page" : pageNo,
                "app_id":Utility.getDeviceID(),
-      "video_cat_id" : idVideoCategory] as NSDictionary
+               "favourite_for":"4",
+                "video_cat_id" : idVideoCategory] as NSDictionary
       
       api_url = WebService_Other_Video_Media
       
     }else if screenDirection == .Daily_Katha_Clip{
       
-      param = ["page" : page,
+      param = ["page" : pageNo,
                "favourite_for":"4",
                "app_id":Utility.getDeviceID()] as NSDictionary
       
@@ -91,27 +99,31 @@ class WhatsNewVideoVC: UIViewController {
       else {
         
         if jsonResponce!["status"].stringValue == "true"{
-          self.arrVideo = jsonResponce!["data"].arrayValue
+       
+          for result in jsonResponce!["data"].arrayValue {
+            self.arrVideo.append(result)
+          }
           
+          self.totalPageNo = jsonResponce!["total_page"].intValue
+          
+          self.is_Api_Being_Called = false
+
           if self.arrVideo.count != 0{
             
-            DispatchQueue.main.async {
               self.tblVideo .reloadData()
               Utility.tableNoDataMessage(tableView: self.tblVideo, message: "", messageColor: UIColor.black, displayMessage: .Center)
             }
-          }
           else
           {
             
-            DispatchQueue.main.async {
               self.tblVideo .reloadData()
               Utility.tableNoDataMessage(tableView: self.tblVideo, message: "No video", messageColor: UIColor.black, displayMessage: .Center)
-              
-            }
           }
           
         }
         else {
+          self.is_Api_Being_Called = false
+
           Utility().showAlertMessage(vc: self, titleStr: "", messageStr: jsonResponce!["message"].stringValue)
         }
       }
@@ -242,8 +254,12 @@ extension WhatsNewVideoVC: MenuNavigationDelegate{
       vc.screenDirection = .Settings
       navigationController?.pushViewController(vc, animated:  true)
       
-    }else if ScreenName == "Search"{
+     }else if ScreenName == "Search"{
       //Search
+      
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "SearchVC") as! SearchVC
+      navigationController?.pushViewController(vc, animated:  true)
        }else if ScreenName == "Favourites"{
       //Favourites
       
@@ -294,8 +310,13 @@ extension WhatsNewVideoVC : UITableViewDelegate, UITableViewDataSource{
     
     let placeHolder = UIImage(named: "youtube_placeholder")
     
+    
+    
     cell.imgVideo.kf.indicatorType = .activity
-    cell.imgVideo.kf.setImage(with: URL(string: "\(BASE_URL_IMAGE)\(data["video_image"].stringValue)"), placeholder: placeHolder, options: [.transition(ImageTransition.fade(1))])
+    
+    let url = URL(string: "https://img.youtube.com/vi/\(Utility.extractYouTubeId(from: data["youtube_link"].stringValue) ?? "")/0.jpg")
+    
+    cell.imgVideo.kf.setImage(with: url, placeholder: placeHolder, options: [.transition(ImageTransition.fade(1))])
     
     if data["is_favourite"].boolValue == true{
       cell.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
@@ -331,6 +352,21 @@ extension WhatsNewVideoVC : UITableViewDelegate, UITableViewDataSource{
   }
   
   
+  func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+    
+    if indexPath.row == arrVideo.count - 1{
+      if is_Api_Being_Called == false{
+        if currentPageNo <  totalPageNo{
+          print("Page Load....")
+          is_Api_Being_Called = true
+          currentPageNo += 1
+          self.getWhatsNewVideo(pageNo: currentPageNo)
+        }
+      }
+    }
+  }
+  
+  
   @IBAction func btnShare(_ sender: UIButton) {
     
     let buttonPosition:CGPoint = sender.convert(CGPoint.zero, to:self.tblVideo)
@@ -342,15 +378,15 @@ extension WhatsNewVideoVC : UITableViewDelegate, UITableViewDataSource{
 
     if screenDirection == .WhatsNew_Video{
       
-      share_Content = "\(data["title"].stringValue) \n\n(Duration: \(data["video_duration"].stringValue)) \n\n \(Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd-MM-yyyy")) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
+      share_Content = "\(data["title"].stringValue) \n\n\(data["youtube_link"].stringValue) \n(Duration: \(data["video_duration"].stringValue)) \n\nDate: \(Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd-MM-yyyy")) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
       
     }else if screenDirection == .Other_Videos{
       
-       share_Content = "\(data["title"].stringValue) \n\n(Duration: \(data["video_duration"].stringValue)) \n\n \(Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd-MM-yyyy")) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
+      share_Content = "\(data["title"].stringValue) \n\n\(data["youtube_link"].stringValue) \n(Duration: \(data["video_duration"].stringValue)) \n\nDate: \(Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd-MM-yyyy")) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
       
     }else if screenDirection == .Daily_Katha_Clip{
       
-       share_Content = "\(data["title"].stringValue) \n(Duration: \(data["video_duration"].stringValue)) \n \(Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd-MM-yyyy")) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
+      share_Content = "\(data["title"].stringValue) \n\n\(data["youtube_link"].stringValue) \n(Duration: \(data["video_duration"].stringValue)) \nDate: \(Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd-MM-yyyy")) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
     }
     
     // set up activity view controller
@@ -416,47 +452,52 @@ extension WhatsNewVideoVC : UITableViewDelegate, UITableViewDataSource{
   
   @IBAction func btnFavourite(_ sender: UIButton) {
     
+    
     let buttonPosition:CGPoint = sender.convert(CGPoint.zero, to:self.tblVideo)
     let indexPath = self.tblVideo.indexPathForRow(at: buttonPosition)
     
-    let data = arrVideo[indexPath!.row]
-    var favourite_for = String()
-    var favourite_id = String()
     
-    if screenDirection == .WhatsNew_Video{
+    if arrVideo.count != 0{
       
+      let data = arrVideo[indexPath!.row]
+      var favourite_for = String()
+      var favourite_id = String()
       
-    }else if screenDirection == .Other_Videos{
-      favourite_for = "4"
-      favourite_id = data["id"].stringValue
-    }else if screenDirection == .Daily_Katha_Clip{
-      favourite_for = "4"
-      favourite_id = data["id"].stringValue
-    }
-    
-    let paramater = ["app_id":Utility.getDeviceID(),
-                     "favourite_for":favourite_for,
-                     "favourite_id":favourite_id]
-    
-    WebServices().CallGlobalAPI(url: WebService_Favourite,headers: [:], parameters: paramater as NSDictionary, HttpMethod: "POST", ProgressView: true) { ( _ jsonResponce:JSON? , _ strErrorMessage:String) in
-      
-      if(jsonResponce?.error != nil) {
+      if screenDirection == .WhatsNew_Video{
         
-        var errorMess = jsonResponce?.error?.localizedDescription
-        errorMess = MESSAGE_Err_Service
-        Utility().showAlertMessage(vc: self, titleStr: "", messageStr: errorMess!)
+      }else if screenDirection == .Other_Videos{
+        favourite_for = "4"
+        favourite_id = data["id"].stringValue
+      }else if screenDirection == .Daily_Katha_Clip{
+        favourite_for = "4"
+        favourite_id = data["id"].stringValue
       }
-      else {
+      
+      let paramater = ["app_id":Utility.getDeviceID(),
+                       "favourite_for":favourite_for,
+                       "favourite_id":favourite_id]
+      
+      WebServices().CallGlobalAPI(url: WebService_Favourite,headers: [:], parameters: paramater as NSDictionary, HttpMethod: "POST", ProgressView: true) { ( _ jsonResponce:JSON? , _ strErrorMessage:String) in
         
-        if jsonResponce!["status"].stringValue == "true"{
-          self.getWhatsNewVideo(page: "1")
+        if(jsonResponce?.error != nil) {
+          
+          var errorMess = jsonResponce?.error?.localizedDescription
+          errorMess = MESSAGE_Err_Service
+          Utility().showAlertMessage(vc: self, titleStr: "", messageStr: errorMess!)
         }
         else {
-          Utility().showAlertMessage(vc: self, titleStr: "", messageStr: jsonResponce!["message"].stringValue)
+          
+          if jsonResponce!["status"].stringValue == "true"{
+            self.arrVideo.removeAll()
+            self.getWhatsNewVideo(pageNo: 1)
+          }
+          else {
+            Utility().showAlertMessage(vc: self, titleStr: "", messageStr: jsonResponce!["message"].stringValue)
+          }
         }
       }
+      
     }
-    
   }
   
   

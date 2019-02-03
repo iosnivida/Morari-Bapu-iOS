@@ -22,15 +22,55 @@ class EventsDetailsVC: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     
-    DispatchQueue.main.async {
-      self.lblDescription.text = self.arrEvents["description"]?.stringValue
+    getDetails()
+  
+  }
+  
+  //MARK:- Api Call
+  func getDetails(){
+  
+     let  paramater = ["app_id":Utility.getDeviceID(),
+                   "id":arrEvents["id"]!.stringValue]
+     let  str_Url = WebService_Event_Detail
+    
+    
+    WebServices().CallGlobalAPI(url: str_Url,headers: [:], parameters: paramater as NSDictionary, HttpMethod: "POST", ProgressView: true) { ( _ jsonResponce:JSON? , _ strErrorMessage:String) in
       
-      self.lblDate.text = "\(Utility.dateToString(dateStr: self.arrEvents["from_date"]!.stringValue, strDateFormat: "dd-MM-yyyy")) To \(Utility.dateToString(dateStr: self.arrEvents["to_date"]!.stringValue, strDateFormat: "dd-MM-yyyy"))"
-      
-      self.lblTitle.text = self.arrEvents["title"]?.stringValue
+      if(jsonResponce?.error != nil) {
+        
+        var errorMess = jsonResponce?.error?.localizedDescription
+        errorMess = MESSAGE_Err_Service
+        Utility().showAlertMessage(vc: self, titleStr: "", messageStr: errorMess!)
+      }
+      else {
+        
+        if jsonResponce!["status"].stringValue == "true"{
+          
+          self.arrEvents = jsonResponce!["data"]["Event"].dictionaryValue
+          
+          DispatchQueue.main.async {
+            
+            self.lblDescription.text = self.arrEvents["description"]?.stringValue
+            
+            self.lblDate.text = "\(Utility.dateToString(dateStr: self.arrEvents["from_date"]!.stringValue, strDateFormat: "dd-MM-yyyy")) To \(Utility.dateToString(dateStr: self.arrEvents["to_date"]!.stringValue, strDateFormat: "dd-MM-yyyy"))"
+            
+            self.lblTitle.text = self.arrEvents["title"]?.stringValue
+            
+          }
+        }
+        else {
+          
+          if jsonResponce!["status"].stringValue == "false" && jsonResponce!["message"].stringValue == "No Data Found"{
+            
+            self.lblDate.text = ""
+            self.lblTitle.text = ""
+            self.lblDescription.text = ""
+            
+          }
+          Utility().showAlertMessage(vc: self, titleStr: "", messageStr: jsonResponce!["message"].stringValue)
+        }
+      }
     }
-    
-    
   }
 
   
@@ -157,8 +197,12 @@ extension EventsDetailsVC: MenuNavigationDelegate{
       vc.screenDirection = .Settings
       navigationController?.pushViewController(vc, animated:  true)
       
-    }else if ScreenName == "Search"{
+     }else if ScreenName == "Search"{
       //Search
+      
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "SearchVC") as! SearchVC
+      navigationController?.pushViewController(vc, animated:  true)
        }else if ScreenName == "Favourites"{
       //Favourites
       

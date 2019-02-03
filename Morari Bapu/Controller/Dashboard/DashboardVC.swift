@@ -90,7 +90,6 @@ class DashboardVC: UIViewController, UIScrollViewDelegate {
                     if self.arrSlider.count != 0{
                       
                       
-                        DispatchQueue.main.async {
                             self.pageControl.numberOfPages = self.arrSlider.count
                         
                          /* let title = self.arrSlider[0]
@@ -103,10 +102,11 @@ class DashboardVC: UIViewController, UIScrollViewDelegate {
                           
                           
                           self.vwCarousel.type = iCarouselType.coverFlow2
-                          self.vwCarousel.centerItemWhenSelected = false
-                          self.vwCarousel.autoscroll = 0.3;
+                          self.vwCarousel.scroll(byNumberOfItems: self.arrSlider.count, duration: 0.2)
+                          self.vwCarousel.isScrollEnabled = true
+                      
                           self.vwCarousel .reloadData()
-                        }
+                      
                     }
                     else
                     {
@@ -555,94 +555,99 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
     
     let data = arrHome[sender.tag]
     
-    var paramater = NSDictionary()
-    
-    if data["list_heading"].stringValue == "Quotes"{
-      //Quotes
+    if arrHome.count != 0{
       
-      paramater = ["app_id":Utility.getDeviceID(),
-                   "favourite_for":data["favourite_for"].stringValue,
-                   "favourite_id":data["quote_id"].stringValue]
+      var paramater = NSDictionary()
       
-    }
-    else if data["list_heading"].stringValue == "Katha Chopai"{
-      //Katha Chopai
-      
-      paramater = ["app_id":Utility.getDeviceID(),
-                   "favourite_for":data["favourite_for"].stringValue,
-                   "favourite_id":data["katha_chopai_id"].stringValue]
-      
-    }
-    else if data["list_heading"].stringValue == "Ram Charit Manas"{
-      //Ram charit manas
-      
-      paramater = ["app_id":Utility.getDeviceID(),
-                   "favourite_for":data["favourite_for"].stringValue,
-                   "favourite_id":data["ram_charit_manas_id"].stringValue]
-      
-    }
-    else if data["list_heading"].stringValue == "Stuti"{
-      
-      paramater = ["app_id":Utility.getDeviceID(),
-                   "favourite_for":data["favourite_for"].stringValue,
-                   "favourite_id":data["stuti_id"].stringValue]
-      
-    }else if data["list_heading"].stringValue == "Other Stuti"{
-      
-      paramater = ["app_id":Utility.getDeviceID(),
-                   "favourite_for":data["favourite_for"].stringValue,
-                   "favourite_id":data["ram_charit_manas_id"].stringValue]
-      
-    }else if data["list_heading"].stringValue == "Sankirtan"{
-      
-      paramater = ["app_id":Utility.getDeviceID(),
-                   "favourite_for":data["favourite_for"].stringValue,
-                   "favourite_id":data["sankirtan_id"].stringValue]
-      
-    }
-    else if data["list_heading"].stringValue == "Bapufavouriteshayari"{
-      
-      paramater = ["app_id":Utility.getDeviceID(),
-                   "favourite_for":data["favourite_for"].stringValue,
-                   "favourite_id":data["bapu_shayari_id"].stringValue]
-      
-    }else if data["list_heading"].stringValue == "Daily Katha Clip"{
-      
-      paramater = ["app_id":Utility.getDeviceID(),
-                   "favourite_for":data["favourite_for"].stringValue,
-                   "favourite_id":data["daily_katha_id"].stringValue]
-      
-    }
-    
-    
-    WebServices().CallGlobalAPI(url: WebService_Favourite,headers: [:], parameters: paramater, HttpMethod: "POST", ProgressView: true) { ( _ jsonResponce:JSON? , _ strErrorMessage:String) in
-      
-      if(jsonResponce?.error != nil) {
+      if data["list_heading"].stringValue == "Quotes"{
+        //Quotes
         
-        var errorMess = jsonResponce?.error?.localizedDescription
-        errorMess = MESSAGE_Err_Service
-        Utility().showAlertMessage(vc: self, titleStr: "", messageStr: errorMess!)
+        paramater = ["app_id":Utility.getDeviceID(),
+                     "favourite_for":data["favourite_for"].stringValue,
+                     "favourite_id":data["quote_id"].stringValue]
+        
       }
-      else {
+      else if data["list_heading"].stringValue == "Katha Chopai"{
+        //Katha Chopai
         
-        if jsonResponce!["status"].stringValue == "true"{
+        paramater = ["app_id":Utility.getDeviceID(),
+                     "favourite_for":data["favourite_for"].stringValue,
+                     "favourite_id":data["katha_chopai_id"].stringValue]
+        
+      }
+      else if data["list_heading"].stringValue == "Ram Charit Manas"{
+        //Ram charit manas
+        
+        paramater = ["app_id":Utility.getDeviceID(),
+                     "favourite_for":data["favourite_for"].stringValue,
+                     "favourite_id":data["ram_charit_manas_id"].stringValue]
+        
+      }
+      else if data["list_heading"].stringValue == "Stuti"{
+        
+        paramater = ["app_id":Utility.getDeviceID(),
+                     "favourite_for":data["favourite_for"].stringValue,
+                     "favourite_id":data["stuti_id"].stringValue]
+        
+      }else if data["list_heading"].stringValue == "Other Stuti"{
+        
+        paramater = ["app_id":Utility.getDeviceID(),
+                     "favourite_for":data["favourite_for"].stringValue,
+                     "favourite_id":data["ram_charit_manas_id"].stringValue]
+        
+      }else if data["list_heading"].stringValue == "Sankirtan"{
+        
+        paramater = ["app_id":Utility.getDeviceID(),
+                     "favourite_for":data["favourite_for"].stringValue,
+                     "favourite_id":data["sankirtan_id"].stringValue]
+        
+      }
+      else if data["list_heading"].stringValue == "Bapufavouriteshayari"{
+        
+        paramater = ["app_id":Utility.getDeviceID(),
+                     "favourite_for":data["favourite_for"].stringValue,
+                     "favourite_id":data["bapu_shayari_id"].stringValue]
+        
+      }else if data["list_heading"].stringValue == "Daily Katha Clip"{
+        
+        paramater = ["app_id":Utility.getDeviceID(),
+                     "favourite_for":data["favourite_for"].stringValue,
+                     "favourite_id":data["daily_katha_id"].stringValue]
+        
+      }
+      
+      
+      WebServices().CallGlobalAPI(url: WebService_Favourite,headers: [:], parameters: paramater, HttpMethod: "POST", ProgressView: true) { ( _ jsonResponce:JSON? , _ strErrorMessage:String) in
+        
+        if(jsonResponce?.error != nil) {
           
-          self.getHome(pageNo: 0)
-          
-        }
-        else if jsonResponce!["status"].stringValue == "false"{
-          
-          if jsonResponce!["status"].stringValue == "No Data Found"{
-            self.getHome(pageNo: 0)
-
-          }
-          
+          var errorMess = jsonResponce?.error?.localizedDescription
+          errorMess = MESSAGE_Err_Service
+          Utility().showAlertMessage(vc: self, titleStr: "", messageStr: errorMess!)
         }
         else {
-          Utility().showAlertMessage(vc: self, titleStr: "", messageStr: jsonResponce!["message"].stringValue)
+          
+          if jsonResponce!["status"].stringValue == "true"{
+            
+            self.getHome(pageNo: 0)
+            
+          }
+          else if jsonResponce!["status"].stringValue == "false"{
+            
+            if jsonResponce!["status"].stringValue == "No Data Found"{
+              self.getHome(pageNo: 0)
+              
+            }
+            
+          }
+          else {
+            Utility().showAlertMessage(vc: self, titleStr: "", messageStr: jsonResponce!["message"].stringValue)
+          }
         }
       }
+      
     }
+    
   }
   
   @IBAction func btnShare(_ sender: UIButton) {
@@ -838,6 +843,13 @@ extension DashboardVC : iCarouselDataSource, iCarouselDelegate{
      return arrSlider.count
   }
   
+  func carousel(_ carousel: iCarousel, valueFor option: iCarouselOption, withDefault value: CGFloat) -> CGFloat {
+    
+   
+      return value * 0.5
+   
+    
+  }
   func carousel(_ carousel: iCarousel, viewForItemAt index: Int, reusing view: UIView?) -> UIView {
     var itemView: UIImageView
     if (view == nil)
@@ -992,8 +1004,12 @@ extension DashboardVC: MenuNavigationDelegate{
       vc.screenDirection = .Settings
       navigationController?.pushViewController(vc, animated:  true)
       
-    }else if ScreenName == "Search"{
+     }else if ScreenName == "Search"{
       //Search
+      
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "SearchVC") as! SearchVC
+      navigationController?.pushViewController(vc, animated:  true)
     }else if ScreenName == "Favourites"{
       //Favourites
       

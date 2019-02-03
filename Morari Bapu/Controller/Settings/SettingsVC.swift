@@ -193,11 +193,11 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     
     if screenDirection == .Settings{
-      return 6
+      return 5
     }else  if screenDirection == .About_Us{
       return 1
     }else if screenDirection == .Media{
-      return 7
+      return 6
     }else if screenDirection == .Audios{
       return 3
     }
@@ -237,11 +237,8 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
       }else if indexPath.row == 3{
         cell.lblTitle.text = "Share The App"
         
-      }else if indexPath.row == 4{
-        cell.lblTitle.text = "SND Internet Radio"
-        
       }
-      else if indexPath.row == 5{
+      else if indexPath.row == 4{
         cell.lblTitle.text = "FAQ"
         
       }
@@ -338,10 +335,6 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
           cell.lblUnReadCount.text = " 99+ "
         }
         
-        
-      }
-      else {
-        cell.lblTitle.text = "SND Internet Radio"
         
       }
       
@@ -481,10 +474,8 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
           
         }
         
-      }else if indexPath.row == 4{
-        self.view.makeToast("Coming Soon...", duration: 3.0, position: .bottom)
       }
-      else if indexPath.row == 5{
+      else if indexPath.row == 4{
         let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "FaqVC") as! FaqVC
         navigationController?.pushViewController(vc, animated:  true)
@@ -547,12 +538,6 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
         let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "ArticlesVC") as! ArticlesVC
         navigationController?.pushViewController(vc, animated:  true)
-        
-      }
-      else {
-        
-        //SND Internet Radio
-        self.view.makeToast("Coming Soon...", duration: 3.0, position: .bottom)
         
       }
       
@@ -742,8 +727,12 @@ extension SettingsVC: MenuNavigationDelegate{
       vc.screenDirection = .Settings
       navigationController?.pushViewController(vc, animated:  true)
       
-    }else if ScreenName == "Search"{
+     }else if ScreenName == "Search"{
       //Search
+      
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "SearchVC") as! SearchVC
+      navigationController?.pushViewController(vc, animated:  true)
        }else if ScreenName == "Favourites"{
       //Favourites
       

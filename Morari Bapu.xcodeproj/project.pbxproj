@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0701D94021FCB93C00E08E6C /* SearchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0701D93F21FCB93C00E08E6C /* SearchVC.swift */; };
 		0702110C21DB8AFB006B6472 /* EventsDetailsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0702110B21DB8AFB006B6472 /* EventsDetailsVC.swift */; };
 		0702110E21DB8B0A006B6472 /* EventsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0702110D21DB8B0A006B6472 /* EventsVC.swift */; };
 		0702111021DB8B1C006B6472 /* EventsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0702110F21DB8B1C006B6472 /* EventsCollectionViewCell.swift */; };
@@ -102,6 +103,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0701D93F21FCB93C00E08E6C /* SearchVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchVC.swift; sourceTree = "<group>"; };
 		0702110B21DB8AFB006B6472 /* EventsDetailsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsDetailsVC.swift; sourceTree = "<group>"; };
 		0702110D21DB8B0A006B6472 /* EventsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsVC.swift; sourceTree = "<group>"; };
 		0702110F21DB8B1C006B6472 /* EventsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -206,6 +208,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0701D93E21FCB91A00E08E6C /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				0701D93F21FCB93C00E08E6C /* SearchVC.swift */,
+			);
+			path = Search;
+			sourceTree = "<group>";
+		};
 		0702110921DB8ABA006B6472 /* Events */ = {
 			isa = PBXGroup;
 			children = (
@@ -300,6 +310,7 @@
 		07094A812161DA5C00B5B08C /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				0701D93E21FCB91A00E08E6C /* Search */,
 				07D9394721F62B33003F847D /* Up Coming Kathas */,
 				0766437D21E7AC2B00B15520 /* Articles */,
 				0766437A21E79F0500B15520 /* Favourite */,
@@ -832,6 +843,7 @@
 				"${BUILT_PRODUCTS_DIR}/ESTMusicIndicator/ESTMusicIndicator.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
 				"${BUILT_PRODUCTS_DIR}/IQKeyboardManagerSwift/IQKeyboardManagerSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/Jukebox/Jukebox.framework",
 				"${BUILT_PRODUCTS_DIR}/Kingfisher/Kingfisher.framework",
 				"${BUILT_PRODUCTS_DIR}/Protobuf/Protobuf.framework",
 				"${BUILT_PRODUCTS_DIR}/SVProgressHUD/SVProgressHUD.framework",
@@ -850,6 +862,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ESTMusicIndicator.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IQKeyboardManagerSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Jukebox.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Kingfisher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Protobuf.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SVProgressHUD.framework",
@@ -920,6 +933,7 @@
 				07443DF82165228900F39CCD /* UpcomingKathaTableViewCell.swift in Sources */,
 				070D461221DD20430084C0DA /* AboutTheAppVC.swift in Sources */,
 				074029EC21DE763400E4DE4B /* WhatsNewPhotosCollectionViewCell.swift in Sources */,
+				0701D94021FCB93C00E08E6C /* SearchVC.swift in Sources */,
 				07094A532161C32E00B5B08C /* DashboardVC.swift in Sources */,
 				070D461621DD23E10084C0DA /* FeedbackVC.swift in Sources */,
 				07A755202162658B00793232 /* MenuCollectionViewCell.swift in Sources */,

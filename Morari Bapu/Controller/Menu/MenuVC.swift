@@ -177,7 +177,7 @@ extension MenuVC: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, 
           cell.lblCounter.text = " 99+ "
         }
       }
-      else if indexPath.row == 9{
+      else if indexPath.row == 6{
         //Media
         
         cell.lblCounter.isHidden = false
@@ -190,7 +190,7 @@ extension MenuVC: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, 
           cell.lblCounter.text = " 99+ "
         }
         
-      }else if indexPath.row == 10{
+      }else if indexPath.row == 9{
         //What's New
         
           cell.lblCounter.isHidden = false
@@ -204,20 +204,22 @@ extension MenuVC: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, 
           cell.lblCounter.text = " 99+ "
         }
         
-      }else if indexPath.row == 15{
-        //Events
-      
-          cell.lblCounter.isHidden = false
-        if arrMenu["Event"]?.stringValue == ""{
+      }else if indexPath.row == 10{
+        //Katha Ebook
+        
+        cell.lblCounter.isHidden = false
+        
+        if arrMenu["KathaEBook"]?.stringValue == ""{
           cell.lblCounter.isHidden = true
         }
-        else if arrMenu["Event"]?.intValue ?? 0 < 99{
-          cell.lblCounter.text = arrMenu["Event"]?.stringValue
+        else if arrMenu["KathaEBook"]?.intValue ?? 0 < 99{
+          cell.lblCounter.text = arrMenu["KathaEBook"]?.stringValue
         }else{
           cell.lblCounter.text = " 99+ "
         }
-      
-      }else if indexPath.row == 16{
+        
+      }
+     else if indexPath.row == 10{
         //Katha Ebook
       
           cell.lblCounter.isHidden = false
@@ -231,13 +233,25 @@ extension MenuVC: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, 
           cell.lblCounter.text = " 99+ "
         }
         
+      }
+      else if indexPath.row == 15{
+        //Events
+        
+        cell.lblCounter.isHidden = false
+        if arrMenu["Event"]?.stringValue == ""{
+          cell.lblCounter.isHidden = true
+        }
+        else if arrMenu["Event"]?.intValue ?? 0 < 99{
+          cell.lblCounter.text = arrMenu["Event"]?.stringValue
+        }else{
+          cell.lblCounter.text = " 99+ "
+        }
+        
       }else{
         cell.lblCounter.isHidden = true
       }
       
-      
-        
-            return cell
+        return cell
     
     }
     
@@ -286,8 +300,8 @@ extension MenuVC: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, 
           delegate?.SelectedMenu(ScreenName: "Daily Katha Clip")
 
         }else if indexPath.row == 6{
-          //Live Katha Audio
-          delegate?.SelectedMenu(ScreenName: "Live Katha Audio")
+          //Media
+          delegate?.SelectedMenu(ScreenName: "Media")
 
         }else if indexPath.row == 7{
           //You Tube Channel
@@ -299,12 +313,12 @@ extension MenuVC: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, 
 
         }
         else if indexPath.row == 9{
-          //Media
-          delegate?.SelectedMenu(ScreenName: "Media")
-
-        }else if indexPath.row == 10{
           //What's New
           delegate?.SelectedMenu(ScreenName: "What's New")
+
+        }else if indexPath.row == 10{
+          //Katha Ebook
+          delegate?.SelectedMenu(ScreenName: "Katha Ebook")
 
         }else if indexPath.row == 11{
           //Sangeet Ni Duniya
@@ -325,10 +339,6 @@ extension MenuVC: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, 
         }else if indexPath.row == 15{
           //Events
           delegate?.SelectedMenu(ScreenName: "Events")
-
-        }else if indexPath.row == 16{
-          //Katha Ebook
-          delegate?.SelectedMenu(ScreenName: "Katha Ebook")
 
         }
       

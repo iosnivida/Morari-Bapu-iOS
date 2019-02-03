@@ -15,6 +15,7 @@ class Articles1TableViewCell: UITableViewCell {
   @IBOutlet weak var lblDate: UILabel!
   @IBOutlet weak var btnFavourite: UIButton!
   @IBOutlet weak var btnShare: UIButton!
+  @IBOutlet weak var btnYoutube: UIButton!
 
   override func awakeFromNib() {
         super.awakeFromNib()

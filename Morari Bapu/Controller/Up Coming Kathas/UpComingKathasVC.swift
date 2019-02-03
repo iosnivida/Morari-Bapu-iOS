@@ -18,6 +18,10 @@ class UpComingKathasVC: UIViewController {
   
   var arrUpComingKathas : [JSON] = []
   
+  var currentPageNo = Int()
+  var totalPageNo = Int()
+  var is_Api_Being_Called : Bool = false
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     
@@ -32,16 +36,20 @@ class UpComingKathasVC: UIViewController {
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
    
-      lblTitle.text = "Upcoming Kathas"
-      getUpcomingKathas()
+    currentPageNo = 1
+    
+    lblTitle.text = "Upcoming Kathas"
+    
+    arrUpComingKathas.removeAll()
+    getUpcomingKathas(pageNo: currentPageNo)
 
     
   }
   
   //MARK:- Api Call
-  func getUpcomingKathas(){
+  func getUpcomingKathas(pageNo:Int){
     
-     let param = ["page" : "1",
+     let param = ["page" : pageNo,
                "app_id":Utility.getDeviceID(),
                "favourite_for":"2"] as NSDictionary
     
@@ -56,8 +64,15 @@ class UpComingKathasVC: UIViewController {
       else {
         
         if jsonResponce!["status"].stringValue == "true"{
-          self.arrUpComingKathas = jsonResponce!["data"].arrayValue
           
+          for result in jsonResponce!["data"].arrayValue {
+            self.arrUpComingKathas.append(result)
+          }
+          
+          self.totalPageNo = jsonResponce!["total_page"].intValue
+
+          self.is_Api_Being_Called = false
+
           if self.arrUpComingKathas.count != 0{
             DispatchQueue.main.async {
               
@@ -77,6 +92,9 @@ class UpComingKathasVC: UIViewController {
           
         }
         else {
+          
+          self.is_Api_Being_Called = false
+
           Utility().showAlertMessage(vc: self, titleStr: "", messageStr: jsonResponce!["message"].stringValue)
         }
       }
@@ -164,6 +182,21 @@ extension UpComingKathasVC : UITableViewDelegate, UITableViewDataSource{
       navigationController?.pushViewController(vc, animated:  true)
     
   }
+  
+  func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+    
+    if indexPath.row == arrUpComingKathas.count - 1{
+      if is_Api_Being_Called == false{
+        if currentPageNo <  totalPageNo{
+          print("Page Load....")
+          is_Api_Being_Called = true
+          currentPageNo += 1
+          self.getUpcomingKathas(pageNo: currentPageNo)
+        }
+      }
+    }
+  }
+  
 }
 
 //MARK:- Menu Navigation Delegate
@@ -270,6 +303,11 @@ extension UpComingKathasVC : MenuNavigationDelegate{
       
     }else if ScreenName == "Search"{
       //Search
+      
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "SearchVC") as! SearchVC
+      navigationController?.pushViewController(vc, animated:  true)
+      
     }else if ScreenName == "Favourites"{
       //Favourites
       

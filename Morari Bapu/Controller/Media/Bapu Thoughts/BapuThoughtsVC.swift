@@ -16,9 +16,15 @@ class BapuThoughtsVC: UIViewController {
   @IBOutlet weak var tblThought: UITableView!
   var arrThought = [JSON]()
   
+  var currentPageNo = Int()
+  var totalPageNo = Int()
+  var is_Api_Being_Called : Bool = false
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     
+    currentPageNo = 1
+
     tblThought.tableFooterView =  UIView.init(frame: .zero)
     tblThought.layoutMargins = .zero
     
@@ -26,16 +32,16 @@ class BapuThoughtsVC: UIViewController {
     tblThought.estimatedRowHeight = UITableView.automaticDimension
     
     DispatchQueue.main.async {
-      self.getShayri()
+      self.arrThought.removeAll()
+      self.getShayri(pageNo: self.currentPageNo)
     }
     
   }
   
-  
   //MARK:- Api Call
-  func getShayri(){
+  func getShayri(pageNo:Int){
     
-    let param = ["page" : "1",
+    let param = ["page" : pageNo,
                  "app_id":Utility.getDeviceID()] as NSDictionary
     
     WebServices().CallGlobalAPI(url: WebService_Media_Thought,headers: [:], parameters: param, HttpMethod: "POST", ProgressView: true) { ( _ jsonResponce:JSON? , _ strErrorMessage:String) in
@@ -49,7 +55,12 @@ class BapuThoughtsVC: UIViewController {
       else {
         
         if jsonResponce!["status"].stringValue == "true"{
-          self.arrThought = jsonResponce!["data"].arrayValue
+          
+          self.totalPageNo = jsonResponce!["total_page"].intValue
+
+          for result in jsonResponce!["data"].arrayValue {
+            self.arrThought.append(result)
+          }
           
           if self.arrThought.count != 0{
             
@@ -70,6 +81,9 @@ class BapuThoughtsVC: UIViewController {
           
         }
         else {
+          
+          self.is_Api_Being_Called = false
+
           Utility().showAlertMessage(vc: self, titleStr: "", messageStr: jsonResponce!["message"].stringValue)
         }
       }
@@ -150,6 +164,20 @@ extension BapuThoughtsVC : UITableViewDelegate, UITableViewDataSource{
       
     }
     
+  }
+  
+  func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+    
+    if indexPath.row == arrThought.count - 1{
+      if is_Api_Being_Called == false{
+        if currentPageNo <  totalPageNo{
+          print("Page Load....")
+          is_Api_Being_Called = true
+          currentPageNo += 1
+          self.getShayri(pageNo: currentPageNo)
+        }
+      }
+    }
   }
   
   @IBAction func btnShare(_ sender: UIButton) {
@@ -275,9 +303,13 @@ extension BapuThoughtsVC: MenuNavigationDelegate{
       vc.screenDirection = .Settings
       navigationController?.pushViewController(vc, animated:  true)
       
-    }else if ScreenName == "Search"{
+     }else if ScreenName == "Search"{
       //Search
-       }else if ScreenName == "Favourites"{
+      
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "SearchVC") as! SearchVC
+      navigationController?.pushViewController(vc, animated:  true)
+    }else if ScreenName == "Favourites"{
       //Favourites
       
       let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)

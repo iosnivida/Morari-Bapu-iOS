@@ -17,29 +17,37 @@ class FavouriteVC: UIViewController {
   @IBOutlet weak var tblFavourites: UITableView!
   @IBOutlet weak var lblTitle: UILabel!
   
+  var currentPageNo = Int()
+  var totalPageNo = Int()
+  var is_Api_Being_Called : Bool = false
+  
   var arrFavourites : [JSON] = []
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    
+    currentPageNo = 1
     
     tblFavourites.tableFooterView =  UIView.init(frame: .zero)
     tblFavourites.layoutMargins = .zero
     
     tblFavourites.rowHeight = 150
     tblFavourites.estimatedRowHeight = UITableView.automaticDimension
-
+    
     lblTitle.text = "Favourites"
- 
-    self.getFavouritesList()
+    
+    self.arrFavourites.removeAll()
+    self.getFavouritesList(pageNo: 1)
+
     
   }
   
   //MARK:- Api Call
-  func getFavouritesList(){
+  func getFavouritesList(pageNo:Int){
     
-    let param = ["page" : "1",
+    let param = ["page" : pageNo,
                  "app_id":Utility.getDeviceID()] as NSDictionary
- 
+    
     WebServices().CallGlobalAPI(url: WebService_Favourite_List,headers: [:], parameters: param, HttpMethod: "POST", ProgressView: true) { ( _ jsonResponce:JSON? , _ strErrorMessage:String) in
       
       if(jsonResponce?.error != nil) {
@@ -52,28 +60,38 @@ class FavouriteVC: UIViewController {
         
         if jsonResponce!["status"].stringValue == "true"{
           
-          self.arrFavourites.removeAll()
-          self.arrFavourites = jsonResponce!["data"].arrayValue
+          self.is_Api_Being_Called = false
+          
+          for result in jsonResponce!["data"].arrayValue {
+            self.arrFavourites.append(result)
+          }
+          
+          self.totalPageNo = jsonResponce!["total_page"].intValue
           
           if self.arrFavourites.count != 0{
-            DispatchQueue.main.async {
-              
+  
               Utility.tableNoDataMessage(tableView: self.tblFavourites, message: "",messageColor:UIColor.white, displayMessage: .Center)
               
               self.tblFavourites .reloadData()
-            }
+            
           }
           else
           {
             
-            DispatchQueue.main.async {
               self.tblFavourites.reloadData()
               Utility.tableNoDataMessage(tableView: self.tblFavourites, message: "No Favourites",messageColor:UIColor.white, displayMessage: .Center)
-            }
+
           }
           
         }
+        else if jsonResponce!["status"].stringValue == "false"{
+            if jsonResponce!["message"].stringValue == "No Data Found"{
+                self.arrFavourites.removeAll()
+                self.tblFavourites.reloadData()
+            }
+        }
         else {
+          self.is_Api_Being_Called = false
           Utility().showAlertMessage(vc: self, titleStr: "", messageStr: jsonResponce!["message"].stringValue)
         }
       }
@@ -117,7 +135,7 @@ extension FavouriteVC : UITableViewDelegate, UITableViewDataSource{
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     
     let data = arrFavourites[indexPath.row]
-
+    
     if data["list_heading"].stringValue == "Quotes"{
       //Quotes
       
@@ -136,15 +154,15 @@ extension FavouriteVC : UITableViewDelegate, UITableViewDataSource{
       cell.btnFavourite.tag = indexPath.row
       cell.btnShare.tag = indexPath.row
       cell.btnTitle.tag = indexPath.row
-
+      
       cell.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
-
+      
       cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
       cell.btnFavourite.addTarget(self, action: #selector(btnFavourite(_:)), for: UIControl.Event.touchUpInside)
       cell.btnTitle.addTarget(self, action: #selector(btnToSpecificScreen(_:)), for: UIControl.Event.touchUpInside)
-
+      
       return cell
-
+      
     }
     else if data["list_heading"].stringValue == "Katha Chopai"{
       //Katha Chopai
@@ -161,19 +179,19 @@ extension FavouriteVC : UITableViewDelegate, UITableViewDataSource{
       cell.lblDescription1.text = data["quotes_hindi"].stringValue
       cell.btnTitle.setTitle(data["list_heading"].stringValue, for: .normal)
       cell.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
-
+      
       cell.btnFavourite.tag = indexPath.row
       cell.btnShare.tag = indexPath.row
       cell.btnTitle.tag = indexPath.row
-
+      
       cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
       cell.btnFavourite.addTarget(self, action: #selector(btnFavourite(_:)), for: UIControl.Event.touchUpInside)
       cell.btnTitle.addTarget(self, action: #selector(btnToSpecificScreen(_:)), for: UIControl.Event.touchUpInside)
       cell.btnTitle.addTarget(self, action: #selector(btnToSpecificScreen(_:)), for: UIControl.Event.touchUpInside)
-
+      
       
       return cell
-
+      
       
     }
     else if data["list_heading"].stringValue == "Ram Charit Manas"{
@@ -191,23 +209,23 @@ extension FavouriteVC : UITableViewDelegate, UITableViewDataSource{
       cell.lblDescription1.text = data["description"].stringValue
       cell.btnTitle.setTitle(data["list_heading"].stringValue, for: .normal)
       cell.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
-
+      
       cell.btnFavourite.tag = indexPath.row
       cell.btnShare.tag = indexPath.row
       cell.btnTitle.tag = indexPath.row
-
+      
       cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
       cell.btnFavourite.addTarget(self, action: #selector(btnFavourite(_:)), for: UIControl.Event.touchUpInside)
       cell.btnTitle.addTarget(self, action: #selector(btnToSpecificScreen(_:)), for: UIControl.Event.touchUpInside)
       cell.btnTitle.addTarget(self, action: #selector(btnToSpecificScreen(_:)), for: UIControl.Event.touchUpInside)
-
+      
       
       return cell
       
     }
     else if data["list_heading"].stringValue == "Daily Katha Video"{
       //Daily Katha
-
+      
       let cellIdentifier = "YoutubeTableViewCell"
       
       guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? YoutubeTableViewCell  else {
@@ -218,62 +236,31 @@ extension FavouriteVC : UITableViewDelegate, UITableViewDataSource{
       cell.lblDuration.text = "(Duration: \(data["video_duration"].stringValue))"
       cell.lblDate.text = Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd-MM-yyyy")
       cell.btnTitle.setTitle(data["list_heading"].stringValue, for: .normal)
-
+      
       let placeHolder = UIImage(named: "youtube_placeholder")
       
+      let url = URL(string: "https://img.youtube.com/vi/\(Utility.extractYouTubeId(from: data["youtube_link"].stringValue) ?? "")/0.jpg")
+      
       cell.imgVideo.kf.indicatorType = .activity
-      cell.imgVideo.kf.setImage(with: URL(string: "\(BASE_URL_IMAGE)\(data["video_image"].stringValue)"), placeholder: placeHolder, options: [.transition(ImageTransition.fade(1))])
+      cell.imgVideo.kf.setImage(with: url, placeholder: placeHolder, options: [.transition(ImageTransition.fade(1))])
       
       cell.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
-
+      
       
       cell.btnShare.tag = indexPath.row
       cell.btnYoutube.tag = indexPath.row
       cell.btnFavourite.tag = indexPath.row
       cell.btnTitle.tag = indexPath.row
-
+      
       cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
       cell.btnYoutube.addTarget(self, action: #selector(btnYoutube), for: UIControl.Event.touchUpInside)
       cell.btnFavourite.addTarget(self, action: #selector(btnFavourite), for: UIControl.Event.touchUpInside)
       cell.btnTitle.addTarget(self, action: #selector(btnToSpecificScreen(_:)), for: UIControl.Event.touchUpInside)
-
+      
       return cell
       
     }
-//    else if data["list_heading"].stringValue == "Bapu Articles"{
-//      //Bapu Articles
-//
-//      let cellIdentifier = "YoutubeTableViewCell"
-//
-//      guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? YoutubeTableViewCell  else {
-//        fatalError("The dequeued cell is not an instance of MealTableViewCell.")
-//      }
-//
-//      cell.lblTitle.text = data["article"].stringValue
-//      cell.lblDuration.text = data["link"].stringValue
-//      cell.lblDate.text = Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd-MMM-yyyy")
-//
-//      let placeHolder = UIImage(named: "youtube_placeholder")
-//
-//      cell.imgVideo.kf.indicatorType = .activity
-//      cell.imgVideo.kf.setImage(with: URL(string: "\(BASE_URL_IMAGE)\(data["video_image"].stringValue)"), placeholder: placeHolder, options: [.transition(ImageTransition.fade(1))])
-//
-//      cell.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
-//
-//      cell.btnShare.tag = indexPath.row
-//      cell.btnYoutube.tag = indexPath.row
-//      cell.btnFavourite.tag = indexPath.row
-//      cell.btnTitle.tag = indexPath.row
-//
-//      cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
-//      cell.btnYoutube.addTarget(self, action: #selector(btnYoutube), for: UIControl.Event.touchUpInside)
-//      cell.btnFavourite.addTarget(self, action: #selector(btnFavourite), for: UIControl.Event.touchUpInside)
-//      cell.btnTitle.addTarget(self, action: #selector(btnToSpecificScreen(_:)), for: UIControl.Event.touchUpInside)
-//
-//      return cell
-//
-//    }
-     else if data["list_heading"].stringValue == "Stuti" || data["list_heading"].stringValue == "Other Stuti" || data["list_heading"].stringValue == "Sankirtan"{
+    else if data["list_heading"].stringValue == "Stuti" || data["list_heading"].stringValue == "Other Stuti" || data["list_heading"].stringValue == "Sankirtan"{
       //Sankirtan
       
       let cellIdentifier = "AudioTableViewCell"
@@ -285,10 +272,10 @@ extension FavouriteVC : UITableViewDelegate, UITableViewDataSource{
       cell.lblbTitle.text = data["title"].stringValue
       cell.lblDuration.text = "(Duration: \(data["video_duration"].stringValue))"
       cell.btnTitle.setTitle(data["list_heading"].stringValue, for: .normal)
-
+      
       cell.btnShare.tag  = indexPath.row
       cell.btnTitle.tag = indexPath.row
-
+      
       cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
       
       cell.btnFavourite.tag  = indexPath.row
@@ -296,10 +283,10 @@ extension FavouriteVC : UITableViewDelegate, UITableViewDataSource{
       
       cell.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
       cell.btnTitle.addTarget(self, action: #selector(btnToSpecificScreen(_:)), for: UIControl.Event.touchUpInside)
-
+      
       
       return cell
-
+      
       
     }
     else if data["list_heading"].stringValue == "Bapufavouriteshayari"{
@@ -326,11 +313,76 @@ extension FavouriteVC : UITableViewDelegate, UITableViewDataSource{
       cell.viewMusicIndicator.isHidden = true
       
       cell.btnTitle.tag = indexPath.row
-
+      
       cell.btnTitle.addTarget(self, action: #selector(btnToSpecificScreen(_:)), for: UIControl.Event.touchUpInside)
-
+      
       
       return cell
+      
+    }else if data["list_heading"].stringValue == "Article"{
+      //Articles
+      
+      if data["image"].stringValue == "" && data["video"].stringValue == ""{
+        
+        let cellIdentifier = "Articles1TableViewCell"
+        
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? Articles1TableViewCell  else {
+          fatalError("The dequeued cell is not an instance of MealTableViewCell.")
+        }
+      
+        cell.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
+   
+        cell.lblTitle.text = data["description"].stringValue
+        cell.lblLink.text = data["html_link"].stringValue
+        cell.lblLink.useUnderlineLabel(line_Color: UIColor.black)
+        cell.lblDate.text = Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd-MMM-yyyy")
+        
+        cell.btnShare.tag = indexPath.row
+        cell.btnYoutube.tag = indexPath.row
+        cell.btnFavourite.tag = indexPath.row
+        
+        cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
+        cell.btnYoutube.addTarget(self, action: #selector(btnLinkWebSite), for: UIControl.Event.touchUpInside)
+        cell.btnFavourite.addTarget(self, action: #selector(btnFavourite), for: UIControl.Event.touchUpInside)
+        return cell
+        
+        
+        
+      }else {
+        
+        
+        let cellIdentifier = "Articles2TableViewCell"
+        
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? Articles2TableViewCell  else {
+          fatalError("The dequeued cell is not an instance of MealTableViewCell.")
+        }
+        
+        cell.lblTitle.text = data["description"].stringValue
+        cell.lblLink.text = data["html_link"].stringValue
+        cell.lblLink.useUnderlineLabel(line_Color: UIColor.black)
+        cell.lblDate.text = Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd-MMM-yyyy")
+        
+        let placeHolder = UIImage(named: "youtube_placeholder")
+        
+        cell.imgVideo.kf.indicatorType = .activity
+        cell.imgVideo.kf.setImage(with: URL(string: "\(BASE_URL_IMAGE)\(data["image"].stringValue)"), placeholder: placeHolder, options: [.transition(ImageTransition.fade(1))])
+        
+  
+        cell.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
+        
+        cell.btnShare.tag = indexPath.row
+        cell.btnYoutube.tag = indexPath.row
+        cell.btnLink.tag = indexPath.row
+        cell.btnFavourite.tag = indexPath.row
+        
+        cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
+        cell.btnYoutube.addTarget(self, action: #selector(btnYoutube), for: UIControl.Event.touchUpInside)
+        cell.btnLink.addTarget(self, action: #selector(btnLinkWebSite), for: UIControl.Event.touchUpInside)
+        cell.btnFavourite.addTarget(self, action: #selector(btnFavourite), for: UIControl.Event.touchUpInside)
+        
+        return cell
+        
+      }
       
     }else{
       return UITableViewCell()
@@ -338,110 +390,154 @@ extension FavouriteVC : UITableViewDelegate, UITableViewDataSource{
   }
   
   func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    /*
+    let data = arrFavourites[indexPath.row]
+
+    if data["list_heading"].stringValue == "Article"{
+        return 0
+    }else{
+        return UITableView.automaticDimension
+    }*/
+    
     return UITableView.automaticDimension
+    
   }
   
   func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-    return UITableView.automaticDimension
+    
+    let data = arrFavourites[indexPath.row]
+
+    if data["list_heading"].stringValue == "Article"{
+      return 0
+    }else{
+      return UITableView.automaticDimension
+    }
   }
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     
-   
+    
+  }
+  
+  func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+    
+    if indexPath.row == arrFavourites.count - 1{
+      if is_Api_Being_Called == false{
+        if currentPageNo <  totalPageNo{
+          print("Page Load....")
+          is_Api_Being_Called = true
+          currentPageNo += 1
+          self.getFavouritesList(pageNo: currentPageNo)
+        }
+      }
+    }
   }
   
   @IBAction func btnFavourite(_ sender: UIButton) {
     
-    let data = arrFavourites[sender.tag]
-    
-    var paramater = NSDictionary()
-
-    if data["list_heading"].stringValue == "Quotes"{
-      //Quotes
-    
-      paramater = ["app_id":Utility.getDeviceID(),
-                   "favourite_for":data["favourite_for"].stringValue,
-                   "favourite_id":data["quote_id"].stringValue]
-
-    }
-    else if data["list_heading"].stringValue == "Katha Chopai"{
-      //Katha Chopai
+    if arrFavourites.count != 0{
       
-      paramater = ["app_id":Utility.getDeviceID(),
-                   "favourite_for":data["favourite_for"].stringValue,
-                   "favourite_id":data["katha_chopai_id"].stringValue]
-
-    }
-    else if data["list_heading"].stringValue == "Ram Charit Manas"{
-      //Ram charit manas
+      let data = arrFavourites[sender.tag]
       
-      paramater = ["app_id":Utility.getDeviceID(),
-                   "favourite_for":data["favourite_for"].stringValue,
-                   "favourite_id":data["ram_charit_manas_id"].stringValue]
-
-    }
-    else if data["list_heading"].stringValue == "Stuti"{
+      var paramater = NSDictionary()
       
-      paramater = ["app_id":Utility.getDeviceID(),
-                   "favourite_for":data["favourite_for"].stringValue,
-                   "favourite_id":data["stuti_id"].stringValue]
-      
-    }else if data["list_heading"].stringValue == "Other Stuti"{
-      
-      paramater = ["app_id":Utility.getDeviceID(),
-                   "favourite_for":data["favourite_for"].stringValue,
-                   "favourite_id":data["ram_charit_manas_id"].stringValue]
-      
-    }else if data["list_heading"].stringValue == "Sankirtan"{
-      
-      paramater = ["app_id":Utility.getDeviceID(),
-                   "favourite_for":data["favourite_for"].stringValue,
-                   "favourite_id":data["sankirtan_id"].stringValue]
-      
-    }
-    else if data["list_heading"].stringValue == "Bapufavouriteshayari"{
-      
-      paramater = ["app_id":Utility.getDeviceID(),
-                   "favourite_for":data["favourite_for"].stringValue,
-                   "favourite_id":data["bapu_shayari_id"].stringValue]
-      
-    }else if data["list_heading"].stringValue == "Daily Katha Video"{
-      
-      paramater = ["app_id":Utility.getDeviceID(),
-                   "favourite_for":data["favourite_for"].stringValue,
-                   "favourite_id":data["daily_katha_id"].stringValue]
-      
-    }
-
-    
-    WebServices().CallGlobalAPI(url: WebService_Favourite,headers: [:], parameters: paramater, HttpMethod: "POST", ProgressView: true) { ( _ jsonResponce:JSON? , _ strErrorMessage:String) in
-      
-      if(jsonResponce?.error != nil) {
+      if data["list_heading"].stringValue == "Quotes"{
+        //Quotes
         
-        var errorMess = jsonResponce?.error?.localizedDescription
-        errorMess = MESSAGE_Err_Service
-        Utility().showAlertMessage(vc: self, titleStr: "", messageStr: errorMess!)
+        paramater = ["app_id":Utility.getDeviceID(),
+                     "favourite_for":data["favourite_for"].stringValue,
+                     "favourite_id":data["quote_id"].stringValue]
+        
       }
-      else {
+      else if data["list_heading"].stringValue == "Katha Chopai"{
+        //Katha Chopai
         
-        if jsonResponce!["status"].stringValue == "true"{
-         
-          self.getFavouritesList()
-         
-        }
-        else if jsonResponce!["status"].stringValue == "false"{
+        paramater = ["app_id":Utility.getDeviceID(),
+                     "favourite_for":data["favourite_for"].stringValue,
+                     "favourite_id":data["katha_chopai_id"].stringValue]
+        
+      }
+      else if data["list_heading"].stringValue == "Ram Charit Manas"{
+        //Ram charit manas
+        
+        paramater = ["app_id":Utility.getDeviceID(),
+                     "favourite_for":data["favourite_for"].stringValue,
+                     "favourite_id":data["ram_charit_manas_id"].stringValue]
+        
+      }
+      else if data["list_heading"].stringValue == "Stuti"{
+        
+        paramater = ["app_id":Utility.getDeviceID(),
+                     "favourite_for":data["favourite_for"].stringValue,
+                     "favourite_id":data["stuti_id"].stringValue]
+        
+      }else if data["list_heading"].stringValue == "Other Stuti"{
+        
+        paramater = ["app_id":Utility.getDeviceID(),
+                     "favourite_for":data["favourite_for"].stringValue,
+                     "favourite_id":data["ram_charit_manas_id"].stringValue]
+        
+      }else if data["list_heading"].stringValue == "Sankirtan"{
+        
+        paramater = ["app_id":Utility.getDeviceID(),
+                     "favourite_for":data["favourite_for"].stringValue,
+                     "favourite_id":data["sankirtan_id"].stringValue]
+        
+      }
+      else if data["list_heading"].stringValue == "Bapufavouriteshayari"{
+        
+        paramater = ["app_id":Utility.getDeviceID(),
+                     "favourite_for":data["favourite_for"].stringValue,
+                     "favourite_id":data["bapu_shayari_id"].stringValue]
+        
+      }else if data["list_heading"].stringValue == "Daily Katha Video"{
+        
+        paramater = ["app_id":Utility.getDeviceID(),
+                     "favourite_for":data["favourite_for"].stringValue,
+                     "favourite_id":data["daily_katha_id"].stringValue]
+        
+      }else if data["list_heading"].stringValue == "Article"{
+        
+        paramater = ["app_id":Utility.getDeviceID(),
+                     "favourite_for":data["favourite_for"].stringValue,
+                     "favourite_id":data["article_id"].stringValue]
+        
+      }
+      
+      
+      WebServices().CallGlobalAPI(url: WebService_Favourite,headers: [:], parameters: paramater, HttpMethod: "POST", ProgressView: true) { ( _ jsonResponce:JSON? , _ strErrorMessage:String) in
+        
+        if(jsonResponce?.error != nil) {
           
-          if jsonResponce!["status"].stringValue == "No Data Found"{
-            self.getFavouritesList()
-
-          }
-          
+          var errorMess = jsonResponce?.error?.localizedDescription
+          errorMess = MESSAGE_Err_Service
+          Utility().showAlertMessage(vc: self, titleStr: "", messageStr: errorMess!)
         }
         else {
-          Utility().showAlertMessage(vc: self, titleStr: "", messageStr: jsonResponce!["message"].stringValue)
+          
+          if jsonResponce!["status"].stringValue == "true"{
+            
+            self.arrFavourites.removeAll()
+            self.getFavouritesList(pageNo: 1)
+            
+            
+          }
+          else if jsonResponce!["status"].stringValue == "false"{
+            
+            if jsonResponce!["message"].stringValue == "No Data Found"{
+              self.arrFavourites.removeAll()
+              self.getFavouritesList(pageNo: 1)
+              
+            }
+            
+          }
+          else {
+            Utility().showAlertMessage(vc: self, titleStr: "", messageStr: jsonResponce!["message"].stringValue)
+          }
         }
       }
     }
+
   }
   
   @IBAction func btnShare(_ sender: UIButton) {
@@ -457,52 +553,57 @@ extension FavouriteVC : UITableViewDelegate, UITableViewDataSource{
       //Quotes
       
       share_Content = "\(data["title"].stringValue) \n\nDate: \(Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd MMM yyyy")) \n\n \(data["quotes_gujarati"].stringValue) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
-
+      
       
     }
     else if data["list_heading"].stringValue == "Katha Chopai"{
       //Katha Chopai
       
       share_Content = "\(data["title"].stringValue)-\(data["title_no"].stringValue) \n\nDate: \(Utility.dateToString(dateStr: data["from_date"].stringValue, strDateFormat: "dd MMM yyyy")) \n\n \(data["quotes_hindi"].stringValue) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
-
-
+      
+      
       
     }
     else if data["list_heading"].stringValue == "Ram Charit Manas"{
       //Ram charit manas
       share_Content = "\(data["title"].stringValue)-\(data["title_no"].stringValue) \n\nDate: \(Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd MMM yyyy")) \n\n \(data["description"].stringValue) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
-
-
+      
+      
       
     }
     else if data["list_heading"].stringValue == "Stuti"{
       
       share_Content = "\(data["title"].stringValue) \n\n(Duration: \(data["video_duration"].stringValue)) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
-
+      
       
     }else if data["list_heading"].stringValue == "Other Stuti"{
       
       share_Content = "\(data["title"].stringValue) \n\n(Duration: \(data["video_duration"].stringValue)) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
-
+      
       
     }else if data["list_heading"].stringValue == "Sankirtan"{
       
       share_Content = "\(data["title"].stringValue) \n\n(Duration: \(data["video_duration"].stringValue)) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
-
+      
       
     }
     else if data["list_heading"].stringValue == "Bapufavouriteshayari"{
       
-       share_Content = "Shayari \n\n \(data["quotes_gujarati"].stringValue) \n\n\(data["quotes_english"].stringValue) \n\n\(data["quotes_hindi"].stringValue)  \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
-
+      share_Content = "Shayari \n\n \(data["quotes_gujarati"].stringValue) \n\n\(data["quotes_english"].stringValue) \n\n\(data["quotes_hindi"].stringValue)  \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
+      
       
     }else if data["list_heading"].stringValue == "Daily Katha Video"{
       
-       share_Content = "\(data["title"].stringValue) \n(Duration: \(data["video_duration"].stringValue)) \n \(Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd-MM-yyyy")) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
+      share_Content = "\(data["title"].stringValue) \n(Duration: \(data["video_duration"].stringValue)) \n \(Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd-MM-yyyy")) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
+      
+      
+    }else if data["list_heading"].stringValue == "Article"{
+      
+      share_Content = "\(data["description"].stringValue) \n\nThis message has been sent via the Morari Bapu App. You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
 
       
     }
-
+    
     
     // set up activity view controller
     let textToShare = [share_Content]
@@ -529,9 +630,9 @@ extension FavouriteVC : UITableViewDelegate, UITableViewDataSource{
     var youtubeLink = String()
     
     if data["favourite_for"].intValue == 4{
-
+      
       youtubeLink = data["youtube_link"].stringValue
-
+      
     }else{
       youtubeLink = data["youtube_link"].stringValue
     }
@@ -544,7 +645,7 @@ extension FavouriteVC : UITableViewDelegate, UITableViewDataSource{
       
     }
     
- 
+    
     
   }
   
@@ -562,7 +663,7 @@ extension FavouriteVC : UITableViewDelegate, UITableViewDataSource{
       let vc = storyboard.instantiateViewController(withIdentifier: "KathaChopaiVC") as! KathaChopaiVC
       vc.screenDirection = .Quotes
       navigationController?.pushViewController(vc, animated:  true)
-
+      
     }
     else if data["list_heading"].stringValue == "Katha Chopai"{
       //Katha Chopai
@@ -579,7 +680,7 @@ extension FavouriteVC : UITableViewDelegate, UITableViewDataSource{
       let vc = storyboard.instantiateViewController(withIdentifier: "KathaChopaiVC") as! KathaChopaiVC
       vc.screenDirection = .Ram_Charit_Manas
       navigationController?.pushViewController(vc, animated:  true)
-
+      
     }
     else if data["list_heading"].stringValue == "Stuti"{
       
@@ -587,7 +688,7 @@ extension FavouriteVC : UITableViewDelegate, UITableViewDataSource{
       let vc = storyboard.instantiateViewController(withIdentifier: "AudioVC") as! AudioVC
       vc.screenDirection = .Stuti
       navigationController?.pushViewController(vc, animated:  true)
-
+      
     }else if data["list_heading"].stringValue == "Other Stuti"{
       
       //Other Audio
@@ -595,7 +696,7 @@ extension FavouriteVC : UITableViewDelegate, UITableViewDataSource{
       let vc = storyboard.instantiateViewController(withIdentifier: "AudioVC") as! AudioVC
       vc.screenDirection = .Others
       navigationController?.pushViewController(vc, animated:  true)
-
+      
     }else if data["list_heading"].stringValue == "Sankirtan"{
       
       //Sankirtan
@@ -619,13 +720,30 @@ extension FavouriteVC : UITableViewDelegate, UITableViewDataSource{
       let vc = storyboard.instantiateViewController(withIdentifier: "WhatsNewVideoVC") as! WhatsNewVideoVC
       vc.screenDirection = .Daily_Katha_Clip
       navigationController?.pushViewController(vc, animated:  true)
-
+      
     }
     
   }
   
+  @IBAction func btnLinkWebSite(_ sender: UIButton) {
+    
+    let buttonPosition:CGPoint = sender.convert(CGPoint.zero, to:self.tblFavourites)
+    let indexPath = self.tblFavourites.indexPathForRow(at: buttonPosition)
+    
+    let data = arrFavourites[indexPath!.row]
+
+    let youtubeLink = data["html_link"].url
+    
+    if Utility.canOpenURL(data["html_link"].stringValue){
+      DispatchQueue.main.async {
+        UIApplication.shared.open(youtubeLink!, options: [:])
+      }
+    }else{
+    }
+  }
   
-   
+  
+  
 }
 
 //MARK:- Menu Navigation Delegate
@@ -652,7 +770,7 @@ extension FavouriteVC : MenuNavigationDelegate{
       vc.screenDirection = .Ram_Charit_Manas
       navigationController?.pushViewController(vc, animated:  true)
       
-     }else if ScreenName == "Upcoing Katha"{
+    }else if ScreenName == "Upcoing Katha"{
       //Upcoing Katha
       
       let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
@@ -732,7 +850,12 @@ extension FavouriteVC : MenuNavigationDelegate{
       
     }else if ScreenName == "Search"{
       //Search
-       }else if ScreenName == "Favourites"{
+      
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "SearchVC") as! SearchVC
+      navigationController?.pushViewController(vc, animated:  true)
+      
+    }else if ScreenName == "Favourites"{
       //Favourites
       
       let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
@@ -754,3 +877,4 @@ extension FavouriteVC : MenuNavigationDelegate{
     }
   }
 }
+

@@ -24,11 +24,17 @@ class AudioVC: UIViewController {
   @IBOutlet weak var tblAudio: UITableView!
   var arrAudio = [JSON]()
   var screenDirection = AudioScreenIdentifier.Stuti
-  var arrFavourite = NSArray()
+  var arrFavourite = NSMutableArray()
 
+  var currentPageNo = Int()
+  var totalPageNo = Int()
+  var is_Api_Being_Called : Bool = false
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    
+    currentPageNo = 1
+
     
     tblAudio.tableFooterView =  UIView.init(frame: .zero)
     tblAudio.layoutMargins = .zero
@@ -47,14 +53,15 @@ class AudioVC: UIViewController {
     }
     
     DispatchQueue.main.async {
-      self.getAudio()
+      self.arrAudio.removeAll()
+      self.getAudio(pageNo: self.currentPageNo)
     }
     
   }
   
   
   //MARK:- Api Call
-  func getAudio(){
+  func getAudio(pageNo:Int){
     
     
     var api_Url = String()
@@ -62,7 +69,7 @@ class AudioVC: UIViewController {
     if screenDirection == .Stuti{
       api_Url = WebService_Stuti_List
       
-      param = ["page" : "1",
+      param = ["page" : pageNo,
                "app_id":Utility.getDeviceID(),
                "stuti_type_id":"1",
                "favourite_for":"5"] as NSDictionary
@@ -71,7 +78,7 @@ class AudioVC: UIViewController {
     }else if screenDirection == .Sankirtan{
       api_Url = WebService_Sankirtan_Audio
       
-      param = ["page" : "1",
+      param = ["page" : pageNo,
                "app_id":Utility.getDeviceID(),
                "favourite_for":"8"] as NSDictionary
       
@@ -79,7 +86,7 @@ class AudioVC: UIViewController {
     }else if screenDirection == .Others{
       api_Url = WebService_Stuti_List
       
-      param = ["page" : "1",
+      param = ["page" : pageNo,
                "app_id":Utility.getDeviceID(),
                "stuti_type_id":"2",
                "favourite_for":"10"] as NSDictionary
@@ -88,7 +95,7 @@ class AudioVC: UIViewController {
       
       api_Url = WebService_Whats_New_Audio
       
-      param = ["page" : "1",
+      param = ["page" : pageNo,
                "app_id":Utility.getDeviceID(),
                "audio_id":"1"] as NSDictionary
     }
@@ -104,12 +111,19 @@ class AudioVC: UIViewController {
       else {
         
         if jsonResponce!["status"].stringValue == "true"{
-          self.arrAudio = jsonResponce!["data"].arrayValue
+          self.totalPageNo = jsonResponce!["total_page"].intValue
           
-          if jsonResponce!["MyFavourite"].count != 0{
-              self.arrFavourite = jsonResponce!["MyFavourite"].arrayObject! as NSArray
+          for result in jsonResponce!["data"].arrayValue {
+            self.arrAudio.append(result)
           }
           
+          
+          for result in jsonResponce!["MyFavourite"].arrayValue {
+            self.arrFavourite.add(result.stringValue)
+          }
+          
+          self.is_Api_Being_Called = false
+
 
           if self.arrAudio.count != 0{
             
@@ -130,6 +144,8 @@ class AudioVC: UIViewController {
           
         }
         else {
+          self.is_Api_Being_Called = false
+
           Utility().showAlertMessage(vc: self, titleStr: "", messageStr: jsonResponce!["message"].stringValue)
         }
       }
@@ -266,9 +282,23 @@ extension AudioVC : UITableViewDelegate, UITableViewDataSource{
     }
     
     
-   // Utility.music_Player_Show(onViewController: self, position: indexPath.row, listOfAudio: arrAudio)
+      Utility.music_Player_Show(onViewController: self, position: indexPath.row, listOfAudio: arrAudio)
 
     
+  }
+  
+  func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+    
+    if indexPath.row == arrAudio.count - 1{
+      if is_Api_Being_Called == false{
+        if currentPageNo <  totalPageNo{
+          print("Page Load....")
+          is_Api_Being_Called = true
+          currentPageNo += 1
+          self.getAudio(pageNo: currentPageNo)
+        }
+      }
+    }
   }
   
   @IBAction func btnShare(_ sender: UIButton) {
@@ -301,54 +331,59 @@ extension AudioVC : UITableViewDelegate, UITableViewDataSource{
   
   @IBAction func btnFavourite(_ sender: UIButton) {
     
-    let data = arrAudio[sender.tag]
-    
-    var paramater = NSDictionary()
-    
-  if screenDirection == .Stuti{
-  
-    paramater = ["app_id":Utility.getDeviceID(),
-                 "favourite_for":"5",
-                 "favourite_id":data["id"].stringValue]
-
-  
-  }else if screenDirection == .Sankirtan{
-  
-    paramater = ["app_id":Utility.getDeviceID(),
-                 "favourite_for":"8",
-                 "favourite_id":data["id"].stringValue]
-  
-  
-  }else if screenDirection == .Others{
-  
-    paramater = ["app_id":Utility.getDeviceID(),
-                 "favourite_for":"2",
-                 "favourite_id":data["id"].stringValue]
-  
-  }
-    
-    WebServices().CallGlobalAPI(url: WebService_Favourite,headers: [:], parameters: paramater, HttpMethod: "POST", ProgressView: true) { ( _ jsonResponce:JSON? , _ strErrorMessage:String) in
+    if arrAudio.count != 0{
       
-      if(jsonResponce?.error != nil) {
+      let data = arrAudio[sender.tag]
+      
+      var paramater = NSDictionary()
+      
+      if screenDirection == .Stuti{
         
-        var errorMess = jsonResponce?.error?.localizedDescription
-        errorMess = MESSAGE_Err_Service
-        Utility().showAlertMessage(vc: self, titleStr: "", messageStr: errorMess!)
+        paramater = ["app_id":Utility.getDeviceID(),
+                     "favourite_for":"5",
+                     "favourite_id":data["id"].stringValue]
+        
+        
+      }else if screenDirection == .Sankirtan{
+        
+        paramater = ["app_id":Utility.getDeviceID(),
+                     "favourite_for":"8",
+                     "favourite_id":data["id"].stringValue]
+        
+        
+      }else if screenDirection == .Others{
+        
+        paramater = ["app_id":Utility.getDeviceID(),
+                     "favourite_for":"2",
+                     "favourite_id":data["id"].stringValue]
+        
       }
-      else {
+      
+      WebServices().CallGlobalAPI(url: WebService_Favourite,headers: [:], parameters: paramater, HttpMethod: "POST", ProgressView: true) { ( _ jsonResponce:JSON? , _ strErrorMessage:String) in
         
-        if jsonResponce!["status"].stringValue == "true"{
-         
-          self.getAudio()
-         
+        if(jsonResponce?.error != nil) {
+          
+          var errorMess = jsonResponce?.error?.localizedDescription
+          errorMess = MESSAGE_Err_Service
+          Utility().showAlertMessage(vc: self, titleStr: "", messageStr: errorMess!)
         }
         else {
-          Utility().showAlertMessage(vc: self, titleStr: "", messageStr: jsonResponce!["message"].stringValue)
+          
+          if jsonResponce!["status"].stringValue == "true"{
+            
+            self.arrFavourite.removeAllObjects()
+            self.arrAudio.removeAll()
+            self.getAudio(pageNo: 1)
+            
+          }
+          else {
+            Utility().showAlertMessage(vc: self, titleStr: "", messageStr: jsonResponce!["message"].stringValue)
+          }
         }
       }
+      
     }
-    
-}
+  }
 }
 
 //MARK:- Menu Navigation Delegate
@@ -453,8 +488,13 @@ extension AudioVC: MenuNavigationDelegate{
       vc.screenDirection = .Settings
       navigationController?.pushViewController(vc, animated:  true)
       
-    }else if ScreenName == "Search"{
+     }else if ScreenName == "Search"{
       //Search
+      
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "SearchVC") as! SearchVC
+      navigationController?.pushViewController(vc, animated:  true)
+      
     }else if ScreenName == "Favourites"{
       //Favourites
       

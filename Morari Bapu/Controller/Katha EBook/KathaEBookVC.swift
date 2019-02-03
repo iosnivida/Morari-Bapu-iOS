@@ -14,12 +14,15 @@ import Kingfisher
 class KathaEBookVC: UIViewController {
 
   var arrKathaEBook  = [JSON]()
+  var selectedBook  = [String:JSON]()
 
   @IBOutlet weak var tblKathaEBook: UITableView!
-  
+  @IBOutlet weak var viewBookType: UIView!
+
   override func viewDidLoad() {
         super.viewDidLoad()
 
+    viewBookType.isHidden = true
     tblKathaEBook.tableFooterView =  UIView.init(frame: .zero)
     tblKathaEBook.layoutMargins = .zero
     
@@ -78,6 +81,7 @@ class KathaEBookVC: UIViewController {
     }
   }
   
+  
   //MARK:- Button Event
   @IBAction func btnMenu(_ sender: Any) {
     Utility.menu_Show(onViewController: self)
@@ -96,6 +100,13 @@ class KathaEBookVC: UIViewController {
   @IBAction func backToHome(_ sender: Any) {
     self.navigationController?.popToRootViewController(animated: true)
   }
+  
+  
+  @IBAction func dismissView(_ sender: Any) {
+    viewBookType.isHidden = true
+
+  }
+  
   
 }
 
@@ -123,17 +134,13 @@ extension KathaEBookVC : UITableViewDelegate, UITableViewDataSource{
     let data = arrKathaEBook[indexPath.row]
 
     cell.lblTitle.text = data["title"].stringValue
-    cell.lblDescription1.text = data["android_english"].stringValue
-    cell.lblDescription2.text = data["android_hindi"].stringValue
-    cell.lblDescription3.text = data["android_gujarati"].stringValue
-
-    cell.btnEnglish.tag = indexPath.row
-    cell.btnHindi.tag = indexPath.row
-    cell.btnGujarati.tag = indexPath.row
+    cell.lblDate.text = data["date"].stringValue
     
-    cell.btnEnglish.addTarget(self, action: #selector(btnEnglishEbookDetails), for: UIControl.Event.touchUpInside)
-    cell.btnHindi.addTarget(self, action: #selector(btnHindiEbookDetails), for: UIControl.Event.touchUpInside)
-    cell.btnGujarati.addTarget(self, action: #selector(btnGujaratiEbookDetails), for: UIControl.Event.touchUpInside)
+    cell.btnViewEBook.tag = indexPath.row
+    cell.btnViewEBook.addTarget(self, action: #selector(btnViewEbook), for: UIControl.Event.touchUpInside)
+    
+    cell.btnShare.tag = indexPath.row
+    cell.btnShare.addTarget(self, action: #selector(btnShare(_:)), for: UIControl.Event.touchUpInside)
 
     return cell
   }
@@ -148,27 +155,39 @@ extension KathaEBookVC : UITableViewDelegate, UITableViewDataSource{
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     
-//    let data = arrKathaEBook[indexPath.row]
-//
-//    if let url = data["android_gujarati"].url {
-//      UIApplication.shared.open(url, options: [:])
-//    }
+    let data = arrKathaEBook[indexPath.row]
+    
+    if data["is_read"].intValue == 0{
+      
+      let param = ["app_id":Utility.getDeviceID(),
+                   "katha_ebook_id":data["id"].stringValue] as NSDictionary
+      
+      Utility.readUnread(api_Url: WebService_Katha_E_Book_Read_Unread, parameters: param)
+    }
+    
+    
+  }
+  
+  @IBAction func btnViewEbook(_ sender: UIButton) {
+    
+    viewBookType.isHidden = false
+    selectedBook = arrKathaEBook[sender.tag].dictionaryValue
+    
+    if selectedBook["is_read"]!.intValue == 0{
+      
+      let param = ["app_id":Utility.getDeviceID(),
+                   "katha_ebook_id":selectedBook["id"]!.stringValue] as NSDictionary
+      
+      Utility.readUnread(api_Url: WebService_Katha_E_Book_Read_Unread, parameters: param)
+    }
     
   }
   
   @IBAction func btnEnglishEbookDetails(_ sender: UIButton) {
 
-    let data = arrKathaEBook[sender.tag]
-
-    if data["is_read"].intValue == 0{
-
-      let param = ["app_id":Utility.getDeviceID(),
-                   "katha_ebook_id":data["id"].stringValue] as NSDictionary
-      
-        Utility.readUnread(api_Url: WebService_Katha_E_Book_Read_Unread, parameters: param)
-    }
-      
-    let urlStr = "\(BASE_URL_IMAGE)\(data["android_gujarati"].stringValue)"
+    viewBookType.isHidden = true
+    
+    let urlStr = "\(BASE_URL_IMAGE)\(selectedBook["android_gujarati"]!.stringValue)"
     
     if #available(iOS 10.0, *) {
       UIApplication.shared.open(URL(string: urlStr)!, options: [:], completionHandler: nil)
@@ -182,16 +201,9 @@ extension KathaEBookVC : UITableViewDelegate, UITableViewDataSource{
   
   @IBAction func btnGujaratiEbookDetails(_ sender: UIButton) {
     
-    let data = arrKathaEBook[sender.tag]
-   
-    if data["is_read"].intValue == 0{
-      
-      let param = ["app_id":Utility.getDeviceID(),
-                   "katha_ebook_id":data["id"].stringValue] as NSDictionary
-      Utility.readUnread(api_Url: WebService_Katha_E_Book_Read_Unread, parameters: param)
-    }
+    viewBookType.isHidden = true
     
-    let urlStr = "\(BASE_URL_IMAGE)\(data["android_gujarati"].stringValue)"
+    let urlStr = "\(BASE_URL_IMAGE)\(selectedBook["android_gujarati"]!.stringValue)"
     
     if #available(iOS 10.0, *) {
       UIApplication.shared.open(URL(string: urlStr)!, options: [:], completionHandler: nil)
@@ -204,17 +216,9 @@ extension KathaEBookVC : UITableViewDelegate, UITableViewDataSource{
   
   @IBAction func btnHindiEbookDetails(_ sender: UIButton) {
     
-    let data = arrKathaEBook[sender.tag]
+    viewBookType.isHidden = true
     
-    if data["is_read"].intValue == 0{
-      
-      let param = ["app_id":Utility.getDeviceID(),
-                   "katha_ebook_id":data["id"].stringValue] as NSDictionary
-      
-      Utility.readUnread(api_Url: WebService_Katha_E_Book_Read_Unread, parameters: param)
-    }
-    
-    let urlStr = "\(BASE_URL_IMAGE)\(data["android_hindi"].stringValue)"
+    let urlStr = "\(BASE_URL_IMAGE)\(selectedBook["android_hindi"]!.stringValue)"
     
     if #available(iOS 10.0, *) {
       UIApplication.shared.open(URL(string: urlStr)!, options: [:], completionHandler: nil)
@@ -224,6 +228,30 @@ extension KathaEBookVC : UITableViewDelegate, UITableViewDataSource{
     }
     
   }
+  
+  @IBAction func btnShare(_ sender: UIButton) {
+    
+    let data = arrKathaEBook[sender.tag]
+    
+    let urleng = "\(BASE_URL_IMAGE)\(data["android_english"].stringValue)"
+    let urlhindi = "\(BASE_URL_IMAGE)\(data["android_hindi"].stringValue)"
+    let urlguj = "\(BASE_URL_IMAGE)\(data["android_gujarati"].stringValue)"
+    
+    let share_Content = "\(data["title"].stringValue) \n\nDate: \(data["date"].stringValue) \n\n \(urleng) \n\n\(urlhindi) \n\n\(urlguj) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
+  
+    let textToShare = [share_Content]
+    let activityViewController = UIActivityViewController(activityItems: textToShare, applicationActivities: nil)
+    activityViewController.popoverPresentationController?.sourceView = self.view // so that iPads won't crash
+    
+    // exclude some activity types from the list (optional)
+    activityViewController.excludedActivityTypes = [ UIActivity.ActivityType.airDrop, UIActivity.ActivityType.postToFacebook ]
+    
+    DispatchQueue.main.async {
+      self.present(activityViewController, animated: true, completion: nil)
+    }
+    
+  }
+  
 
 }
 
@@ -329,8 +357,12 @@ extension KathaEBookVC: MenuNavigationDelegate{
       vc.screenDirection = .Settings
       navigationController?.pushViewController(vc, animated:  true)
       
-    }else if ScreenName == "Search"{
+     }else if ScreenName == "Search"{
       //Search
+      
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "SearchVC") as! SearchVC
+      navigationController?.pushViewController(vc, animated:  true)
        }else if ScreenName == "Favourites"{
       //Favourites
       

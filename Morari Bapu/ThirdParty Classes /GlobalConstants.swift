@@ -31,7 +31,7 @@ let WebService_Stuti_List                            = "\(BASE_URL)Stuti/App_Get
 let WebService_Stuti_Details                         = "\(BASE_URL)Stuti/App_GetStutiDetail"
 
 let WebService_Chopai_List                           = "\(BASE_URL)KathaChopai/App_GetKathaChopai"
-let WebService_Chopai_Details                        = "\(BASE_URL)KathaChopai/App_GetKathaChopaiDetail"
+let WebService_Katha_Chopai_Details                  = "\(BASE_URL)KathaChopai/App_GetKathaChopaiDetail"
 
 let WebService_Ram_Charit_Manas_List                 = "\(BASE_URL)Ramcharit/App_GetRamcharit"
 let WebService_Ram_Charit_Manas_Detail               = "\(BASE_URL)Ramcharit/App_GetRamcharitDetail"
@@ -48,6 +48,7 @@ let WebService_Live_Katha_Video                     = "\(BASE_URL)LiveKathaVideo
 let WebService_Bapus_Photos_Media                   = "\(BASE_URL)BapuDarshan/App_GetBapuDarshan"
 let WebService_Other_Video_Media                    = "\(BASE_URL)Kathavideo/App_GetOtherVideo"
 
+let WebService_Search                               = "\(BASE_URL)SearchModule/App_Search"
 
 let WebService_Feedback                             = "\(BASE_URL)Feedback/App_Add_Feedback"
 

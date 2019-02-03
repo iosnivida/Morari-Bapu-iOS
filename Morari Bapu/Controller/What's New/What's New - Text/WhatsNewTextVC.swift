@@ -16,9 +16,15 @@ class WhatsNewTextVC: UIViewController {
   @IBOutlet weak var tblText: UITableView!
   var arrText = [JSON]()
   
+  var currentPageNo = Int()
+  var totalPageNo = Int()
+  var is_Api_Being_Called : Bool = false
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     
+    currentPageNo = 1
+
     tblText.tableFooterView =  UIView.init(frame: .zero)
     tblText.layoutMargins = .zero
     
@@ -26,16 +32,17 @@ class WhatsNewTextVC: UIViewController {
     tblText.estimatedRowHeight = UITableView.automaticDimension
     
     DispatchQueue.main.async {
-      self.getWhatsNewText()
+      self.arrText.removeAll()
+      self.getWhatsNewText(pageNo:self.currentPageNo)
     }
     
   }
   
   
   //MARK:- Api Call
-  func getWhatsNewText(){
+  func getWhatsNewText(pageNo:Int){
     
-    let param = ["page" : "1",
+    let param = ["page" : pageNo,
                  "app_id":Utility.getDeviceID()] as NSDictionary
     
     WebServices().CallGlobalAPI(url: WebService_Whats_New_Text,headers: [:], parameters: param, HttpMethod: "POST", ProgressView: true) { ( _ jsonResponce:JSON? , _ strErrorMessage:String) in
@@ -49,8 +56,14 @@ class WhatsNewTextVC: UIViewController {
       else {
         
         if jsonResponce!["status"].stringValue == "true"{
-          self.arrText = jsonResponce!["data"].arrayValue
           
+          for result in jsonResponce!["data"].arrayValue {
+            self.arrText.append(result)
+          }
+          self.totalPageNo = jsonResponce!["total_page"].intValue
+          
+          self.is_Api_Being_Called = false
+
           if self.arrText.count != 0{
             
             DispatchQueue.main.async {
@@ -70,6 +83,8 @@ class WhatsNewTextVC: UIViewController {
           
         }
         else {
+          self.is_Api_Being_Called = false
+
           Utility().showAlertMessage(vc: self, titleStr: "", messageStr: jsonResponce!["message"].stringValue)
         }
       }
@@ -95,8 +110,6 @@ class WhatsNewTextVC: UIViewController {
   }
   
 }
-
-
 
 //MARK:- Menu Navigation Delegate
 extension WhatsNewTextVC: MenuNavigationDelegate{
@@ -200,8 +213,12 @@ extension WhatsNewTextVC: MenuNavigationDelegate{
       vc.screenDirection = .Settings
       navigationController?.pushViewController(vc, animated:  true)
       
-    }else if ScreenName == "Search"{
+     }else if ScreenName == "Search"{
       //Search
+      
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "SearchVC") as! SearchVC
+      navigationController?.pushViewController(vc, animated:  true)
        }else if ScreenName == "Favourites"{
       //Favourites
       
@@ -276,7 +293,20 @@ extension WhatsNewTextVC : UITableViewDelegate, UITableViewDataSource{
         
         Utility.readUnread(api_Url: WebService_Text_Whats_New_Read_Unread, parameters: param)
     }
+  }
+  
+  func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
     
+    if indexPath.row == arrText.count - 1{
+      if is_Api_Being_Called == false{
+        if currentPageNo <  totalPageNo{
+          print("Page Load....")
+          is_Api_Being_Called = true
+          currentPageNo += 1
+          self.getWhatsNewText(pageNo: currentPageNo)
+        }
+      }
+    }
   }
   
 }

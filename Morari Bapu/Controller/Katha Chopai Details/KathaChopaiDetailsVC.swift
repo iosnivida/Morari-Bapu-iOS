@@ -29,66 +29,150 @@ class KathaChopaiDetailsVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+      lblDate.text = ""
+      lblDescription1.text = ""
+      
       lblTitle.text = strTitle
       
-      if lblTitle.text == "Katha Chopai"{
-       
-        lblSubTitle.text = "\(arrKathaDetails["title"]!.stringValue)-\(arrKathaDetails["title_no"]!.stringValue)"
-        lblDate.text = Utility.dateToString(dateStr: arrKathaDetails["from_date"]?.stringValue ?? "", strDateFormat: "dd MMM yyyy")
-        lblDescription1.text = arrKathaDetails["katha_gujarati"]!.stringValue
-        lblDescription2.text = arrKathaDetails["katha_hindi"]!.stringValue
-        lblDescription3.text = arrKathaDetails["katha_english"]!.stringValue
-        lblDescription4.text = arrKathaDetails["description"]!.stringValue
+      getDetails()
     
-        let predicate: NSPredicate = NSPredicate(format: "SELF contains[cd] %@", arrKathaDetails["id"]!.stringValue)
-        let result = self.arrFavourite.filtered(using: predicate)
-
-        if result.count != 0{
-          self.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
-        }else{
-          self.btnFavourite.setImage(UIImage(named: "unfavorite"), for: .normal)
-        }
-        
-
-      }else if lblTitle.text == "Ram Charit Manas"{
-        
-        lblSubTitle.text = "\(arrKathaDetails["title"]!.stringValue)-\(arrKathaDetails["title_no"]!.stringValue)"
-        lblDate.text = Utility.dateToString(dateStr: arrKathaDetails["date"]?.stringValue ?? "", strDateFormat: "dd MMM yyyy")
-        lblDescription1.text = arrKathaDetails["katha_gujarati"]!.stringValue
-        lblDescription2.text = arrKathaDetails["katha_hindi"]!.stringValue
-        lblDescription3.text = arrKathaDetails["katha_english"]!.stringValue
-        lblDescription4.text = arrKathaDetails["description"]!.stringValue
-        
-        let predicate: NSPredicate = NSPredicate(format: "SELF contains[cd] %@", arrKathaDetails["id"]!.stringValue)
-        let result = self.arrFavourite.filtered(using: predicate)
-        
-        if result.count != 0{
-          self.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
-        }else{
-          self.btnFavourite.setImage(UIImage(named: "unfavorite"), for: .normal)
-        }
-        
-      }
-      else{
-        
-        lblSubTitle.text = arrKathaDetails["title"]!.stringValue
-        lblDate.text = Utility.dateToString(dateStr: arrKathaDetails["quotes_date"]?.stringValue ?? "", strDateFormat: "dd MMM yyyy")
-        lblDescription1.text = arrKathaDetails["quotes_gujarati"]!.stringValue
-        lblDescription2.text = arrKathaDetails["quotes_hindi"]!.stringValue
-        lblDescription3.text = arrKathaDetails["quotes_english"]!.stringValue
-        
-        let predicate: NSPredicate = NSPredicate(format: "SELF contains[cd] %@", arrKathaDetails["id"]!.stringValue)
-        let result = self.arrFavourite.filtered(using: predicate)
-        
-        if result.count != 0{
-          self.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
-        }else{
-          self.btnFavourite.setImage(UIImage(named: "unfavorite"), for: .normal)
-        }
-
-      }
       
     }
+  
+  //MARK:- Api Call
+  func getDetails(){
+    
+
+    var paramater = NSDictionary()
+    var str_Url = String()
+
+    if lblTitle.text == "Katha Chopai"{
+      
+      paramater = ["app_id":Utility.getDeviceID(),
+                   "favourite_for":"2",
+                   "id":arrKathaDetails["id"]!.stringValue]
+      str_Url = WebService_Katha_Chopai_Details
+      
+    }else if lblTitle.text == "Ram Charit Manas"{
+      
+      paramater = ["app_id":Utility.getDeviceID(),
+                   "favourite_for":"3",
+                   "id":arrKathaDetails["id"]!.stringValue]
+      str_Url = WebService_Ram_Charit_Manas_Detail
+    }
+    else{
+      
+      paramater = ["app_id":Utility.getDeviceID(),
+                   "favourite_for":"1",
+                   "id":arrKathaDetails["id"]!.stringValue]
+      str_Url = WebService_Quotes_Details
+    }
+    
+    WebServices().CallGlobalAPI(url: str_Url,headers: [:], parameters: paramater, HttpMethod: "POST", ProgressView: true) { ( _ jsonResponce:JSON? , _ strErrorMessage:String) in
+      
+      if(jsonResponce?.error != nil) {
+        
+        var errorMess = jsonResponce?.error?.localizedDescription
+        errorMess = MESSAGE_Err_Service
+        Utility().showAlertMessage(vc: self, titleStr: "", messageStr: errorMess!)
+      }
+      else {
+        
+        if jsonResponce!["status"].stringValue == "true"{
+ 
+          
+          self.lblTitle.text = self.strTitle
+          
+          if self.lblTitle.text == "Katha Chopai"{
+            
+            self.arrKathaDetails = jsonResponce!["data"]["KathaChopai"].dictionaryValue
+            self.arrFavourite = jsonResponce!["MyFavourite"].arrayObject! as NSArray
+            
+            
+            self.lblSubTitle.text = "\(self.arrKathaDetails["title"]!.stringValue)-\(self.arrKathaDetails["title_no"]!.stringValue)"
+            self.lblDate.text = Utility.dateToString(dateStr: self.arrKathaDetails["from_date"]?.stringValue ?? "", strDateFormat: "dd MMM yyyy")
+            self.lblDescription1.text = self.arrKathaDetails["katha_hindi"]!.stringValue
+            self.lblDescription2.text = self.arrKathaDetails["katha_gujarati"]!.stringValue
+            self.lblDescription3.text = self.arrKathaDetails["katha_english"]!.stringValue
+            self.lblDescription4.text = self.arrKathaDetails["description"]!.stringValue
+            
+            
+            let predicate: NSPredicate = NSPredicate(format: "SELF contains[cd] %@", self.arrKathaDetails["id"]!.stringValue)
+            let result = self.arrFavourite.filtered(using: predicate)
+            
+            if result.count != 0{
+              self.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
+            }else{
+              self.btnFavourite.setImage(UIImage(named: "unfavorite"), for: .normal)
+            }
+            
+            
+          }else if self.lblTitle.text == "Ram Charit Manas"{
+            
+            self.arrKathaDetails = jsonResponce!["data"]["Ramcharit"].dictionaryValue
+            self.arrFavourite = jsonResponce!["MyFavourite"].arrayObject! as NSArray
+            
+            
+            self.lblSubTitle.text = "\(self.arrKathaDetails["title"]!.stringValue)-\(self.arrKathaDetails["title_no"]!.stringValue)"
+            self.lblDate.text = Utility.dateToString(dateStr: self.arrKathaDetails["date"]?.stringValue ?? "", strDateFormat: "dd MMM yyyy")
+            self.lblDescription1.text = self.arrKathaDetails["katha_gujarati"]!.stringValue
+            self.lblDescription2.text = self.arrKathaDetails["katha_hindi"]!.stringValue
+            self.lblDescription3.text = self.arrKathaDetails["katha_english"]!.stringValue
+            self.lblDescription4.text = self.arrKathaDetails["description"]!.stringValue
+            
+           let predicate: NSPredicate = NSPredicate(format: "SELF contains[cd] %@", self.arrKathaDetails["id"]!.stringValue)
+            let result = self.arrFavourite.filtered(using: predicate)
+            
+            if result.count != 0{
+              self.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
+            }else{
+              self.btnFavourite.setImage(UIImage(named: "unfavorite"), for: .normal)
+            }
+            
+          }
+          else{
+            
+            self.arrKathaDetails = jsonResponce!["data"]["Quote"].dictionaryValue
+            self.arrFavourite = jsonResponce!["MyFavourite"].arrayObject! as NSArray
+            
+            
+            self.lblSubTitle.text = self.arrKathaDetails["title"]!.stringValue
+            self.lblDate.text = Utility.dateToString(dateStr: self.arrKathaDetails["quotes_date"]?.stringValue ?? "", strDateFormat: "dd MMM yyyy")
+            self.lblDescription1.text = self.arrKathaDetails["quotes_gujarati"]!.stringValue
+            self.lblDescription2.text = self.arrKathaDetails["quotes_hindi"]!.stringValue
+            self.lblDescription3.text = self.arrKathaDetails["quotes_english"]!.stringValue
+            
+            let predicate: NSPredicate = NSPredicate(format: "SELF contains[cd] %@", self.arrKathaDetails["id"]!.stringValue)
+            let result = self.arrFavourite.filtered(using: predicate)
+            
+            if result.count != 0{
+              self.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
+            }else{
+              self.btnFavourite.setImage(UIImage(named: "unfavorite"), for: .normal)
+            }
+            
+          }
+        }
+        else {
+          
+          if jsonResponce!["status"].stringValue == "false" && jsonResponce!["message"].stringValue == "No Data Found"{
+           
+            self.lblTitle.text = ""
+            self.lblSubTitle.text = ""
+            self.lblDate.text = ""
+            self.lblDescription1.text = ""
+            self.lblDescription2.text = ""
+            self.lblDescription3.text = ""
+            self.lblDescription4.text = ""
+            self.btnShare.isHidden = true
+            self.btnFavourite.isHidden = true
+            
+          }
+          Utility().showAlertMessage(vc: self, titleStr: "", messageStr: jsonResponce!["message"].stringValue)
+        }
+      }
+    }
+  }
   
   //MARK : Button Event
   @IBAction func btnBack(_ sender: Any) {
@@ -302,8 +386,12 @@ extension KathaChopaiDetailsVC: MenuNavigationDelegate{
       vc.screenDirection = .Settings
       navigationController?.pushViewController(vc, animated:  true)
       
-    }else if ScreenName == "Search"{
+     }else if ScreenName == "Search"{
       //Search
+      
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "SearchVC") as! SearchVC
+      navigationController?.pushViewController(vc, animated:  true)
        }else if ScreenName == "Favourites"{
       //Favourites
       

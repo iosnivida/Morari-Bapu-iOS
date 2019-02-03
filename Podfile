@@ -33,6 +33,9 @@ target 'Morari Bapu' do
   # Pods for Doggie
 
   pod 'iCarousel', '~> 1.8'
+  
+  # Audio Player
+  pod 'Jukebox'
 
   # Pods for Morari Bapu
 

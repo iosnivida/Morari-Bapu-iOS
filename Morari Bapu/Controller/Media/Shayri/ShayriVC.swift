@@ -15,11 +15,17 @@ class ShayriVC: UIViewController {
   
   @IBOutlet weak var tblShayri: UITableView!
   var arrShayri = [JSON]()
-  var arrFavourite = NSArray()
+  var arrFavourite = NSMutableArray()
 
+  var currentPageNo = Int()
+  var totalPageNo = Int()
+  var is_Api_Being_Called : Bool = false
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     
+    currentPageNo = 1
+
     tblShayri.tableFooterView =  UIView.init(frame: .zero)
     tblShayri.layoutMargins = .zero
     
@@ -34,16 +40,18 @@ class ShayriVC: UIViewController {
     
     
     DispatchQueue.main.async {
-      self.getShayri()
+      self.arrShayri.removeAll()
+      self.arrFavourite.removeAllObjects()
+      self.getShayri(pageNo: self.currentPageNo)
     }
     
   }
   
   
   //MARK:- Api Call
-  func getShayri(){
+  func getShayri(pageNo:Int){
     
-    let param = ["page" : "1",
+    let param = ["page" : pageNo,
                  "favourite_for":"9",
                  "app_id":Utility.getDeviceID()] as NSDictionary
     
@@ -58,8 +66,19 @@ class ShayriVC: UIViewController {
       else {
         
         if jsonResponce!["status"].stringValue == "true"{
-          self.arrShayri = jsonResponce!["data"].arrayValue
-          self.arrFavourite = jsonResponce!["MyFavourite"].arrayObject! as NSArray
+          
+          for result in jsonResponce!["MyFavourite"].arrayValue {
+            self.arrFavourite.add(result.stringValue)
+          }
+          
+          for result in jsonResponce!["data"].arrayValue {
+            self.arrShayri.append(result)
+          }
+          
+          self.is_Api_Being_Called = false
+
+          self.totalPageNo = jsonResponce!["total_page"].intValue
+          
 
           if self.arrShayri.count != 0{
             
@@ -80,6 +99,8 @@ class ShayriVC: UIViewController {
           
         }
         else {
+          self.is_Api_Being_Called = false
+
           Utility().showAlertMessage(vc: self, titleStr: "", messageStr: jsonResponce!["message"].stringValue)
         }
       }
@@ -151,7 +172,7 @@ extension ShayriVC : UITableViewDelegate, UITableViewDataSource{
     let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
     let vc = storyboard.instantiateViewController(withIdentifier: "ShayriDetailsVC") as! ShayriDetailsVC
     vc.arrShayri = data.dictionaryValue
-    vc.arrFavourite = arrFavourite
+    vc.arrFavourite = arrFavourite as NSArray
     navigationController?.pushViewController(vc, animated:  true)
     
   }
@@ -162,6 +183,20 @@ extension ShayriVC : UITableViewDelegate, UITableViewDataSource{
   
   func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
     return UITableView.automaticDimension
+  }
+  
+  func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+    
+    if indexPath.row == arrShayri.count - 1{
+      if is_Api_Being_Called == false{
+        if currentPageNo <  totalPageNo{
+          print("Page Load....")
+          is_Api_Being_Called = true
+          currentPageNo += 1
+          self.getShayri(pageNo: currentPageNo)
+        }
+      }
+    }
   }
   
 }
@@ -276,8 +311,12 @@ extension ShayriVC: MenuNavigationDelegate{
       vc.screenDirection = .Settings
       navigationController?.pushViewController(vc, animated:  true)
       
-    }else if ScreenName == "Search"{
+     }else if ScreenName == "Search"{
       //Search
+      
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "SearchVC") as! SearchVC
+      navigationController?.pushViewController(vc, animated:  true)
        }else if ScreenName == "Favourites"{
       //Favourites
       

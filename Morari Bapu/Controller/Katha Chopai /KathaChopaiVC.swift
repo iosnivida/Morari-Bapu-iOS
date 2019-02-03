@@ -24,7 +24,11 @@ class KathaChopaiVC: UIViewController {
   @IBOutlet weak var lblTitle: UILabel!
 
   var arrKathaChopia : [JSON] = []
-  var arrFavourite = NSArray()
+  var arrFavourite = NSMutableArray()
+  
+  var currentPageNo = Int()
+  var totalPageNo = Int()
+  var is_Api_Being_Called : Bool = false
   
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,34 +38,43 @@ class KathaChopaiVC: UIViewController {
       
       tblKathaChopai.rowHeight = 150
       tblKathaChopai.estimatedRowHeight = UITableView.automaticDimension
-      
+    
   }
   
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
     
+    
+    currentPageNo = 1
+
     if screenDirection == .Katha_Chopai{
       //Katha Chopai
       
       lblTitle.text = "Katha Chopai"
-      getKathaChopai()
+      self.arrKathaChopia.removeAll()
+      self.arrFavourite.removeAllObjects()
+      getKathaChopai(pageNo: currentPageNo)
     }else if screenDirection == .Ram_Charit_Manas{
       //Ram Charit Manas
       
       lblTitle.text = "Ram Charit Manas"
-      getKathaChopai()
+      self.arrKathaChopia.removeAll()
+      self.arrFavourite.removeAllObjects()
+      getKathaChopai(pageNo: currentPageNo)
     }
     else{
       //Quotes
       
       lblTitle.text = "Quotes"
-      getKathaChopai()
+      self.arrKathaChopia.removeAll()
+      self.arrFavourite.removeAllObjects()
+      getKathaChopai(pageNo: currentPageNo)
     }
     
   }
 
   //MARK:- Api Call
-  func getKathaChopai(){
+  func getKathaChopai(pageNo:Int){
     
     
     
@@ -71,7 +84,7 @@ class KathaChopaiVC: UIViewController {
     if screenDirection == .Katha_Chopai{
       //Katha Chopai
       
-      param = ["page" : "1",
+      param = ["page" : pageNo,
                    "app_id":Utility.getDeviceID(),
                    "favourite_for":"2"] as NSDictionary
       
@@ -80,7 +93,7 @@ class KathaChopaiVC: UIViewController {
     }else if screenDirection == .Ram_Charit_Manas{
       //Ram Charit Manas
       
-      param = ["page" : "1",
+      param = ["page" : pageNo,
                    "app_id":Utility.getDeviceID(),
                    "favourite_for":"3"] as NSDictionary
       
@@ -89,7 +102,7 @@ class KathaChopaiVC: UIViewController {
     else{
       //Quotes
       
-      param = ["page" : "1",
+      param = ["page" : pageNo,
                    "app_id":Utility.getDeviceID(),
                    "favourite_for":"1"] as NSDictionary
       
@@ -107,9 +120,20 @@ class KathaChopaiVC: UIViewController {
       else {
         
         if jsonResponce!["status"].stringValue == "true"{
-          self.arrKathaChopia = jsonResponce!["data"].arrayValue
-          self.arrFavourite = jsonResponce!["MyFavourite"].arrayObject! as NSArray
+          
+          for result in jsonResponce!["data"].arrayValue{
+            self.arrKathaChopia.append(result)
+          }
+          
+          for result in jsonResponce!["MyFavourite"].arrayValue{
+            self.arrFavourite.add(result.stringValue)
+          }
+          
+          self.totalPageNo = jsonResponce!["total_page"].intValue
+          
+          self.is_Api_Being_Called = false
 
+          
           if self.arrKathaChopia.count != 0{
               DispatchQueue.main.async {
               
@@ -129,6 +153,8 @@ class KathaChopaiVC: UIViewController {
           
         }
         else {
+          self.is_Api_Being_Called = false
+
           Utility().showAlertMessage(vc: self, titleStr: "", messageStr: jsonResponce!["message"].stringValue)
         }
       }
@@ -273,9 +299,22 @@ extension KathaChopaiVC : UITableViewDelegate, UITableViewDataSource{
       navigationController?.pushViewController(vc, animated:  true)
       
     }
-    
-    
   }
+  
+  func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+    
+    if indexPath.row == arrKathaChopia.count - 1{
+      if is_Api_Being_Called == false{
+        if currentPageNo <  totalPageNo{
+          print("Page Load....")
+          is_Api_Being_Called = true
+          currentPageNo += 1
+          self.getKathaChopai(pageNo: currentPageNo)
+        }
+      }
+    }
+  }
+  
 }
 
 //MARK:- Menu Navigation Delegate
@@ -304,6 +343,10 @@ extension KathaChopaiVC : MenuNavigationDelegate{
       
     }else if ScreenName == "Upcoing Katha"{
       //Upcoing Katha
+      
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "UpComingKathasVC") as! UpComingKathasVC
+      navigationController?.pushViewController(vc, animated:  true)
       
     }else if ScreenName == "Quotes"{
       //Quotes
@@ -376,8 +419,12 @@ extension KathaChopaiVC : MenuNavigationDelegate{
       vc.screenDirection = .Settings
       navigationController?.pushViewController(vc, animated:  true)
       
-    }else if ScreenName == "Search"{
+     }else if ScreenName == "Search"{
       //Search
+      
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "SearchVC") as! SearchVC
+      navigationController?.pushViewController(vc, animated:  true)
        }else if ScreenName == "Favourites"{
       //Favourites
       

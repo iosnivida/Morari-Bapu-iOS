@@ -9,6 +9,8 @@
 import UIKit
 import SwiftyJSON
 import Kingfisher
+import MediaPlayer
+import Jukebox
 
 class MusicPlayerVC: UIViewController {
 
@@ -25,32 +27,75 @@ class MusicPlayerVC: UIViewController {
   @IBOutlet weak var lblOutOfAudio: UILabel!
   @IBOutlet weak var lblStartTimer: UILabel!
   @IBOutlet weak var lblEndTimer: UILabel!
-  @IBOutlet weak var lblSliderAudio: UISlider!
+  @IBOutlet weak var sliderAudio: UISlider!
+  @IBOutlet weak var sliderVolume: UISlider!
   @IBOutlet weak var btnPrevious: UIButton!
   @IBOutlet weak var btnPlayPause: UIButton!
+  @IBOutlet weak var btnVolume: UIButton!
   @IBOutlet weak var btnNext: UIButton!
   @IBOutlet weak var btnRepeat: UIButton!
+  @IBOutlet weak var indicator: UIActivityIndicatorView!
   
   @IBOutlet weak var btnSuffle: UIButton!
   @IBOutlet weak var constraintTopView: NSLayoutConstraint!
 
   @IBOutlet weak var constraintMainViewHeight: NSLayoutConstraint!
   
+  @IBOutlet weak var constraintTopVolumeView: NSLayoutConstraint!
+  
   var arrAudioList = [JSON]()
   
   var playPosition = Int()
   
+  var isUpDown = false
+  var isSuffle = false
+  var isRepeat = false
+  
+  //Jukbok
+  var jukebox : Jukebox!
+  
   override func viewDidLoad() {
         super.viewDidLoad()
 
+
+      // begin receiving remote events
+      UIApplication.shared.beginReceivingRemoteControlEvents()
+
+      self.constraintTopVolumeView.constant = -70
+      self.view.layoutIfNeeded()
+    
       self.constraintTopView.constant = self.view.frame.height - 50
       self.constraintMainViewHeight.constant = self.view.frame.height - 20
       self.view.layoutIfNeeded()
 
-      updateAudioPlayer(positon: playPosition)
     
-    }
-  
+        for audio in arrAudioList{
+          
+          // configure jukebox
+          
+          if jukebox == nil{
+            
+              jukebox = Jukebox(delegate: self, items: [
+                JukeboxItem(URL: URL(string: "\(BASE_URL_IMAGE)\(audio["audio_file"].stringValue)")!)
+                ])!
+            
+          }else{
+            
+            /// Later add another item
+            let delay = DispatchTime.now() + Double(Int64(3 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
+            DispatchQueue.main.asyncAfter(deadline: delay) {
+              self.jukebox.append(item: JukeboxItem (URL: URL(string: "\(BASE_URL_IMAGE)\(audio["audio_file"].stringValue)")!), loadingAssets: true)
+            }
+          }
+        }
+    
+    
+        self.jukebox.play()
+    
+        updateAudioPlayer(positon: playPosition)
+    
+  }
+
   func updateAudioPlayer(positon:Int){
     
     let dict = arrAudioList[positon]
@@ -99,55 +144,303 @@ class MusicPlayerVC: UIViewController {
   //MARK:- Button Event
   @IBAction func btnUpAndDown(_ sender: Any) {
     
-    DispatchQueue.main.async {
+    if isUpDown == false{
       
       UIView.animate(withDuration: 0.3, animations: {
+        self.isUpDown = true
         self.constraintTopView.constant = 20
+        self.btnPlayPauseHeader.alpha = 0.0
+        self.btnNextHeader.alpha = 0.0
+        self.btnPreviousHeader.alpha = 0.0
+        self.view.layoutIfNeeded()
+      })
+      
+    }else{
+      UIView.animate(withDuration: 0.3, animations: {
+        self.btnPlayPauseHeader.alpha = 1.0
+        self.btnNextHeader.alpha = 1.0
+        self.btnPreviousHeader.alpha = 1.0
+        self.isUpDown = false
+        self.constraintTopView.constant = self.view.frame.height - 50
         self.view.layoutIfNeeded()
       })
     }
   }
+  
+  @IBAction func swipeUp(_ sender: Any) {
+    UIView.animate(withDuration: 0.3, animations: {
+      self.isUpDown = true
+      self.constraintTopView.constant = 20
+      self.btnPlayPauseHeader.alpha = 0.0
+      self.btnNextHeader.alpha = 0.0
+      self.btnPreviousHeader.alpha = 0.0
+      self.view.layoutIfNeeded()
+    })
+  }
+  
+  @IBAction func swipeDown(_ sender: Any) {
+    UIView.animate(withDuration: 0.3, animations: {
+      self.btnPlayPauseHeader.alpha = 1.0
+      self.btnNextHeader.alpha = 1.0
+      self.btnPreviousHeader.alpha = 1.0
+      self.isUpDown = false
+      self.constraintTopView.constant = self.view.frame.height - 50
+      self.view.layoutIfNeeded()
+    })
+  }
+  
   
   @IBAction func btnPlayPause(_ sender: Any) {
     
     if btnPlayPause.isSelected == false{
       btnPlayPause.isSelected = true
       btnPlayPause.setImage(UIImage(named: "pause"), for: .normal)
+      btnPlayPauseHeader.isSelected = true
+      btnPlayPauseHeader.setImage(UIImage(named: "pause"), for: .normal)
       
     }else{
       
       btnPlayPause.isSelected = false
       btnPlayPause.setImage(UIImage(named: "play"), for: .normal)
+      btnPlayPauseHeader.isSelected = false
+      btnPlayPauseHeader.setImage(UIImage(named: "play"), for: .normal)
     }
   }
   
-  @IBAction func btnNext(_ sender: Any) {
-    
-  }
-  
-  @IBAction func btnPrevious(_ sender: Any) {
-    
+  @IBAction func btnVolumeChanger(_ sender: Any) {
+   
+    if btnVolume.isSelected == true{
+      btnVolume.isSelected = false
+      
+      UIView.animate(withDuration: 0.3) {
+        self.constraintTopVolumeView.constant = -70
+        self.view.layoutIfNeeded()
+      }
+      
+    }else{
+      btnVolume.isSelected = true
+      
+      UIView.animate(withDuration: 0.3) {
+        self.constraintTopVolumeView.constant = 0
+        self.view.layoutIfNeeded()
+      }
+      
+    }
   }
   
   @IBAction func btnSuffle(_ sender: Any) {
     
+    if isSuffle == true{
+      
+      isSuffle = false
+      
+    }else{
+     
+      isSuffle = true
+      
+    }
   }
+  
   
   @IBAction func btnRepeat(_ sender: Any) {
     
+    if isRepeat == false{
+      
+      isRepeat = true
+      
+      
+    }else{
+      
+      self.jukebox.seek(toSecond: 0, shouldPlay: false)
+      
+      isRepeat = false
+      
+    }
   }
-  
   
 }
 
+// MARK:- JukeboxDelegate -
+extension MusicPlayerVC: JukeboxDelegate{
 
-class PassThroughView: UIView {
-  override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-    for subview in subviews {
-      if !subview.isHidden && subview.isUserInteractionEnabled && subview.point(inside: convert(point, to: subview), with: event) {
-        return true
+  func jukeboxStateDidChange(_ jukebox: Jukebox) {
+    
+    UIView.animate(withDuration: 0.3, animations: { () -> Void in
+      self.indicator.alpha = jukebox.state == .loading ? 1 : 0
+      self.btnPlayPause.alpha = jukebox.state == .loading ? 0 : 1
+      self.btnPlayPause.isEnabled = jukebox.state == .loading ? false : true
+      
+      if self.isUpDown == false{
+        self.btnPlayPauseHeader.alpha = jukebox.state == .loading ? 0 : 1
+        self.btnPlayPauseHeader.isEnabled = jukebox.state == .loading ? false : true
+      }
+
+    })
+    
+    if jukebox.state == .ready {
+      btnPlayPause.setImage(UIImage(named: "play"), for: .normal)
+      
+      if self.isUpDown == false{
+        btnPlayPauseHeader.setImage(UIImage(named: "play"), for: .normal)
+      }
+
+    } else if jukebox.state == .loading  {
+      btnPlayPause.setImage(UIImage(named: "pause"), for: .normal)
+      
+      if self.isUpDown == false{
+        btnPlayPauseHeader.setImage(UIImage(named: "play"), for: .normal)
+      }
+
+    } else {
+      sliderVolume.value = jukebox.volume
+      let imageName: String
+      switch jukebox.state {
+      case .playing, .loading:
+        imageName = "pause"
+      case .paused, .failed, .ready:
+        imageName = "play"
+      }
+      btnPlayPause.setImage(UIImage(named: imageName), for: .normal)
+      
+      if self.isUpDown == false{
+        btnPlayPauseHeader.setImage(UIImage(named: imageName), for: .normal)
+      }
+
+    }
+    
+    print("Jukebox state changed to \(jukebox.state)")
+  }
+  
+  
+  func jukeboxPlaybackProgressDidChange(_ jukebox: Jukebox) {
+    
+    if let currentTime = jukebox.currentItem?.currentTime, let duration = jukebox.currentItem?.meta.duration {
+      let value = Float(currentTime / duration)
+      
+      DispatchQueue.main.async {
+        self.populateLabelWithTime(self.lblStartTimer, time: currentTime)
+        self.populateLabelWithTime(self.lblEndTimer, time: duration)
+        self.sliderAudio.setValue(value, animated: true)
+        
+      }
+    } else {
+      resetUI()
+    }
+  }
+
+  
+  func jukeboxDidLoadItem(_ jukebox: Jukebox, item: JukeboxItem) {
+    
+    if isRepeat == true{
+      
+      self.jukebox.play(atIndex: jukebox.playIndex)
+      updateAudioPlayer(positon: jukebox.playIndex)
+      
+    }else{
+      
+      updateAudioPlayer(positon: jukebox.playIndex)
+      
+    }
+    
+ 
+    
+    print("Jukebox did load: \(item.URL.lastPathComponent)")
+  }
+  
+  func jukeboxDidUpdateMetadata(_ jukebox: Jukebox, forItem: JukeboxItem) {
+    print("Item updated:\n\(forItem)")
+  }
+  
+  override func remoteControlReceived(with event: UIEvent?) {
+    if event?.type == .remoteControl {
+      switch event!.subtype {
+      case .remoteControlPlay :
+        jukebox.play()
+      case .remoteControlPause :
+        jukebox.pause()
+      case .remoteControlNextTrack :
+        jukebox.playNext()
+      case .remoteControlPreviousTrack:
+        jukebox.playPrevious()
+      case .remoteControlTogglePlayPause:
+        if jukebox.state == .playing {
+          jukebox.pause()
+        } else {
+          jukebox.play()
+        }
+      default:
+        break
       }
     }
-    return false
   }
+  
+  
+  // MARK:- Callbacks -
+  
+  @IBAction func volumeSliderValueChanged() {
+    if let jk = jukebox {
+      jk.volume = sliderVolume.value
+    }
+  }
+  
+  @IBAction func progressSliderValueChanged() {
+    if let duration = jukebox.currentItem?.meta.duration {
+      jukebox.seek(toSecond: Int(Double(sliderAudio.value) * duration))
+    }
+  }
+  
+  @IBAction func prevAction() {
+    
+    if let time = jukebox.currentItem?.currentTime, time > 5.0 || jukebox.playIndex == 0 {
+      jukebox.replayCurrentItem()
+    } else {
+      jukebox.playPrevious()
+    }
+  }
+  
+  @IBAction func nextAction() {
+    jukebox.playNext()
+  }
+  
+  @IBAction func playPauseAction() {
+    switch jukebox.state {
+    case .ready :
+      jukebox.play(atIndex: 0)
+    case .playing :
+      jukebox.pause()
+    case .paused :
+      jukebox.play()
+    default:
+      jukebox.stop()
+    }
+  }
+  
+  @IBAction func replayAction() {
+    /*resetUI()
+    jukebox.replay()
+    */
+  }
+  
+  @IBAction func stopAction() {
+    resetUI()
+    jukebox.stop()
+  }
+  
+  
+  //MARK:- Helpers
+  func populateLabelWithTime(_ label : UILabel, time: Double) {
+    let minutes = Int(time / 60)
+    let seconds = Int(time) - minutes * 60
+    
+    label.text = String(format: "%02d", minutes) + ":" + String(format: "%02d", seconds)
+  }
+  
+  func resetUI()
+  {
+    lblStartTimer.text = "00:00"
+    lblEndTimer.text = "00:00"
+    sliderAudio.value = 0
+  }
+  
 }
+

@@ -64,6 +64,7 @@ PODS:
     - GoogleUtilities/Logger
   - iCarousel (1.8.3)
   - IQKeyboardManagerSwift (6.0.5)
+  - Jukebox (0.2.1)
   - Kingfisher (4.7.0)
   - nanopb (0.3.8):
     - nanopb/decode (= 0.3.8)
@@ -86,6 +87,7 @@ DEPENDENCIES:
   - Firebase/RemoteConfig
   - iCarousel (~> 1.8)
   - IQKeyboardManagerSwift (~> 6.0.3)
+  - Jukebox
   - Kingfisher (~> 4.7.0)
   - SVProgressHUD
   - SwiftyGif
@@ -109,6 +111,7 @@ SPEC REPOS:
     - GoogleUtilities
     - iCarousel
     - IQKeyboardManagerSwift
+    - Jukebox
     - Kingfisher
     - nanopb
     - Protobuf
@@ -133,6 +136,7 @@ SPEC CHECKSUMS:
   GoogleUtilities: 760ccb53b7c7f40f9c02d8c241f76f841a7a6162
   iCarousel: d782f635afac190c49bb8ee455882284cff8b85f
   IQKeyboardManagerSwift: c14eca30f6001457d6ddf25e313f23fb6578c41c
+  Jukebox: 81db618ccd3a1cc9b154f4ae0f5c4b54638666dd
   Kingfisher: da6b005aa96d37698e3e4f1ccfe96a5b9bbf27d6
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
   Protobuf: 1eb9700044745f00181c136ef21b8ff3ad5a0fd5
@@ -142,6 +146,6 @@ SPEC CHECKSUMS:
   SwiftyUserDefaults: 3d273b1739b68ada3145dc754a70ec775bc5c8be
   Toast-Swift: ba0b01b095aada709d915f9beb1d38184a2721c3
 
-PODFILE CHECKSUM: 35129e60b9ec296f2be5ff29210b29f77c44ab8a
+PODFILE CHECKSUM: 0e2742eaf01d7e4dcbf3427cf330181b5b102551
 
 COCOAPODS: 1.5.3
