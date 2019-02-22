@@ -13,5 +13,6 @@ class ImageViewerCollectionViewCell: UICollectionViewCell {
   @IBOutlet var imgView: UIImageView!
   @IBOutlet var btnDownload: UIButton!
   @IBOutlet var btnShare: UIButton!
-
+  @IBOutlet weak var btnFavourites: UIButton!
+  
 }

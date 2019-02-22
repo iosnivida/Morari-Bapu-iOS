@@ -8,21 +8,59 @@
 
 import UIKit
 import CoreData
-import  IQKeyboardManagerSwift
+import IQKeyboardManagerSwift
+import UserNotifications
+import SwiftyJSON
+
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-    var window: UIWindow?
+  var reachability: Reachability?
 
+    var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
      
       //IQKeyboardManager Library
       IQKeyboardManager.shared.enable = true
+      
+      
+      if #available(iOS 10.0, *) {
+        // For iOS 10 display notification (sent via APNS)
+        UNUserNotificationCenter.current().delegate = self
+        
+        let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
+        UNUserNotificationCenter.current().requestAuthorization(
+          options: authOptions,
+          completionHandler: {_, _ in })
+      } else {
+        let settings: UIUserNotificationSettings =
+          UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
+        application.registerUserNotificationSettings(settings)
+      }
+      
+      application.registerForRemoteNotifications()
+      
+      //Internet checking
+      self.reachability = Reachability()
 
+      do
+      {
+        try reachability?.startNotifier()
+      }
+      catch
+      {
+        print( "ERROR: Could not start reachability notifier." )
+      }
+      
       
         return true
+    }
+  
+    class func sharedAppDelegate() -> AppDelegate?
+    {
+      return UIApplication.shared.delegate as? AppDelegate
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
@@ -93,6 +131,124 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
+  
+  func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data)
+  {
+    var token = ""
+    for i in 0..<deviceToken.count {
+      token = token + String(format: "%02.2hhx", arguments: [deviceToken[i]])
+    }
+    print(token)
+    
+    UserDefaults.standard.set(token, forKey: "fcmToken")
+
+    print("deviceToken: \(token)")
+    
+  }
+
 
 }
 
+
+// [START ios_10_message_handling]
+extension AppDelegate : UNUserNotificationCenterDelegate {
+  
+  func userNotificationCenter(center: UNUserNotificationCenter, willPresentNotification notification: UNNotification, withCompletionHandler completionHandler: (UNNotificationPresentationOptions) -> Void)
+  {
+    let userInfo = notification.request.content.userInfo
+    
+    
+    completionHandler([UNNotificationPresentationOptions.alert,UNNotificationPresentationOptions.sound,UNNotificationPresentationOptions.badge])
+    
+    let jsonResponce = JSON(userInfo)
+    
+    print("Notification Responce:\(jsonResponce)")
+    
+  }
+  
+  func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any]) {
+    
+    
+    //Notification Badges Count
+    
+    let currentBadgeNumber = UIApplication.shared.applicationIconBadgeNumber
+    UIApplication.shared.applicationIconBadgeNumber = currentBadgeNumber + 1
+    
+    let jsonResponce = JSON(userInfo)
+    
+   
+    
+    
+    print("Notification Responce:\(jsonResponce)")
+  }
+  
+  func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any],
+                   fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+    
+    
+    //Notification Badges Count
+    let currentBadgeNumber = UIApplication.shared.applicationIconBadgeNumber
+    UIApplication.shared.applicationIconBadgeNumber = currentBadgeNumber + 1
+    
+    let jsonResponce = JSON(userInfo)
+    
+    
+   
+    
+    print("Notification Responce:\(jsonResponce)")
+    
+  }
+  
+  // Receive displayed notifications for iOS 10 devices.
+  func userNotificationCenter(_ center: UNUserNotificationCenter,
+                              willPresent notification: UNNotification,
+                              withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+    let userInfo = notification.request.content.userInfo
+    
+    // With swizzling disabled you must let Messaging know about the message, for Analytics
+    // Messaging.messaging().appDidReceiveMessage(userInfo)
+    
+    let jsonResponce = JSON(userInfo)
+    
+    print("Notification Responce:\(jsonResponce)")
+    
+    
+      completionHandler([])
+      
+    }
+  
+  
+  func userNotificationCenter(_ center: UNUserNotificationCenter,
+                              didReceive response: UNNotificationResponse,
+                              withCompletionHandler completionHandler: @escaping () -> Void) {
+    let userInfo = response.notification.request.content.userInfo
+    // Print message ID.
+    let jsonResponce = JSON(userInfo)
+    
+    print("Notification Responce:\(jsonResponce)")
+    
+    
+    if UIApplication.shared.applicationState == UIApplication.State.active {
+      
+        DispatchQueue.main.async {
+          NotificationCenter.default.post(name: NSNotification.Name(rawValue: "notifications"), object: jsonResponce)
+        }
+      
+    }
+    else if UIApplication.shared.applicationState == UIApplication.State.inactive{
+      
+      DispatchQueue.main.async {
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "notifications"), object: jsonResponce)
+      }
+    
+    }
+    else if UIApplication.shared.applicationState == UIApplication.State.background{
+      DispatchQueue.main.async {
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "notifications"), object: jsonResponce)
+      }
+    }
+    
+    completionHandler()
+  }
+  
+}

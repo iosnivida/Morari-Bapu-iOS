@@ -17,6 +17,7 @@ import SwiftyUserDefaults
 enum SettingScreenIdentify {
   case Settings
   case About_Us
+  case About
   case Media
   case Audios
   case Other_Videos
@@ -50,7 +51,10 @@ class SettingsVC: UIViewController {
       lblTitle.text = "Settings"
     }else if screenDirection == .About_Us{
       lblTitle.text = "About Us"
-    }else if screenDirection == .Media{
+    }else if screenDirection == .About{
+      lblTitle.text = "About"
+    }
+    else if screenDirection == .Media{
       lblTitle.text = "Media"
       self.getUnreadCounter()
     }else if screenDirection == .Audios{
@@ -193,9 +197,11 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     
     if screenDirection == .Settings{
-      return 5
+      return 6
     }else  if screenDirection == .About_Us{
       return 1
+    }else  if screenDirection == .About{
+      return 6
     }else if screenDirection == .Media{
       return 6
     }else if screenDirection == .Audios{
@@ -226,19 +232,22 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
     
     if screenDirection == .Settings{
       if indexPath.row == 0{
-        cell.lblTitle.text = "About Us"
+        cell.lblTitle.text = "About"
         
       }else if indexPath.row == 1{
-        cell.lblTitle.text = "About The App"
-        
+        cell.lblTitle.text = "About Us"
+      
       }else if indexPath.row == 2{
+        cell.lblTitle.text = "User Guide"
+      }
+      else if indexPath.row == 3{
         cell.lblTitle.text = "Feedback"
         
-      }else if indexPath.row == 3{
+      }else if indexPath.row == 4{
         cell.lblTitle.text = "Share The App"
         
       }
-      else if indexPath.row == 4{
+      else if indexPath.row == 5{
         cell.lblTitle.text = "FAQ"
         
       }
@@ -246,6 +255,25 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
     }else if screenDirection == .About_Us{
       if indexPath.row == 0{
         cell.lblTitle.text = "About Bapu"
+      }
+    }else if screenDirection == .About{
+      if indexPath.row == 0{
+        cell.lblTitle.text = "About Talgajarda"
+        
+      }else if indexPath.row == 1{
+        cell.lblTitle.text = "About Shenjal"
+        
+      }else if indexPath.row == 2{
+        cell.lblTitle.text = "About Gurukul"
+      }
+      else if indexPath.row == 3{
+        cell.lblTitle.text = "About Chitrakutdham"
+        
+      }else if indexPath.row == 4{
+        cell.lblTitle.text = "About Tulsidas Ji"
+      }
+      else if indexPath.row == 5{
+        cell.lblTitle.text = "About Bapu's Guru"
       }
     }else if screenDirection == .Media{
       if indexPath.row == 0{
@@ -356,6 +384,18 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
       
       cell.lblTitle.text = dict["name"].stringValue
       
+      cell.lblUnReadCount.isHidden = false
+      
+      if dict["video_count"].stringValue == ""{
+        cell.lblUnReadCount.isHidden = true
+      }
+      else if dict["video_count"].intValue < 99{
+        cell.lblUnReadCount.text = dict["video_count"].stringValue
+      }else{
+        cell.lblUnReadCount.text = " 99+ "
+      }
+      
+      
     }else{
       //What's New
       if indexPath.row == 0{
@@ -438,25 +478,33 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
         
         let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "SettingsVC") as! SettingsVC
-        vc.screenDirection = .About_Us
+        vc.screenDirection = .About
         navigationController?.pushViewController(vc, animated:  true)
         
       }else if indexPath.row == 1{
         //About The App
         
         let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
-        let vc = storyboard.instantiateViewController(withIdentifier: "AboutTheAppVC") as! AboutTheAppVC
-        vc.strTitle = "About The App"
+        let vc = storyboard.instantiateViewController(withIdentifier: "SettingsVC") as! SettingsVC
+        vc.screenDirection = .About_Us
         navigationController?.pushViewController(vc, animated:  true)
         
       }else if indexPath.row == 2{
+        //About The App
+        
+        let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "AboutTheAppVC") as! AboutTheAppVC
+        vc.strTitle = "User Guide"
+        navigationController?.pushViewController(vc, animated:  true)
+        
+      }else if indexPath.row == 3{
         //Feedback
         
         let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "FeedbackVC") as! FeedbackVC
         navigationController?.pushViewController(vc, animated:  true)
         
-      }else if indexPath.row == 3{
+      }else if indexPath.row == 4{
         
         DispatchQueue.main.async {
           // text to share
@@ -475,7 +523,7 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
         }
         
       }
-      else if indexPath.row == 4{
+      else if indexPath.row == 5{
         let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "FaqVC") as! FaqVC
         navigationController?.pushViewController(vc, animated:  true)
@@ -487,6 +535,53 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
       let vc = storyboard.instantiateViewController(withIdentifier: "AboutTheAppVC") as! AboutTheAppVC
       vc.strTitle = "About Bapu"
       navigationController?.pushViewController(vc, animated:  true)
+      
+    }else if screenDirection == .About{
+      //About Us
+      
+      if indexPath.row == 0{
+        
+        let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "AboutTheAppVC") as! AboutTheAppVC
+        vc.strTitle = "About Talgajarda"
+        navigationController?.pushViewController(vc, animated:  true)
+        
+      }else if indexPath.row == 1{
+        
+        let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "AboutTheAppVC") as! AboutTheAppVC
+        vc.strTitle = "About Shenjal"
+        navigationController?.pushViewController(vc, animated:  true)
+        
+      }else if indexPath.row == 2{
+        
+        let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "AboutTheAppVC") as! AboutTheAppVC
+        vc.strTitle = "About Gurukul"
+        navigationController?.pushViewController(vc, animated:  true)
+        
+      }else if indexPath.row == 3{
+        
+        let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "AboutTheAppVC") as! AboutTheAppVC
+        vc.strTitle = "About Chitrakutdham"
+        navigationController?.pushViewController(vc, animated:  true)
+        
+      }else if indexPath.row == 4{
+        
+        let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "AboutTheAppVC") as! AboutTheAppVC
+        vc.strTitle = "About Tulsidas Ji"
+        navigationController?.pushViewController(vc, animated:  true)
+        
+      }else if indexPath.row == 5{
+        
+        let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "AboutTheAppVC") as! AboutTheAppVC
+        vc.strTitle = "About Bapu's Guru"
+        navigationController?.pushViewController(vc, animated:  true)
+        
+      }
       
     }else if screenDirection == .Media{
       
@@ -578,8 +673,8 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
       let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "WhatsNewVideoVC") as! WhatsNewVideoVC
       vc.idVideoCategory = dict["id"].stringValue
+      vc.strTitle = dict["name"].stringValue
       vc.screenDirection = .Other_Videos
-      
       navigationController?.pushViewController(vc, animated:  true)
       
     }else{
@@ -750,6 +845,14 @@ extension SettingsVC: MenuNavigationDelegate{
       
       let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "KathaEBookVC") as! KathaEBookVC
+      navigationController?.pushViewController(vc, animated:  true)
+      
+    }else if ScreenName == "Privacy Notice"{
+      //Privacy Notice
+
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "AboutTheAppVC") as! AboutTheAppVC
+      vc.strTitle = "Privacy Notice"
       navigationController?.pushViewController(vc, animated:  true)
       
     }

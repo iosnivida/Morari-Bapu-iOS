@@ -31,7 +31,7 @@ class EventsVC: UIViewController {
     
     let param = ["id" : "1",
                  "app_id":Utility.getDeviceID(),
-                 "favourite_for":"1"] as NSDictionary
+                 "favourite_for":"15"] as NSDictionary
     
     WebServices().CallGlobalAPI(url: WebService_Event_List,headers: [:], parameters: param, HttpMethod: "POST", ProgressView: true) { ( _ jsonResponce:JSON? , _ strErrorMessage:String) in
       
@@ -60,7 +60,16 @@ class EventsVC: UIViewController {
               
             }
           }
+        }else if jsonResponce!["status"].stringValue == "false"{
           
+          if jsonResponce!["message"].stringValue == "No Data Found"{
+            
+            DispatchQueue.main.async {
+              self.cvEvents.reloadData()
+              Utility.collectionViewNoDataMessage(collectionView: self.cvEvents, message: "Coming Soon", textColor: UIColor.white)
+
+            }
+          }
         }
         else {
           Utility().showAlertMessage(vc: self, titleStr: "", messageStr: jsonResponce!["message"].stringValue)
@@ -105,6 +114,16 @@ extension EventsVC: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate
     
     cell.lblEventTitle.text = dict["title"].stringValue
     
+    //Notification readable or not
+    if dict["is_read"].boolValue == false{
+      //Non-Readable notification
+      cell.viewBackground.backgroundColor = UIColor.colorFromHex("#d3d3d3")
+      
+    }else{
+      //Readable notification
+      cell.viewBackground.backgroundColor = UIColor.colorFromHex("#ffffff")
+    }
+    
     return cell
   }
   
@@ -137,7 +156,7 @@ extension EventsVC: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate
     
     let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
     let vc = storyboard.instantiateViewController(withIdentifier: "EventsDetailsVC") as! EventsDetailsVC
-    vc.arrEvents = arrEvents[indexPath.row].dictionaryValue
+    vc.strId = data["id"].stringValue
     navigationController?.pushViewController(vc, animated:  true)
     
     
@@ -273,6 +292,14 @@ extension EventsVC: MenuNavigationDelegate{
       
       let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "KathaEBookVC") as! KathaEBookVC
+      navigationController?.pushViewController(vc, animated:  true)
+      
+    }else if ScreenName == "Privacy Notice"{
+      //Privacy Notice
+
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "AboutTheAppVC") as! AboutTheAppVC
+      vc.strTitle = "Privacy Notice"
       navigationController?.pushViewController(vc, animated:  true)
       
     }

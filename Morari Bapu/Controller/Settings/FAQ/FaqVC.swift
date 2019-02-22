@@ -118,8 +118,11 @@ extension FaqVC : UITableViewDelegate, UITableViewDataSource{
     
     let data = arrFaq[indexPath.row]
     
-    cell.lblTitle.attributedText = NSAttributedString(html: data["question"].stringValue)
-    cell.lblDescription.attributedText = NSAttributedString(html: data["answer"].stringValue)
+    //cell.lblTitle.attributedText = NSAttributedString(html: data["question"].stringValue)
+    //cell.lblDescription.attributedText = NSAttributedString(html: data["answer"].stringValue)
+    
+    cell.lblTitle.text = data["question"].stringValue
+    cell.lblDescription.text = data["answer"].stringValue
     
     return cell
     
@@ -271,6 +274,14 @@ extension FaqVC: MenuNavigationDelegate{
       
       let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "KathaEBookVC") as! KathaEBookVC
+      navigationController?.pushViewController(vc, animated:  true)
+      
+    }else if ScreenName == "Privacy Notice"{
+      //Privacy Notice
+
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "AboutTheAppVC") as! AboutTheAppVC
+      vc.strTitle = "Privacy Notice"
       navigationController?.pushViewController(vc, animated:  true)
       
     }

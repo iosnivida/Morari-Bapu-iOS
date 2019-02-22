@@ -11,6 +11,10 @@ import Alamofire
 import SwiftyJSON
 import Kingfisher
 
+import MediaPlayer
+import AVKit
+import AVFoundation
+
 enum WhatsNewVideoScreenIdentify {
   case WhatsNew_Video
   case Other_Videos
@@ -24,6 +28,7 @@ class WhatsNewVideoVC: UIViewController {
   @IBOutlet weak var lblTitle: UILabel!
   var screenDirection = WhatsNewVideoScreenIdentify.WhatsNew_Video
   var idVideoCategory = String()
+  var strTitle = String()
   
   var currentPageNo = Int()
   var totalPageNo = Int()
@@ -48,7 +53,7 @@ class WhatsNewVideoVC: UIViewController {
     if screenDirection == .WhatsNew_Video{
       lblTitle.text = "Video"
     }else if screenDirection == .Other_Videos{
-      lblTitle.text = "Other Video"
+      lblTitle.text = strTitle
       
     }else if screenDirection == .Daily_Katha_Clip{
       lblTitle.text = "Daily Katha Clip"
@@ -67,6 +72,7 @@ class WhatsNewVideoVC: UIViewController {
       
       param = ["page" : pageNo,
                "favourite_for":"2",
+               "favourite_for":"13",
                "app_id":Utility.getDeviceID()] as NSDictionary
       
       api_url = WebService_Whats_New_Video
@@ -112,14 +118,17 @@ class WhatsNewVideoVC: UIViewController {
             
               self.tblVideo .reloadData()
               Utility.tableNoDataMessage(tableView: self.tblVideo, message: "", messageColor: UIColor.black, displayMessage: .Center)
-            }
-          else
-          {
-            
-              self.tblVideo .reloadData()
-              Utility.tableNoDataMessage(tableView: self.tblVideo, message: "No video", messageColor: UIColor.black, displayMessage: .Center)
           }
           
+        }else if jsonResponce!["status"].stringValue == "false"{
+          
+          if jsonResponce!["message"].stringValue == "No Data Found"{
+            
+            DispatchQueue.main.async {
+              self.tblVideo.reloadData()
+              Utility.tableNoDataMessage(tableView: self.tblVideo, message: "Coming Soon", messageColor: UIColor.white, displayMessage: .Center)
+            }
+          }
         }
         else {
           self.is_Api_Being_Called = false
@@ -279,6 +288,14 @@ extension WhatsNewVideoVC: MenuNavigationDelegate{
       let vc = storyboard.instantiateViewController(withIdentifier: "KathaEBookVC") as! KathaEBookVC
       navigationController?.pushViewController(vc, animated:  true)
       
+    }else if ScreenName == "Privacy Notice"{
+      //Privacy Notice
+
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "AboutTheAppVC") as! AboutTheAppVC
+      vc.strTitle = "Privacy Notice"
+      navigationController?.pushViewController(vc, animated:  true)
+      
     }
   }
 }
@@ -310,13 +327,10 @@ extension WhatsNewVideoVC : UITableViewDelegate, UITableViewDataSource{
     
     let placeHolder = UIImage(named: "youtube_placeholder")
     
-    
-    
     cell.imgVideo.kf.indicatorType = .activity
     
-    let url = URL(string: "https://img.youtube.com/vi/\(Utility.extractYouTubeId(from: data["youtube_link"].stringValue) ?? "")/0.jpg")
-    
-    cell.imgVideo.kf.setImage(with: url, placeholder: placeHolder, options: [.transition(ImageTransition.fade(1))])
+    cell.imgVideo.kf.indicatorType = .activity
+    cell.imgVideo.kf.setImage(with: URL(string: "\(BASE_URL_IMAGE)\(data["video_image"].stringValue)"), placeholder: placeHolder, options: [.transition(ImageTransition.fade(1))])
     
     if data["is_favourite"].boolValue == true{
       cell.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
@@ -338,6 +352,16 @@ extension WhatsNewVideoVC : UITableViewDelegate, UITableViewDataSource{
     cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
     cell.btnYoutube.addTarget(self, action: #selector(btnYoutube), for: UIControl.Event.touchUpInside)
     cell.btnFavourite.addTarget(self, action: #selector(btnFavourite), for: UIControl.Event.touchUpInside)
+    
+    //Notification readable or not
+    if data["is_read"].boolValue == false{
+      //Non-Readable notification
+      cell.viewBackground.backgroundColor = UIColor.colorFromHex("#d3d3d3")
+      
+    }else{
+      //Readable notification
+      cell.viewBackground.backgroundColor = UIColor.colorFromHex("#ffffff")
+    }
     
     return cell
 
@@ -378,15 +402,15 @@ extension WhatsNewVideoVC : UITableViewDelegate, UITableViewDataSource{
 
     if screenDirection == .WhatsNew_Video{
       
-      share_Content = "\(data["title"].stringValue) \n\n\(data["youtube_link"].stringValue) \n(Duration: \(data["video_duration"].stringValue)) \n\nDate: \(Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd-MM-yyyy")) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
+      share_Content = "Video \n\n\(data["title"].stringValue) \n\n\(data["youtube_link"].stringValue) \n(Duration: \(data["video_duration"].stringValue)) \n\nDate: \(Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd-MM-yyyy")) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
       
     }else if screenDirection == .Other_Videos{
       
-      share_Content = "\(data["title"].stringValue) \n\n\(data["youtube_link"].stringValue) \n(Duration: \(data["video_duration"].stringValue)) \n\nDate: \(Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd-MM-yyyy")) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
+      share_Content = "Video \n\n\(data["title"].stringValue) \n\n\(data["youtube_link"].stringValue) \n(Duration: \(data["video_duration"].stringValue)) \n\nDate: \(Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd-MM-yyyy")) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
       
     }else if screenDirection == .Daily_Katha_Clip{
       
-      share_Content = "\(data["title"].stringValue) \n\n\(data["youtube_link"].stringValue) \n(Duration: \(data["video_duration"].stringValue)) \nDate: \(Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd-MM-yyyy")) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
+      share_Content = "Video \n\n\(data["title"].stringValue) \n\n\(data["youtube_link"].stringValue) \n(Duration: \(data["video_duration"].stringValue)) \nDate: \(Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd-MM-yyyy")) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
     }
     
     // set up activity view controller
@@ -409,12 +433,16 @@ extension WhatsNewVideoVC : UITableViewDelegate, UITableViewDataSource{
     let buttonPosition:CGPoint = sender.convert(CGPoint.zero, to:self.tblVideo)
     let indexPath = self.tblVideo.indexPathForRow(at: buttonPosition)
     
-    let data = arrVideo[indexPath!.row]
-
-    let link = arrVideo[indexPath!.row]
-    let youtubeLink = link["youtube_link"].url
+    var data = arrVideo[indexPath!.row]
     
     if data["is_read"].intValue == 0{
+      
+      data["is_read"] = true;
+      
+      arrVideo[sender.tag] = data
+      
+      let indexPath = NSIndexPath(row: sender.tag, section: 0)
+      tblVideo.reloadRows(at: [indexPath as IndexPath], with: UITableView.RowAnimation.none)
       
       if screenDirection == .WhatsNew_Video{
         
@@ -438,13 +466,27 @@ extension WhatsNewVideoVC : UITableViewDelegate, UITableViewDataSource{
       }
       
     }
-    
-    if Utility.canOpenURL(link["youtube_link"].stringValue){
-      DispatchQueue.main.async {
-        UIApplication.shared.open(youtubeLink!, options: [:])
+ 
+    if data["youtube_link"].stringValue.contains("youtube") {
+      
+      let videoURL = URL(string: "\(data["youtube_link"].stringValue)")
+      if Utility.canOpenURL(data["youtube_link"].stringValue){
+        DispatchQueue.main.async {
+          UIApplication.shared.open(videoURL!, options: [:])
+        }
       }
+      
     }else{
       
+      let videoURL = URL(string: "\(BASE_URL_IMAGE)\(data["video_file"].stringValue)")
+    
+        let player = AVPlayer(url: videoURL!)
+        let playerViewController = AVPlayerViewController()
+        playerViewController.player = player
+        self.present(playerViewController, animated: true) {
+          playerViewController.player!.play()
+          
+        }
     }
     
     

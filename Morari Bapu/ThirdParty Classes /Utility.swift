@@ -71,13 +71,25 @@ class Utility: NSObject
             messageLabel.textColor = messageColor
             messageLabel.numberOfLines = 0;
             messageLabel.textAlignment = .center
+          
+          if message == "Coming Soon"{
+            tableView.backgroundColor = .black
             
             if UIDevice.current.userInterfaceIdiom == .pad{
-                messageLabel.font = UIFont(name:MontserratSemiBold, size:25)
+              messageLabel.font = UIFont(name:MontserratSemiBold, size:40)
             }else{
-                messageLabel.font = UIFont(name:MontserratSemiBold, size:20)
+              messageLabel.font = UIFont(name:MontserratSemiBold, size:40)
             }
             
+          }else{
+            
+            if UIDevice.current.userInterfaceIdiom == .pad{
+              messageLabel.font = UIFont(name:MontserratSemiBold, size:25)
+            }else{
+              messageLabel.font = UIFont(name:MontserratSemiBold, size:20)
+            }
+          }
+          
             messageLabel.sizeToFit()
             
             tableView.backgroundView = messageLabel;
@@ -96,12 +108,25 @@ class Utility: NSObject
         let frame = CGRect(x: 0, y: 0,  width: collectionView.bounds.size.width, height: 200)
         let lblMessage : UILabel = UILabel.init(frame: frame)
         lblMessage.text = message
-        
-        if UIDevice.current.userInterfaceIdiom == .pad{
-            lblMessage.font = UIFont(name:MontserratSemiBold, size:25)
+      
+        if message == "Coming Soon"{
+          collectionView.backgroundColor = .black
+          
+          if UIDevice.current.userInterfaceIdiom == .pad{
+            lblMessage.font = UIFont(name:MontserratSemiBold, size:40)
+          }else{
+            lblMessage.font = UIFont(name:MontserratSemiBold, size:40)
+          }
+          
         }else{
+          
+          if UIDevice.current.userInterfaceIdiom == .pad{
+            lblMessage.font = UIFont(name:MontserratSemiBold, size:25)
+          }else{
             lblMessage.font = UIFont(name:MontserratSemiBold, size:20)
+          }
         }
+      
         
         lblMessage.textAlignment = .center
         lblMessage.sizeToFit()
@@ -490,7 +515,7 @@ class Utility: NSObject
   }
   
   
-  static func image_Viewer_Show(onViewController: UIViewController, indexPosition: IndexPath, images:[JSON]) {
+  static func image_Viewer_Show(onViewController: UIViewController, screenDirection:ImageViewerScreenIdentify ,indexPosition: IndexPath, arrFavourites:NSMutableArray, images:[JSON]) {
     DispatchQueue.main.async {
       //let objVC = self.storyboard?.instantiateViewController(withIdentifier: "LoaderVC") as! LoaderVC
       let storyboardCustom : UIStoryboard = UIStoryboard(name: Custome_Storyboard, bundle: nil)
@@ -499,6 +524,8 @@ class Utility: NSObject
       objVC?.modalTransitionStyle = .crossDissolve
       objVC?.indexPosition = indexPosition
       objVC?.arrImages = images
+      objVC?.screenDirection = screenDirection
+      objVC?.arrFavourites = arrFavourites
       onViewController.present(objVC!, animated: false, completion: nil)
       //UIApplication.shared.delegate?.window!?.rootViewController?.present(objVC, animated: true, completion: nil)
     }
@@ -511,7 +538,7 @@ class Utility: NSObject
   }
   
   static func music_Player_Show(onViewController: UIViewController, position:Int, listOfAudio:[JSON]) {
-    DispatchQueue.main.async {
+    /*DispatchQueue.main.async {
       //let objVC = self.storyboard?.instantiateViewController(withIdentifier: "LoaderVC") as! LoaderVC
       let storyboardCustom : UIStoryboard = UIStoryboard(name: Custome_Storyboard, bundle: nil)
       let objVC = storyboardCustom.instantiateViewController(withIdentifier: "MusicPlayerVC") as? MusicPlayerVC
@@ -521,10 +548,28 @@ class Utility: NSObject
       objVC?.playPosition = position
       onViewController.present(objVC!, animated: false, completion: nil)
       //UIApplication.shared.delegate?.window!?.rootViewController?.present(objVC, animated: true, completion: nil)
-    }
+    }*/
   }
   
   static func music_Player_Hide(onViewController: UIViewController) {
+    DispatchQueue.main.async {
+      onViewController.dismiss(animated: false, completion: nil)
+    }
+  }
+  
+  static func internet_connection_Show(onViewController: UIViewController) {
+    DispatchQueue.main.async {
+      //let objVC = self.storyboard?.instantiateViewController(withIdentifier: "LoaderVC") as! LoaderVC
+      let storyboardCustom : UIStoryboard = UIStoryboard(name: Custome_Storyboard, bundle: nil)
+      let objVC = storyboardCustom.instantiateViewController(withIdentifier: "InternetConnectionVC") as? InternetConnectionVC
+      objVC?.modalPresentationStyle = .overCurrentContext
+      objVC?.modalTransitionStyle = .crossDissolve
+      onViewController.present(objVC!, animated: false, completion: nil)
+      //UIApplication.shared.delegate?.window!?.rootViewController?.present(objVC, animated: true, completion: nil)
+    }
+  }
+  
+  static func internet_connection_hide(onViewController: UIViewController) {
     DispatchQueue.main.async {
       onViewController.dismiss(animated: false, completion: nil)
     }
@@ -568,7 +613,31 @@ class Utility: NSObject
       .flatMap { Range($0.range(at: 1), in: url) }
       .map { String(url[$0]) }
   }
+  
+  
 
+  static func topViewController(viewController: UIViewController) -> Bool
+  {
+    
+    if let wd = UIApplication.shared.delegate?.window {
+      var vc = wd!.rootViewController
+      if(vc is UINavigationController){
+        vc = (vc as! UINavigationController).visibleViewController
+      }
+      
+//      if(vc is viewController){
+//        print("Present Screen...")
+//        return true
+//        //your code
+//      }else{
+//        return false
+//      }
+    }else{
+      return false
+    }
+     return false
+  }
+  
 }
 
 extension String {
@@ -734,6 +803,39 @@ extension UITableView{
         self.layer.shadowOpacity = 0.8
         self.layer.shadowRadius = 2.0
     }
+}
+
+extension UIColor {
+  
+  static func rgbColor(red: CGFloat, green: CGFloat, blue: CGFloat) -> UIColor {
+    
+    return UIColor.init(red: red/255, green: green/255, blue: blue/255, alpha: 1.0)
+  }
+  
+  static func colorFromHex(_ hex: String) -> UIColor {
+    
+    var hexString = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+    
+    if hexString.hasPrefix("#") {
+      
+      hexString.remove(at: hexString.startIndex)
+    }
+    
+    
+    if hexString.count != 6 {
+      
+      return UIColor.white
+    }
+    
+    var rgb: UInt32 = 0
+    Scanner.init(string: hexString).scanHexInt32(&rgb)
+    
+    return UIColor.init(red: CGFloat((rgb & 0xFF0000) >> 16)/255,
+                        green: CGFloat((rgb & 0x00FF00) >> 8)/255,
+                        blue: CGFloat(rgb & 0x0000FF)/255,
+                        alpha: 1.0)
+  }
+  
 }
 
 

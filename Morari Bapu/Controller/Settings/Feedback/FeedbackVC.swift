@@ -273,6 +273,14 @@ extension FeedbackVC: MenuNavigationDelegate{
       let vc = storyboard.instantiateViewController(withIdentifier: "KathaEBookVC") as! KathaEBookVC
       navigationController?.pushViewController(vc, animated:  true)
       
+    }else if ScreenName == "Privacy Notice"{
+      //Privacy Notice
+
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "AboutTheAppVC") as! AboutTheAppVC
+      vc.strTitle = "Privacy Notice"
+      navigationController?.pushViewController(vc, animated:  true)
+      
     }
   }
 }

@@ -77,15 +77,15 @@ class ArticlesVC: UIViewController {
               self.tblArticles .reloadData()
             }
           }
-          else
-          {
+        }else if jsonResponce!["status"].stringValue == "false"{
+          
+          if jsonResponce!["message"].stringValue == "No Data Found"{
             
             DispatchQueue.main.async {
               self.tblArticles.reloadData()
-              Utility.tableNoDataMessage(tableView: self.tblArticles, message: "No Articles",messageColor:UIColor.white, displayMessage: .Center)
+              Utility.tableNoDataMessage(tableView: self.tblArticles, message: "Coming Soon", messageColor: UIColor.white, displayMessage: .Center)
             }
           }
-          
         }
         else {
           self.is_Api_Being_Called = false
@@ -160,6 +160,17 @@ extension ArticlesVC : UITableViewDelegate, UITableViewDataSource{
       cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
       cell.btnYoutube.addTarget(self, action: #selector(btnLinkWebSite), for: UIControl.Event.touchUpInside)
       cell.btnFavourite.addTarget(self, action: #selector(btnFavourite), for: UIControl.Event.touchUpInside)
+      
+      //Notification readable or not
+      if data["is_read"].boolValue == false{
+        //Non-Readable notification
+        cell.viewBackground.backgroundColor = UIColor.colorFromHex("#d3d3d3")
+        
+      }else{
+        //Readable notification
+        cell.viewBackground.backgroundColor = UIColor.colorFromHex("#ffffff")
+      }
+      
       return cell
       
    
@@ -198,6 +209,16 @@ extension ArticlesVC : UITableViewDelegate, UITableViewDataSource{
       cell.btnYoutube.addTarget(self, action: #selector(btnYoutube), for: UIControl.Event.touchUpInside)
       cell.btnLink.addTarget(self, action: #selector(btnLinkWebSite), for: UIControl.Event.touchUpInside)
       cell.btnFavourite.addTarget(self, action: #selector(btnFavourite), for: UIControl.Event.touchUpInside)
+      
+      //Notification readable or not
+      if data["is_read"].boolValue == false{
+        //Non-Readable notification
+        cell.viewBackground.backgroundColor = UIColor.colorFromHex("#d3d3d3")
+        
+      }else{
+        //Readable notification
+        cell.viewBackground.backgroundColor = UIColor.colorFromHex("#ffffff")
+      }
       
       return cell
      
@@ -246,15 +267,23 @@ extension ArticlesVC : UITableViewDelegate, UITableViewDataSource{
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     
-    let data = arrArticles[indexPath.row]
+    var data = arrArticles[indexPath.row]
     
     if data["is_read"].intValue == 0{
+      
+      data["is_read"] = true;
+      
+      arrArticles[indexPath.row] = data
+      
+      let indexPath = NSIndexPath(row: indexPath.row, section: 0)
+      tblArticles.reloadRows(at: [indexPath as IndexPath], with: UITableView.RowAnimation.none)
       
       let param = ["app_id":Utility.getDeviceID(),
                    "article_id":data["id"].stringValue] as NSDictionary
       
       Utility.readUnread(api_Url: WebService_Article_Read_Unread, parameters: param)
     }
+    
   }
   
   func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
@@ -279,7 +308,7 @@ extension ArticlesVC : UITableViewDelegate, UITableViewDataSource{
     
     let data = arrArticles[indexPath!.row]
 
-    let share_Content = "\(data["article"].stringValue) \n\nThis message has been sent via the Morari Bapu App. You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
+    let share_Content = "Articles \n\n\(data["article"].stringValue) \n\nThis message has been sent via the Morari Bapu App. You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
   
     // set up activity view controller
     let textToShare = [share_Content]
@@ -298,19 +327,49 @@ extension ArticlesVC : UITableViewDelegate, UITableViewDataSource{
   
   @IBAction func btnYoutube(_ sender: UIButton) {
     
+    
     let buttonPosition:CGPoint = sender.convert(CGPoint.zero, to:self.tblArticles)
     let indexPath = self.tblArticles.indexPathForRow(at: buttonPosition)
 
-    let data = arrArticles[indexPath!.row]
+    var data = arrArticles[indexPath!.row]
 
-    let videoURL = URL(string: "\(BASE_URL_IMAGE)\(data["video"].stringValue)")
-    let player = AVPlayer(url: videoURL!)
-    let playerViewController = AVPlayerViewController()
-    playerViewController.player = player
-    self.present(playerViewController, animated: true) {
-      playerViewController.player!.play()
+    if data["is_read"].intValue == 0{
+      
+      data["is_read"] = true;
+      
+      arrArticles[sender.tag] = data
+      
+      let indexPath = NSIndexPath(row: sender.tag, section: 0)
+      tblArticles.reloadRows(at: [indexPath as IndexPath], with: UITableView.RowAnimation.none)
+      
+      let param = ["app_id":Utility.getDeviceID(),
+                   "article_id":data["id"].stringValue] as NSDictionary
+      
+      Utility.readUnread(api_Url: WebService_Article_Read_Unread, parameters: param)
     }
     
+    if data["link"].stringValue.contains("youtube") {
+      
+      let videoURL = URL(string: "\(data["link"].stringValue)")
+      if Utility.canOpenURL(data["link"].stringValue){
+        DispatchQueue.main.async {
+          UIApplication.shared.open(videoURL!, options: [:])
+        }
+      }
+      
+    }else{
+      
+      let videoURL = URL(string: "\(BASE_URL_IMAGE)\(data["video"].stringValue)")
+      
+        let player = AVPlayer(url: videoURL!)
+        let playerViewController = AVPlayerViewController()
+        playerViewController.player = player
+        self.present(playerViewController, animated: true) {
+          playerViewController.player!.play()
+        
+        }
+      
+    }
    
   }
   
@@ -321,14 +380,6 @@ extension ArticlesVC : UITableViewDelegate, UITableViewDataSource{
     
     let data = arrArticles[indexPath!.row]
     
-    
-    if data["is_read"].intValue == 0{
-      
-      let param = ["app_id":Utility.getDeviceID(),
-                   "article_id":data["id"].stringValue] as NSDictionary
-      
-      Utility.readUnread(api_Url: WebService_Article_Read_Unread, parameters: param)
-    }
     
     let youtubeLink = data["link"].url
     
@@ -506,6 +557,14 @@ extension ArticlesVC : MenuNavigationDelegate{
       
       let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "KathaEBookVC") as! KathaEBookVC
+      navigationController?.pushViewController(vc, animated:  true)
+      
+    }else if ScreenName == "Privacy Notice"{
+      //Privacy Notice
+
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "AboutTheAppVC") as! AboutTheAppVC
+      vc.strTitle = "Privacy Notice"
       navigationController?.pushViewController(vc, animated:  true)
       
     }

@@ -39,37 +39,45 @@ class KathaChopaiVC: UIViewController {
       tblKathaChopai.rowHeight = 150
       tblKathaChopai.estimatedRowHeight = UITableView.automaticDimension
     
+      currentPageNo = 1
+      
+      if screenDirection == .Katha_Chopai{
+        //Katha Chopai
+        
+        lblTitle.text = "Katha Chopai"
+        self.arrKathaChopia.removeAll()
+        self.arrFavourite.removeAllObjects()
+        getKathaChopai(pageNo: currentPageNo)
+      }else if screenDirection == .Ram_Charit_Manas{
+        //Ram Charit Manas
+        
+        lblTitle.text = "Ram Charit Manas"
+        self.arrKathaChopia.removeAll()
+        self.arrFavourite.removeAllObjects()
+        getKathaChopai(pageNo: currentPageNo)
+      }
+      else{
+        //Quotes
+        
+        lblTitle.text = "Quotes"
+        self.arrKathaChopia.removeAll()
+        self.arrFavourite.removeAllObjects()
+        getKathaChopai(pageNo: currentPageNo)
+      }
+      
+      // Add reachability observer
+      if let reachability = AppDelegate.sharedAppDelegate()?.reachability
+      {
+        NotificationCenter.default.addObserver( self, selector: #selector( self.reachabilityChanged ),name: Notification.Name.reachabilityChanged, object: reachability )
+      }
+      
   }
   
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
     
     
-    currentPageNo = 1
 
-    if screenDirection == .Katha_Chopai{
-      //Katha Chopai
-      
-      lblTitle.text = "Katha Chopai"
-      self.arrKathaChopia.removeAll()
-      self.arrFavourite.removeAllObjects()
-      getKathaChopai(pageNo: currentPageNo)
-    }else if screenDirection == .Ram_Charit_Manas{
-      //Ram Charit Manas
-      
-      lblTitle.text = "Ram Charit Manas"
-      self.arrKathaChopia.removeAll()
-      self.arrFavourite.removeAllObjects()
-      getKathaChopai(pageNo: currentPageNo)
-    }
-    else{
-      //Quotes
-      
-      lblTitle.text = "Quotes"
-      self.arrKathaChopia.removeAll()
-      self.arrFavourite.removeAllObjects()
-      getKathaChopai(pageNo: currentPageNo)
-    }
     
   }
 
@@ -142,15 +150,16 @@ class KathaChopaiVC: UIViewController {
               self.tblKathaChopai .reloadData()
             }
           }
-          else
-          {
+          
+        }else if jsonResponce!["status"].stringValue == "false"{
+          
+          if jsonResponce!["message"].stringValue == "No Data Found"{
             
             DispatchQueue.main.async {
-              self.tblKathaChopai.reloadData()
-              Utility.tableNoDataMessage(tableView: self.tblKathaChopai, message: "No records",messageColor:UIColor.white, displayMessage: .Center)
+              self.tblKathaChopai .reloadData()
+              Utility.tableNoDataMessage(tableView: self.tblKathaChopai, message: "Coming Soon", messageColor: UIColor.white, displayMessage: .Center)
             }
           }
-          
         }
         else {
           self.is_Api_Being_Called = false
@@ -181,6 +190,32 @@ class KathaChopaiVC: UIViewController {
     self.navigationController?.popToRootViewController(animated: true)
   }
   
+  //MARK:- Internet Checking
+  @objc private func reachabilityChanged( notification: NSNotification )
+  {
+    guard let reachability = notification.object as? Reachability else
+    {
+      return
+    }
+    
+    if reachability.connection == .wifi || reachability.connection == .cellular {
+      
+      Utility.internet_connection_hide(onViewController: self)
+ 
+        self.arrKathaChopia.removeAll()
+        self.arrFavourite.removeAllObjects()
+        getKathaChopai(pageNo: 1)
+      
+      print("Reachable via WiFi & Cellular")
+      
+    }
+    else
+    {
+      Utility.internet_connection_Show(onViewController: self)
+      print("Network not reachable")
+    }
+    
+  }
   
 }
 
@@ -227,6 +262,17 @@ extension KathaChopaiVC : UITableViewDelegate, UITableViewDataSource{
       cell.lblDescription1.text = data["quotes_hindi"].stringValue
       
     }
+    
+    //Notification readable or not
+    if data["is_read"].boolValue == false{
+      //Non-Readable notification
+      cell.viewBackground.backgroundColor = UIColor.colorFromHex("#d3d3d3")
+      
+    }else{
+      //Readable notification
+      cell.viewBackground.backgroundColor = UIColor.colorFromHex("#ffffff")
+    }
+    
       
       return cell
   }
@@ -241,9 +287,16 @@ extension KathaChopaiVC : UITableViewDelegate, UITableViewDataSource{
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
    
-    let data = arrKathaChopia[indexPath.row]
+    var data = arrKathaChopia[indexPath.row]
     
     if data["is_read"].intValue == 0{
+      
+      data["is_read"] = true;
+      
+      arrKathaChopia[indexPath.row] = data
+      
+      let indexPath = NSIndexPath(row: indexPath.row, section: 0)
+      tblKathaChopai.reloadRows(at: [indexPath as IndexPath], with: UITableView.RowAnimation.none)
       
       if screenDirection == .Katha_Chopai{
         
@@ -274,8 +327,8 @@ extension KathaChopaiVC : UITableViewDelegate, UITableViewDataSource{
       let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "KathaChopaiDetailsVC") as! KathaChopaiDetailsVC
       vc.strTitle = lblTitle.text!
-      vc.arrKathaDetails = data.dictionaryValue
-      vc.arrFavourite = arrFavourite
+      vc.strId = data["id"].stringValue
+
       navigationController?.pushViewController(vc, animated:  true)
       
     }
@@ -284,8 +337,8 @@ extension KathaChopaiVC : UITableViewDelegate, UITableViewDataSource{
       let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "KathaChopaiDetailsVC") as! KathaChopaiDetailsVC
       vc.strTitle = lblTitle.text!
-      vc.arrKathaDetails = data.dictionaryValue
-      vc.arrFavourite = arrFavourite
+      vc.strId = data["id"].stringValue
+
       navigationController?.pushViewController(vc, animated:  true)
       
     }else{
@@ -293,8 +346,8 @@ extension KathaChopaiVC : UITableViewDelegate, UITableViewDataSource{
       let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "KathaChopaiDetailsVC") as! KathaChopaiDetailsVC
       vc.strTitle = lblTitle.text!
-      vc.arrKathaDetails = data.dictionaryValue
-      vc.arrFavourite = arrFavourite
+      vc.strId = data["id"].stringValue
+
 
       navigationController?.pushViewController(vc, animated:  true)
       
@@ -314,6 +367,8 @@ extension KathaChopaiVC : UITableViewDelegate, UITableViewDataSource{
       }
     }
   }
+  
+  
   
 }
 
@@ -442,6 +497,14 @@ extension KathaChopaiVC : MenuNavigationDelegate{
       
       let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "KathaEBookVC") as! KathaEBookVC
+      navigationController?.pushViewController(vc, animated:  true)
+      
+    }else if ScreenName == "Privacy Notice"{
+      //Privacy Notice
+
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "AboutTheAppVC") as! AboutTheAppVC
+      vc.strTitle = "Privacy Notice"
       navigationController?.pushViewController(vc, animated:  true)
       
     }

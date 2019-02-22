@@ -11,12 +11,14 @@ import Alamofire
 import SwiftyJSON
 import Kingfisher
 
+
 enum AudioScreenIdentifier {
   case Stuti
   case Sankirtan
   case Others
   case WhatsNewAudio
 }
+
 
 class AudioVC: UIViewController {
   
@@ -29,6 +31,22 @@ class AudioVC: UIViewController {
   var currentPageNo = Int()
   var totalPageNo = Int()
   var is_Api_Being_Called : Bool = false
+  
+  private var originalPullUpControllerViewSize: CGSize = .zero
+
+  private func makeSearchViewControllerIfNeeded() -> MusicPlayerVC {
+    let currentPullUpController = children
+      .filter({ $0 is MusicPlayerVC })
+      .first as? MusicPlayerVC
+    let pullUpController: MusicPlayerVC = currentPullUpController ?? UIStoryboard(name: Custome_Storyboard,bundle: nil).instantiateViewController(withIdentifier: "MusicPlayerVC") as! MusicPlayerVC
+    
+    
+    if originalPullUpControllerViewSize == .zero {
+      originalPullUpControllerViewSize = pullUpController.view.bounds.size
+    }
+    
+    return pullUpController
+  }
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -57,8 +75,38 @@ class AudioVC: UIViewController {
       self.getAudio(pageNo: self.currentPageNo)
     }
     
+    
+    //***********************
+    
+
+    
+    //************************
+    
   }
   
+  //MARK:- Up-Down Controller
+  private func addPullUpController(position:Int, listOfAudio:[JSON]) {
+    let pullUpController = makeSearchViewControllerIfNeeded()
+    _ = pullUpController.view // call pullUpController.viewDidLoad()
+    addPullUpController(pullUpController,
+                        initialStickyPointOffset: pullUpController.initialPointOffset,
+                        animated: true)
+    audioDetails(position, listOfAudio)
+    
+  }
+  
+//
+//  @IBAction private func addButtonTapped() {
+//    guard
+//      children.filter({ $0 is MusicPlayerVC }).count == 0
+//      else { return }
+//    addPullUpController()
+//  }
+//
+  @IBAction private func removeButtonTapped() {
+    let pullUpController = makeSearchViewControllerIfNeeded()
+    removePullUpController(pullUpController, animated: true)
+  }
   
   //MARK:- Api Call
   func getAudio(pageNo:Int){
@@ -97,7 +145,8 @@ class AudioVC: UIViewController {
       
       param = ["page" : pageNo,
                "app_id":Utility.getDeviceID(),
-               "audio_id":"1"] as NSDictionary
+               "audio_id":"1",
+               "favourite_for":"19"] as NSDictionary
     }
     
     WebServices().CallGlobalAPI(url: api_Url,headers: [:], parameters: param, HttpMethod: "POST", ProgressView: true) { ( _ jsonResponce:JSON? , _ strErrorMessage:String) in
@@ -132,16 +181,16 @@ class AudioVC: UIViewController {
               Utility.tableNoDataMessage(tableView: self.tblAudio, message: "", messageColor: UIColor.black, displayMessage: .Center)
             }
           }
-          else
-          {
+          
+        }else if jsonResponce!["status"].stringValue == "false"{
+          
+          if jsonResponce!["message"].stringValue == "No Data Found"{
             
             DispatchQueue.main.async {
-              self.tblAudio .reloadData()
-              Utility.tableNoDataMessage(tableView: self.tblAudio, message: "No Audio", messageColor: UIColor.black, displayMessage: .Center)
-              
+              self.tblAudio.reloadData()
+              Utility.tableNoDataMessage(tableView: self.tblAudio, message: "Coming Soon", messageColor: UIColor.white, displayMessage: .Center)
             }
           }
-          
         }
         else {
           self.is_Api_Being_Called = false
@@ -151,7 +200,6 @@ class AudioVC: UIViewController {
       }
     }
   }
-  
   
   //MARK:- Button Event
   @IBAction func btnMenu(_ sender: Any) {
@@ -226,6 +274,15 @@ extension AudioVC : UITableViewDelegate, UITableViewDataSource{
     
     cell.viewMusicIndicator.isHidden = true
     
+    //Notification readable or not
+    if data["is_read"].boolValue == false{
+      //Non-Readable notification
+      cell.viewBackground.backgroundColor = UIColor.colorFromHex("#d3d3d3")
+      
+    }else{
+      //Readable notification
+      cell.viewBackground.backgroundColor = UIColor.colorFromHex("#ffffff")
+    }
     
     return cell
     
@@ -242,11 +299,18 @@ extension AudioVC : UITableViewDelegate, UITableViewDataSource{
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     
-    let data = arrAudio[indexPath.row]
+    var data = arrAudio[indexPath.row]
     
     if screenDirection == .Stuti{
       
       if data["is_read"].intValue == 0{
+        
+        data["is_read"] = true;
+        
+        arrAudio[indexPath.row] = data
+        
+        let indexPath = NSIndexPath(row: indexPath.row, section: 0)
+        tblAudio.reloadRows(at: [indexPath as IndexPath], with: UITableView.RowAnimation.none)
         
         let param = ["app_id":Utility.getDeviceID(),
                      "stuti_id":data["id"].stringValue] as NSDictionary
@@ -259,6 +323,13 @@ extension AudioVC : UITableViewDelegate, UITableViewDataSource{
       
       if data["is_read"].intValue == 0{
         
+        data["is_read"] = true;
+        
+        arrAudio[indexPath.row] = data
+        
+        let indexPath = NSIndexPath(row: indexPath.row, section: 0)
+        tblAudio.reloadRows(at: [indexPath as IndexPath], with: UITableView.RowAnimation.none)
+        
         let param = ["app_id":Utility.getDeviceID(),
                      "sankirtan_id":data["id"].stringValue] as NSDictionary
         
@@ -270,6 +341,13 @@ extension AudioVC : UITableViewDelegate, UITableViewDataSource{
       
     }else if screenDirection == .WhatsNewAudio{
     
+      data["is_read"] = true;
+      
+      arrAudio[indexPath.row] = data
+      
+      let indexPath = NSIndexPath(row: indexPath.row, section: 0)
+      tblAudio.reloadRows(at: [indexPath as IndexPath], with: UITableView.RowAnimation.none)
+      
       if data["is_read"].intValue == 0{
         
         let param = ["app_id":Utility.getDeviceID(),
@@ -282,8 +360,9 @@ extension AudioVC : UITableViewDelegate, UITableViewDataSource{
     }
     
     
-      Utility.music_Player_Show(onViewController: self, position: indexPath.row, listOfAudio: arrAudio)
+      //Utility.music_Player_Show(onViewController: self, position: indexPath.row, listOfAudio: arrAudio)
 
+    self.addPullUpController(position:indexPath.row, listOfAudio:arrAudio)
     
   }
   
@@ -308,11 +387,11 @@ extension AudioVC : UITableViewDelegate, UITableViewDataSource{
     
     if screenDirection == .WhatsNewAudio{
       
-      share_Content = "I am listening - \n\(data["title"].stringValue) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
+      share_Content = "Audio \n\nI am listening - \n\(data["title"].stringValue) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
 
     }else{
       
-      share_Content = "I am listening - \n\(data["name"].stringValue) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
+      share_Content = "Audio \n\nI am listening - \n\(data["name"].stringValue) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
 
     }
     
@@ -343,22 +422,26 @@ extension AudioVC : UITableViewDelegate, UITableViewDataSource{
                      "favourite_for":"5",
                      "favourite_id":data["id"].stringValue]
         
-        
       }else if screenDirection == .Sankirtan{
         
         paramater = ["app_id":Utility.getDeviceID(),
                      "favourite_for":"8",
                      "favourite_id":data["id"].stringValue]
         
-        
       }else if screenDirection == .Others{
-        
+       
         paramater = ["app_id":Utility.getDeviceID(),
                      "favourite_for":"2",
                      "favourite_id":data["id"].stringValue]
         
+      }else if screenDirection == .WhatsNewAudio{
+        
+        paramater = ["app_id":Utility.getDeviceID(),
+                     "favourite_for":"19",
+                     "favourite_id":data["id"].stringValue]
+        
       }
-      
+
       WebServices().CallGlobalAPI(url: WebService_Favourite,headers: [:], parameters: paramater, HttpMethod: "POST", ProgressView: true) { ( _ jsonResponce:JSON? , _ strErrorMessage:String) in
         
         if(jsonResponce?.error != nil) {
@@ -508,7 +591,8 @@ extension AudioVC: MenuNavigationDelegate{
       navigationController?.pushViewController(vc, animated:  true)
       
     }else if ScreenName == "Katha Ebook"{
-      //Katha Ebook
+      //Katha Ebook`   .
+      
       
       let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "KathaEBookVC") as! KathaEBookVC
@@ -516,7 +600,6 @@ extension AudioVC: MenuNavigationDelegate{
       
     }
   }
+  
 }
-
-
 

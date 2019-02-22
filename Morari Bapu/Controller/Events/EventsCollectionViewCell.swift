@@ -12,6 +12,6 @@ class EventsCollectionViewCell: UICollectionViewCell {
   
   
   @IBOutlet weak var lblEventTitle: UILabel!
-  
+  @IBOutlet weak var viewBackground: UIView!
   
 }

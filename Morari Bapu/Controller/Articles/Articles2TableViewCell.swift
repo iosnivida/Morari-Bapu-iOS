@@ -18,6 +18,7 @@ class Articles2TableViewCell: UITableViewCell {
   @IBOutlet weak var btnShare: UIButton!
   @IBOutlet weak var btnFavourite: UIButton!
   @IBOutlet weak var btnLink: UIButton!
+  @IBOutlet weak var viewBackground: UIView!
   
     override func awakeFromNib() {
         super.awakeFromNib()

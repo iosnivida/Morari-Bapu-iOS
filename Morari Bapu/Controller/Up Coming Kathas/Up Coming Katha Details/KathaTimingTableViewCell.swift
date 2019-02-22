@@ -10,7 +10,9 @@ import UIKit
 
 class KathaTimingTableViewCell: UITableViewCell {
 
-    override func awakeFromNib() {
+  @IBOutlet weak var lblTiming: UILabel!
+  
+  override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
     }

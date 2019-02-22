@@ -14,10 +14,15 @@ import Kingfisher
 class EventsDetailsVC: UIViewController {
   
   var arrEvents = [String:JSON]()
-
+  var arrFavourite = NSMutableArray()
+  
+  var strId = String()
+  
   @IBOutlet weak var lblDate: UILabel!
   @IBOutlet weak var lblTitle: UILabel!
   @IBOutlet weak var lblDescription: UILabel!
+  @IBOutlet weak var btnShare: UIButton!
+  @IBOutlet weak var btnFavourites: UIButton!
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -30,7 +35,9 @@ class EventsDetailsVC: UIViewController {
   func getDetails(){
   
      let  paramater = ["app_id":Utility.getDeviceID(),
-                   "id":arrEvents["id"]!.stringValue]
+                       "favourite_for":"15",
+                       "id":strId]
+    
      let  str_Url = WebService_Event_Detail
     
     
@@ -55,6 +62,20 @@ class EventsDetailsVC: UIViewController {
             self.lblDate.text = "\(Utility.dateToString(dateStr: self.arrEvents["from_date"]!.stringValue, strDateFormat: "dd-MM-yyyy")) To \(Utility.dateToString(dateStr: self.arrEvents["to_date"]!.stringValue, strDateFormat: "dd-MM-yyyy"))"
             
             self.lblTitle.text = self.arrEvents["title"]?.stringValue
+            
+            for result in jsonResponce!["MyFavourite"].arrayValue {
+              self.arrFavourite.add(result.stringValue)
+            }
+            
+            
+            let predicate: NSPredicate = NSPredicate(format: "SELF contains[cd] %@", self.arrEvents["id"]!.stringValue)
+            let result = self.arrFavourite.filtered(using: predicate)
+            
+            if result.count != 0{
+              self.btnFavourites.setImage(UIImage(named: "favorite"), for: .normal)
+            }else{
+              self.btnFavourites.setImage(UIImage(named: "unfavorite"), for: .normal)
+            }
             
           }
         }
@@ -90,6 +111,55 @@ class EventsDetailsVC: UIViewController {
   @IBAction func backToHome(_ sender: Any) {
     self.navigationController?.popToRootViewController(animated: true)
   }
+  
+  @IBAction func btnShare(_ sender: Any) {
+    
+    let share_Content = "Event \n\n\(self.arrEvents["title"]!.stringValue) \n\n\(self.arrEvents["description"]!.stringValue) \n\nDate: \(Utility.dateToString(dateStr: self.arrEvents["from_date"]!.stringValue, strDateFormat: "dd-MM-yyyy")) To \(Utility.dateToString(dateStr: self.arrEvents["to_date"]!.stringValue, strDateFormat: "dd-MM-yyyy"))  \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
+    
+    let textToShare = [share_Content]
+    let activityViewController = UIActivityViewController(activityItems: textToShare, applicationActivities: nil)
+    activityViewController.popoverPresentationController?.sourceView = self.view // so that iPads won't crash
+    
+    // exclude some activity types from the list (optional)
+    activityViewController.excludedActivityTypes = [ UIActivity.ActivityType.airDrop, UIActivity.ActivityType.postToFacebook ]
+    
+    DispatchQueue.main.async {
+      self.present(activityViewController, animated: true, completion: nil)
+    }
+    
+  }
+  
+  @IBAction func btnFavourites(_ sender: Any) {
+    
+    let paramater = ["app_id":Utility.getDeviceID(),
+                     "favourite_for":"15",
+                     "favourite_id":self.arrEvents["id"]!.stringValue]
+    
+    WebServices().CallGlobalAPI(url: WebService_Favourite,headers: [:], parameters: paramater as NSDictionary, HttpMethod: "POST", ProgressView: true) { ( _ jsonResponce:JSON? , _ strErrorMessage:String) in
+      
+      if(jsonResponce?.error != nil) {
+        
+        var errorMess = jsonResponce?.error?.localizedDescription
+        errorMess = MESSAGE_Err_Service
+        Utility().showAlertMessage(vc: self, titleStr: "", messageStr: errorMess!)
+      }
+      else {
+        
+        if jsonResponce!["status"].stringValue == "true"{
+          if jsonResponce!["message"].stringValue == "Added in your favourite list"{
+            self.btnFavourites.setImage(UIImage(named: "favorite"), for: .normal)
+          }else{
+            self.btnFavourites.setImage(UIImage(named: "unfavorite"), for: .normal)
+          }
+        }
+        else {
+          Utility().showAlertMessage(vc: self, titleStr: "", messageStr: jsonResponce!["message"].stringValue)
+        }
+      }
+    }
+    
+  }
+  
   
 }
 
@@ -220,6 +290,14 @@ extension EventsDetailsVC: MenuNavigationDelegate{
       
       let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "KathaEBookVC") as! KathaEBookVC
+      navigationController?.pushViewController(vc, animated:  true)
+      
+    }else if ScreenName == "Privacy Notice"{
+      //Privacy Notice
+
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "AboutTheAppVC") as! AboutTheAppVC
+      vc.strTitle = "Privacy Notice"
       navigationController?.pushViewController(vc, animated:  true)
       
     }

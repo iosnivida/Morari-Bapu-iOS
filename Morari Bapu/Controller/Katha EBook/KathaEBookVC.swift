@@ -10,6 +10,8 @@ import UIKit
 import Alamofire
 import SwiftyJSON
 import Kingfisher
+import FolioReaderKit
+import  SVProgressHUD
 
 class KathaEBookVC: UIViewController {
 
@@ -33,8 +35,7 @@ class KathaEBookVC: UIViewController {
     DispatchQueue.main.async {
       self.getKathaEBook()
     }
-    
-    }
+  }
     
   //MARK:- Api Call
   func getKathaEBook(){
@@ -63,16 +64,16 @@ class KathaEBookVC: UIViewController {
               Utility.tableNoDataMessage(tableView: self.tblKathaEBook, message: "", messageColor: UIColor.black, displayMessage: .Center)
             }
           }
-          else
-          {
+          
+        }else if jsonResponce!["status"].stringValue == "false"{
+          
+          if jsonResponce!["message"].stringValue == "No Data Found"{
             
             DispatchQueue.main.async {
-              self.tblKathaEBook .reloadData()
-              Utility.tableNoDataMessage(tableView: self.tblKathaEBook, message: "No E-Book", messageColor: UIColor.black, displayMessage: .Center)
-
+              self.tblKathaEBook.reloadData()
+              Utility.tableNoDataMessage(tableView: self.tblKathaEBook, message: "Coming Soon", messageColor: UIColor.white, displayMessage: .Center)
             }
           }
-          
         }
         else {
           Utility().showAlertMessage(vc: self, titleStr: "", messageStr: jsonResponce!["message"].stringValue)
@@ -142,6 +143,16 @@ extension KathaEBookVC : UITableViewDelegate, UITableViewDataSource{
     cell.btnShare.tag = indexPath.row
     cell.btnShare.addTarget(self, action: #selector(btnShare(_:)), for: UIControl.Event.touchUpInside)
 
+    //Notification readable or not
+    if data["is_read"].boolValue == false{
+      //Non-Readable notification
+      cell.viewBackground.backgroundColor = UIColor.colorFromHex("#d3d3d3")
+      
+    }else{
+      //Readable notification
+      cell.viewBackground.backgroundColor = UIColor.colorFromHex("#ffffff")
+    }
+    
     return cell
   }
   
@@ -155,15 +166,7 @@ extension KathaEBookVC : UITableViewDelegate, UITableViewDataSource{
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     
-    let data = arrKathaEBook[indexPath.row]
-    
-    if data["is_read"].intValue == 0{
-      
-      let param = ["app_id":Utility.getDeviceID(),
-                   "katha_ebook_id":data["id"].stringValue] as NSDictionary
-      
-      Utility.readUnread(api_Url: WebService_Katha_E_Book_Read_Unread, parameters: param)
-    }
+
     
     
   }
@@ -171,9 +174,20 @@ extension KathaEBookVC : UITableViewDelegate, UITableViewDataSource{
   @IBAction func btnViewEbook(_ sender: UIButton) {
     
     viewBookType.isHidden = false
+    self.view.bringSubviewToFront(viewBookType)
+    
     selectedBook = arrKathaEBook[sender.tag].dictionaryValue
     
+    var dict = arrKathaEBook[sender.tag]
+
     if selectedBook["is_read"]!.intValue == 0{
+      
+      dict["is_read"] = true;
+      
+      arrKathaEBook[sender.tag] = dict
+      
+      let indexPath = NSIndexPath(row: sender.tag, section: 0)
+      tblKathaEBook.reloadRows(at: [indexPath as IndexPath], with: UITableView.RowAnimation.none)
       
       let param = ["app_id":Utility.getDeviceID(),
                    "katha_ebook_id":selectedBook["id"]!.stringValue] as NSDictionary
@@ -181,50 +195,199 @@ extension KathaEBookVC : UITableViewDelegate, UITableViewDataSource{
       Utility.readUnread(api_Url: WebService_Katha_E_Book_Read_Unread, parameters: param)
     }
     
+    
+    
   }
   
   @IBAction func btnEnglishEbookDetails(_ sender: UIButton) {
 
     viewBookType.isHidden = true
+    let config = FolioReaderConfig()
+    config.scrollDirection = .horizontalWithVerticalContent
+    config.tintColor = color_Maroon
+    let folioReader = FolioReader()
+
     
-    let urlStr = "\(BASE_URL_IMAGE)\(selectedBook["android_gujarati"]!.stringValue)"
-    
-    if #available(iOS 10.0, *) {
-      UIApplication.shared.open(URL(string: urlStr)!, options: [:], completionHandler: nil)
+    let urlStr = "\(BASE_URL_IMAGE)\(selectedBook["android_english"]!.stringValue)"
+    let filename = (urlStr as NSString).lastPathComponent
+
+    let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+    let filePath = documentsURL.appendingPathComponent(filename)
+
+    let fileManager = FileManager.default
+    if fileManager.fileExists(atPath: filePath.path) {
+      print("FILE AVAILABLE")
+      
+      let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+      let filePath = "\(documentsPath)/\(filename)"
+      print(filePath)
+      folioReader.presentReader(parentViewController: self, withEpubPath: filePath, andConfig: config)
       
     } else {
-      UIApplication.shared.openURL(URL(string: urlStr)!)
+      print("FILE NOT AVAILABLE")
+      
+      SVProgressHUD.show()
+      
+      Alamofire.request(urlStr).downloadProgress(closure : { (progress) in
+        
+        print(progress.fractionCompleted)
+        
+        
+        
+      }).responseData{ (response) in
+        print(response)
+        print(response.result.value!)
+        print(response.result.description)
+        if let data = response.result.value {
+          
+          do {
+            try data.write(to: filePath)
+
+            DispatchQueue.main.async {
+              SVProgressHUD.dismiss()
+              
+              let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+              let filePath = "\(documentsPath)/\(filename)"
+              print(filePath)
+              folioReader.presentReader(parentViewController: self, withEpubPath: filePath, andConfig: config)
+            }
+          
+            
+          } catch {
+            print("Something went wrong!")
+          }
+          
+        }
+      }
+      
     }
-    
 
   }
   
   @IBAction func btnGujaratiEbookDetails(_ sender: UIButton) {
     
     viewBookType.isHidden = true
+    let config = FolioReaderConfig()
+    config.scrollDirection = .horizontalWithVerticalContent
+    config.tintColor = color_Maroon
+    let folioReader = FolioReader()
+    
     
     let urlStr = "\(BASE_URL_IMAGE)\(selectedBook["android_gujarati"]!.stringValue)"
+    let filename = (urlStr as NSString).lastPathComponent
     
-    if #available(iOS 10.0, *) {
-      UIApplication.shared.open(URL(string: urlStr)!, options: [:], completionHandler: nil)
+    let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+    let filePath = documentsURL.appendingPathComponent(filename)
+    
+    let fileManager = FileManager.default
+    if fileManager.fileExists(atPath: filePath.path) {
+      print("FILE AVAILABLE")
+      
+      let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+      let filePath = "\(documentsPath)/\(filename)"
+      print(filePath)
+      folioReader.presentReader(parentViewController: self, withEpubPath: filePath, andConfig: config)
       
     } else {
-      UIApplication.shared.openURL(URL(string: urlStr)!)
+      print("FILE NOT AVAILABLE")
+      
+      SVProgressHUD.show()
+      
+      Alamofire.request(urlStr).downloadProgress(closure : { (progress) in
+        
+        print(progress.fractionCompleted)
+        
+        
+        
+      }).responseData{ (response) in
+        print(response)
+        print(response.result.value!)
+        print(response.result.description)
+        if let data = response.result.value {
+          
+          do {
+            try data.write(to: filePath)
+            
+            DispatchQueue.main.async {
+              SVProgressHUD.dismiss()
+              
+              let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+              let filePath = "\(documentsPath)/\(filename)"
+              print(filePath)
+              folioReader.presentReader(parentViewController: self, withEpubPath: filePath, andConfig: config)
+            }
+            
+          } catch {
+            print("Something went wrong!")
+          }
+          
+        }
+      }
+      
     }
-  
+    
   }
   
   @IBAction func btnHindiEbookDetails(_ sender: UIButton) {
     
     viewBookType.isHidden = true
+    let config = FolioReaderConfig()
+    config.scrollDirection = .horizontalWithVerticalContent
+    config.tintColor = color_Maroon
+    let folioReader = FolioReader()
+    
     
     let urlStr = "\(BASE_URL_IMAGE)\(selectedBook["android_hindi"]!.stringValue)"
+    let filename = (urlStr as NSString).lastPathComponent
     
-    if #available(iOS 10.0, *) {
-      UIApplication.shared.open(URL(string: urlStr)!, options: [:], completionHandler: nil)
+    let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+    let filePath = documentsURL.appendingPathComponent(filename)
+    
+    let fileManager = FileManager.default
+    if fileManager.fileExists(atPath: filePath.path) {
+      print("FILE AVAILABLE")
+      
+      let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+      let filePath = "\(documentsPath)/\(filename)"
+      print(filePath)
+      folioReader.presentReader(parentViewController: self, withEpubPath: filePath, andConfig: config)
       
     } else {
-      UIApplication.shared.openURL(URL(string: urlStr)!)
+      print("FILE NOT AVAILABLE")
+      
+      SVProgressHUD.show()
+      
+      Alamofire.request(urlStr).downloadProgress(closure : { (progress) in
+        
+        print(progress.fractionCompleted)
+        
+        
+        
+      }).responseData{ (response) in
+        print(response)
+        print(response.result.value!)
+        print(response.result.description)
+        if let data = response.result.value {
+          
+          do {
+            try data.write(to: filePath)
+            
+            DispatchQueue.main.async {
+              SVProgressHUD.dismiss()
+              
+              let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+              let filePath = "\(documentsPath)/\(filename)"
+              print(filePath)
+              folioReader.presentReader(parentViewController: self, withEpubPath: filePath, andConfig: config)
+            }
+            
+          } catch {
+            print("Something went wrong!")
+          }
+          
+        }
+      }
+      
     }
     
   }
@@ -237,7 +400,7 @@ extension KathaEBookVC : UITableViewDelegate, UITableViewDataSource{
     let urlhindi = "\(BASE_URL_IMAGE)\(data["android_hindi"].stringValue)"
     let urlguj = "\(BASE_URL_IMAGE)\(data["android_gujarati"].stringValue)"
     
-    let share_Content = "\(data["title"].stringValue) \n\nDate: \(data["date"].stringValue) \n\n \(urleng) \n\n\(urlhindi) \n\n\(urlguj) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
+    let share_Content = "Katha E-Book \n\n\(data["title"].stringValue) \n\nDate: \(data["date"].stringValue) \n\n \(urleng) \n\n\(urlhindi) \n\n\(urlguj) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
   
     let textToShare = [share_Content]
     let activityViewController = UIActivityViewController(activityItems: textToShare, applicationActivities: nil)
@@ -380,6 +543,14 @@ extension KathaEBookVC: MenuNavigationDelegate{
       
       let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "KathaEBookVC") as! KathaEBookVC
+      navigationController?.pushViewController(vc, animated:  true)
+      
+    }else if ScreenName == "Privacy Notice"{
+      //Privacy Notice
+
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "AboutTheAppVC") as! AboutTheAppVC
+      vc.strTitle = "Privacy Notice"
       navigationController?.pushViewController(vc, animated:  true)
       
     }

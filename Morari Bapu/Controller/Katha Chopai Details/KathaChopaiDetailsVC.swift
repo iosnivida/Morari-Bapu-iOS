@@ -25,6 +25,7 @@ class KathaChopaiDetailsVC: UIViewController {
   var arrFavourite = NSArray()
 
   var strTitle = String()
+  var strId = String()
   
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,6 +37,11 @@ class KathaChopaiDetailsVC: UIViewController {
       
       getDetails()
     
+      // Add reachability observer
+      if let reachability = AppDelegate.sharedAppDelegate()?.reachability
+      {
+        NotificationCenter.default.addObserver( self, selector: #selector( self.reachabilityChanged ),name: Notification.Name.reachabilityChanged, object: reachability )
+      }
       
     }
   
@@ -50,21 +56,23 @@ class KathaChopaiDetailsVC: UIViewController {
       
       paramater = ["app_id":Utility.getDeviceID(),
                    "favourite_for":"2",
-                   "id":arrKathaDetails["id"]!.stringValue]
+                   "id":strId]
       str_Url = WebService_Katha_Chopai_Details
       
     }else if lblTitle.text == "Ram Charit Manas"{
       
       paramater = ["app_id":Utility.getDeviceID(),
                    "favourite_for":"3",
-                   "id":arrKathaDetails["id"]!.stringValue]
+                   "id":strId]
+
       str_Url = WebService_Ram_Charit_Manas_Detail
     }
     else{
       
       paramater = ["app_id":Utility.getDeviceID(),
                    "favourite_for":"1",
-                   "id":arrKathaDetails["id"]!.stringValue]
+                   "id":strId]
+
       str_Url = WebService_Quotes_Details
     }
     
@@ -199,16 +207,16 @@ class KathaChopaiDetailsVC: UIViewController {
     
     if lblTitle.text == "Katha Chopai"{
       
-      share_Content = "\(arrKathaDetails["title"]!.stringValue)-\(arrKathaDetails["title_no"]!.stringValue) \n\nDate: \(Utility.dateToString(dateStr: arrKathaDetails["from_date"]?.stringValue ?? "", strDateFormat: "dd MMM yyyy")) \n\n \(arrKathaDetails["katha_gujarati"]!.stringValue) \n\n\(arrKathaDetails["katha_hindi"]!.stringValue) \n\n\(arrKathaDetails["katha_english"]!.stringValue) \n\n\(arrKathaDetails["description"]!.stringValue) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
+      share_Content = "Katha Chopai \n\n\(arrKathaDetails["title"]!.stringValue)-\(arrKathaDetails["title_no"]!.stringValue) \n\nDate: \(Utility.dateToString(dateStr: arrKathaDetails["from_date"]?.stringValue ?? "", strDateFormat: "dd MMM yyyy")) \n\n \(arrKathaDetails["katha_gujarati"]!.stringValue) \n\n\(arrKathaDetails["katha_hindi"]!.stringValue) \n\n\(arrKathaDetails["katha_english"]!.stringValue) \n\n\(arrKathaDetails["description"]!.stringValue) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
       
       
     }else if lblTitle.text == "Ram Charit Manas"{
       
-        share_Content = "\(arrKathaDetails["title"]!.stringValue)-\(arrKathaDetails["title_no"]!.stringValue) \n\nDate: \(Utility.dateToString(dateStr: arrKathaDetails["date"]?.stringValue ?? "", strDateFormat: "dd MMM yyyy")) \n\n \(arrKathaDetails["katha_gujarati"]!.stringValue) \n\n\(arrKathaDetails["katha_hindi"]!.stringValue) \n\n\(arrKathaDetails["katha_english"]!.stringValue) \n\n\(arrKathaDetails["description"]!.stringValue) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
+        share_Content = "Ram Charit Manas \n\n\(arrKathaDetails["title"]!.stringValue)-\(arrKathaDetails["title_no"]!.stringValue) \n\nDate: \(Utility.dateToString(dateStr: arrKathaDetails["date"]?.stringValue ?? "", strDateFormat: "dd MMM yyyy")) \n\n \(arrKathaDetails["katha_gujarati"]!.stringValue) \n\n\(arrKathaDetails["katha_hindi"]!.stringValue) \n\n\(arrKathaDetails["katha_english"]!.stringValue) \n\n\(arrKathaDetails["description"]!.stringValue) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
     }
     else{
       
-        share_Content = "\(arrKathaDetails["title"]!.stringValue) \n\nDate: \(Utility.dateToString(dateStr: arrKathaDetails["quotes_date"]?.stringValue ?? "", strDateFormat: "dd MMM yyyy")) \n\n \(arrKathaDetails["quotes_gujarati"]!.stringValue) \n\n\(arrKathaDetails["quotes_hindi"]!.stringValue) \n\n\(arrKathaDetails["quotes_english"]!.stringValue) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
+        share_Content = "Quotes \n\n\(arrKathaDetails["title"]!.stringValue) \n\nDate: \(Utility.dateToString(dateStr: arrKathaDetails["quotes_date"]?.stringValue ?? "", strDateFormat: "dd MMM yyyy")) \n\n \(arrKathaDetails["quotes_gujarati"]!.stringValue) \n\n\(arrKathaDetails["quotes_hindi"]!.stringValue) \n\n\(arrKathaDetails["quotes_english"]!.stringValue) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
     }
     
     let textToShare = [share_Content]
@@ -274,6 +282,31 @@ class KathaChopaiDetailsVC: UIViewController {
       }
     }
   }
+  
+  //MARK:- Internet Checking
+  @objc private func reachabilityChanged( notification: NSNotification )
+  {
+    guard let reachability = notification.object as? Reachability else
+    {
+      return
+    }
+    
+    if reachability.connection == .wifi || reachability.connection == .cellular {
+      
+      Utility.internet_connection_hide(onViewController: self)
+      self.viewDidLoad()
+      
+      print("Reachable via WiFi & Cellular")
+      
+    }
+    else
+    {
+      Utility.internet_connection_Show(onViewController: self)
+      print("Network not reachable")
+    }
+    
+  }
+  
 }
 
 //MARK:- Menu Navigation Delegate
@@ -409,6 +442,14 @@ extension KathaChopaiDetailsVC: MenuNavigationDelegate{
       
       let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "KathaEBookVC") as! KathaEBookVC
+      navigationController?.pushViewController(vc, animated:  true)
+      
+    }else if ScreenName == "Privacy Notice"{
+      //Privacy Notice
+
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "AboutTheAppVC") as! AboutTheAppVC
+      vc.strTitle = "Privacy Notice"
       navigationController?.pushViewController(vc, animated:  true)
       
     }

@@ -56,8 +56,13 @@ class WebViewVC: UIViewController {
       }
       else if screenDirection == .Live_Katha_Streaming_Video{
         DispatchQueue.main.async {
-          let url = URL(string: "http://moraribapu.org//live_katha_youtube.php")
-          self.webView.loadRequest(NSURLRequest(url: url!) as URLRequest)
+          let url = URL(string: "https://www.youtube.com/channel/UCnePvOdQ-uBSWSIgRoG55gA")
+          //self.webView.loadRequest(NSURLRequest(url: url!) as URLRequest)
+          
+          DispatchQueue.main.async {
+            UIApplication.shared.open(url!, options: [:])
+          }
+          
         }
       }
   }
@@ -216,12 +221,23 @@ extension WebViewVC: MenuNavigationDelegate{
       navigationController?.pushViewController(vc, animated:  true)
     }else if ScreenName == "Events"{
       //Events
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "EventsVC") as! EventsVC
+      navigationController?.pushViewController(vc, animated:  true)
       
     }else if ScreenName == "Katha Ebook"{
       //Katha Ebook
       
       let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "KathaEBookVC") as! KathaEBookVC
+      navigationController?.pushViewController(vc, animated:  true)
+      
+    }else if ScreenName == "Privacy Notice"{
+      //Privacy Notice
+
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "AboutTheAppVC") as! AboutTheAppVC
+      vc.strTitle = "Privacy Notice"
       navigationController?.pushViewController(vc, animated:  true)
       
     }

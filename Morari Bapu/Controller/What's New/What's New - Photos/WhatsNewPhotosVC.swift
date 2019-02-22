@@ -19,6 +19,8 @@ enum PhotosScreenIdentify {
 class WhatsNewPhotosVC: UIViewController {
   
   var arrPhotos : [JSON] = []
+  var arrFavourite = NSMutableArray()
+
   @IBOutlet weak var lblTitle: UILabel!
 
   @IBOutlet weak var cvPhotos: UICollectionView!
@@ -51,18 +53,27 @@ class WhatsNewPhotosVC: UIViewController {
   //MARK:- Api Call
   func getKathaEBook(){
     
-    let param = ["id" : "1",
-                 "app_id":Utility.getDeviceID()] as NSDictionary
+  
 
     var api_Url = String()
+    var param = NSDictionary()
     
     if screenDirection == .Whats_New_Photos{
       //Whats_New_Photos
+      
+      param = ["id" : "1",
+                   "app_id":Utility.getDeviceID(),
+                   "favourite_for":"11"] as NSDictionary
       
       api_Url = WebService_Whats_New_Photos
       
     }else{
       //Media_Photos
+      
+      param = ["id" : "1",
+                   "app_id":Utility.getDeviceID(),
+                   "favourite_for":"12"] as NSDictionary
+      
       api_Url = WebService_Media_Photos
 
     }
@@ -78,8 +89,13 @@ class WhatsNewPhotosVC: UIViewController {
       else {
         
         if jsonResponce!["status"].stringValue == "true"{
+          
           self.arrPhotos = jsonResponce!["data"].arrayValue
           
+          for favourite in jsonResponce!["MyFavourite"].arrayValue{
+              self.arrFavourite.add(favourite.stringValue)
+          }
+
           if self.arrPhotos.count != 0{
             
             DispatchQueue.main.async {
@@ -94,7 +110,16 @@ class WhatsNewPhotosVC: UIViewController {
               
             }
           }
+        }else if jsonResponce!["status"].stringValue == "false"{
           
+          if jsonResponce!["message"].stringValue == "No Data Found"{
+            
+            DispatchQueue.main.async {
+              self.cvPhotos.reloadData()
+              Utility.collectionViewNoDataMessage(collectionView: self.cvPhotos, message: "Coming Soon", textColor: UIColor.white)
+              
+            }
+          }
         }
         else {
           Utility().showAlertMessage(vc: self, titleStr: "", messageStr: jsonResponce!["message"].stringValue)
@@ -144,6 +169,15 @@ extension WhatsNewPhotosVC: UICollectionViewDelegateFlowLayout, UICollectionView
     cell.imgPhotos.layer.masksToBounds = true
     cell.imgPhotos.layer.cornerRadius = 3
     
+    //Notification readable or not
+    if dict["is_read"].boolValue == false{
+      //Non-Readable notification
+      cell.viewBackground.backgroundColor = UIColor.colorFromHex("#d3d3d3")
+      
+    }else{
+      //Readable notification
+      cell.viewBackground.backgroundColor = UIColor.colorFromHex("#ffffff")
+    }
     
     
     
@@ -169,9 +203,23 @@ extension WhatsNewPhotosVC: UICollectionViewDelegateFlowLayout, UICollectionView
 
     var data = arrPhotos[indexPath.row]
 
+    
     if screenDirection == .Media_Photos{
       
       if data["is_read"].intValue == 0{
+        
+        data["is_read"] = true;
+        
+        arrPhotos[indexPath.row] = data
+        
+        let indexPath = NSIndexPath(row: indexPath.row, section: 0)
+        
+        var indexPaths = [IndexPath]()
+        indexPaths.append(indexPath as IndexPath)
+        
+        if cvPhotos != nil {
+          cvPhotos.reloadItems(at: indexPaths)
+        }
         
         let param = ["app_id":Utility.getDeviceID(),
                      "bapudarshan_id":data["id"].stringValue] as NSDictionary
@@ -183,6 +231,19 @@ extension WhatsNewPhotosVC: UICollectionViewDelegateFlowLayout, UICollectionView
       
       if data["is_read"].intValue == 0{
         
+        data["is_read"] = true;
+        
+        arrPhotos[indexPath.row] = data
+        
+        let indexPath = NSIndexPath(row: indexPath.row, section: 0)
+        
+        var indexPaths = [IndexPath]()
+        indexPaths.append(indexPath as IndexPath)
+        
+        if cvPhotos != nil {
+          cvPhotos.reloadItems(at: indexPaths)
+        }
+        
         let param = ["app_id":Utility.getDeviceID(),
                      "image_id":data["id"].stringValue] as NSDictionary
         
@@ -191,7 +252,19 @@ extension WhatsNewPhotosVC: UICollectionViewDelegateFlowLayout, UICollectionView
       
     }
     
-    Utility.image_Viewer_Show(onViewController: self, indexPosition: indexPath, images: arrPhotos)
+    if screenDirection == .Whats_New_Photos{
+      //Whats_New_Photos
+      
+      Utility.image_Viewer_Show(onViewController: self, screenDirection: .Whats_New_Photos, indexPosition: indexPath, arrFavourites: arrFavourite, images: arrPhotos)
+      
+    }else{
+      //Media_Photos
+      
+      Utility.image_Viewer_Show(onViewController: self, screenDirection: .Media_Photos, indexPosition: indexPath, arrFavourites: arrFavourite, images: arrPhotos)
+      
+    }
+    
+   
     
   }
   
@@ -327,7 +400,25 @@ extension WhatsNewPhotosVC: MenuNavigationDelegate{
       let vc = storyboard.instantiateViewController(withIdentifier: "KathaEBookVC") as! KathaEBookVC
       navigationController?.pushViewController(vc, animated:  true)
       
+    }else if ScreenName == "Privacy Notice"{
+      //Privacy Notice
+
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "AboutTheAppVC") as! AboutTheAppVC
+      vc.strTitle = "Privacy Notice"
+      navigationController?.pushViewController(vc, animated:  true)
+      
     }
   }
 }
 
+
+extension WhatsNewPhotosVC : ImageViewerDelegate{
+ 
+  
+  func result(_ favouritesList: NSMutableArray) {
+    arrFavourite.removeAllObjects()
+    arrFavourite = favouritesList
+  }
+  
+}

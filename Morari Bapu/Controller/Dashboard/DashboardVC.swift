@@ -12,6 +12,10 @@ import SwiftyJSON
 import Kingfisher
 import iCarousel
 
+import MediaPlayer
+import AVKit
+import AVFoundation
+
 class DashboardVC: UIViewController, UIScrollViewDelegate {
 
 
@@ -39,20 +43,18 @@ class DashboardVC: UIViewController, UIScrollViewDelegate {
 
       self.scrollView.delegate = self
       
-      
-
       lblSliderTitle.isHidden = true
       currentPageNo = 1
       
       let screenHeight = screenSize.height
 
-      carouselHeight.constant = screenHeight - 160
+      carouselHeight.constant = screenHeight - 130
       self.view.layoutIfNeeded()
       
         tblHome.tableFooterView =  UIView.init(frame: .zero)
         tblHome.layoutMargins = .zero
       
-        tblHome.rowHeight = 500
+        tblHome.rowHeight = 130
         tblHome.estimatedRowHeight = UITableView.automaticDimension
       
         btnDown.imageColorChange(imageColor: UIColor.black)
@@ -63,9 +65,24 @@ class DashboardVC: UIViewController, UIScrollViewDelegate {
         pageControl.numberOfPages = 0
         pageControl.currentPage = 0
         
-        DispatchQueue.main.async {
-            self.getSliderList()
-        }
+      
+        self.getSliderList()
+        self.fcmRegister()
+      
+      // Add reachability observer
+      if let reachability = AppDelegate.sharedAppDelegate()?.reachability
+      {
+        NotificationCenter.default.addObserver( self, selector: #selector( self.reachabilityChanged ),name: Notification.Name.reachabilityChanged, object: reachability )
+      }
+      
+      if Utility.topViewController(viewController: DashboardVC()) == true{
+        print("Present Screen...")
+      }
+      
+      
+      NotificationCenter.default.addObserver(self, selector: #selector(self.notificationRedirect(_:)), name: NSNotification.Name(rawValue: "notifications"), object: nil)
+
+
     }
 
  
@@ -90,7 +107,7 @@ class DashboardVC: UIViewController, UIScrollViewDelegate {
                     if self.arrSlider.count != 0{
                       
                       
-                            self.pageControl.numberOfPages = self.arrSlider.count
+                          self.pageControl.numberOfPages = self.arrSlider.count
                         
                          /* let title = self.arrSlider[0]
                           
@@ -100,20 +117,34 @@ class DashboardVC: UIViewController, UIScrollViewDelegate {
                             self.lblSliderTitle.text = "Image"
                           }*/
                           
-                          
-                          self.vwCarousel.type = iCarouselType.coverFlow2
-                          self.vwCarousel.scroll(byNumberOfItems: self.arrSlider.count, duration: 0.2)
-                          self.vwCarousel.isScrollEnabled = true
+
+                      DispatchQueue.main.async {
+                        self.vwCarousel.type = iCarouselType.linear
+                        self.vwCarousel.scrollToItem(at: 0, animated: true)
+                        
+                        //self.vwCarousel.scroll(byNumberOfItems: self.arrSlider.count, duration: 0.3)
+                        //self.vwCarousel.scroll(byOffset: 375.0, duration: 0.3)
+                        self.vwCarousel.isScrollEnabled = true
+                        
+                        
+                        self.vwCarousel.autoscroll = -0.3;
+                        self.vwCarousel.scrollSpeed = 0.3
+                        self.vwCarousel.decelerationRate = 0.3
+                        
+                        
+
+                        self.vwCarousel.reloadData()
+                        self.view.layoutIfNeeded()
+                      }
                       
-                          self.vwCarousel .reloadData()
+//                          self.vwCarousel.reloadInputViews()
+//                          self.vwCarousel.reloadItem(at: 0, animated: true)
                       
                     }
                     else
                     {
                         
-                        DispatchQueue.main.async {
-                          
-                        }
+                    
                     }
                     
                 }
@@ -149,6 +180,8 @@ class DashboardVC: UIViewController, UIScrollViewDelegate {
                     self.arrHome.append(dashboard)
                   }
                   
+                  print("Total Count: \(self.arrHome.count)")
+                  
                   if self.arrHome.count != 0{
                     DispatchQueue.main.async {
                       
@@ -159,7 +192,7 @@ class DashboardVC: UIViewController, UIScrollViewDelegate {
                   }
                   else{
                     self.tblHome.reloadData()
-                    Utility.tableNoDataMessage(tableView: self.tblHome, message: "No vaccination list",messageColor:UIColor.white, displayMessage: .Center)
+                    Utility.tableNoDataMessage(tableView: self.tblHome, message: "No results found",messageColor:UIColor.white, displayMessage: .Center)
                   }
                 }
                 else {
@@ -169,8 +202,97 @@ class DashboardVC: UIViewController, UIScrollViewDelegate {
             }
         }
     }
+  
+  func fcmRegister(){
     
+    let token = UserDefaults.standard.string(forKey: "fcmToken") ?? ""
+  
+    let  paramater = ["app_id":Utility.getDeviceID(),
+                      "device_id":token,
+                      "apple_id":token]
+  
+    WebServices().CallGlobalAPI(url: WebService_Notification_Token_Register,headers: [:], parameters: paramater as NSDictionary, HttpMethod: "POST", ProgressView: true) { ( _ jsonResponce:JSON? , _ strErrorMessage:String) in
+      
+      if(jsonResponce?.error != nil) {
+        
+        var errorMess = jsonResponce?.error?.localizedDescription
+        errorMess = MESSAGE_Err_Service
+        Utility().showAlertMessage(vc: self, titleStr: "", messageStr: errorMess!)
+      }
+      else {
+        
+        if jsonResponce!["status"].stringValue == "true"{
+          
+       
+        }
+        else {
+          
+          if jsonResponce!["status"].stringValue == "false" && jsonResponce!["message"].stringValue == "No Data Found"{
+            
+         
+          }
+          Utility().showAlertMessage(vc: self, titleStr: "", messageStr: jsonResponce!["message"].stringValue)
+        }
+      }
+    }
+  }
+  
+  //MARK:- Notification Redirection
+  @objc func notificationRedirect(_ notification: NSNotification) {
+
     
+    /*
+     {
+     "type" : 1,
+     "aps" : {
+     "badge" : 1,
+     "sound" : "default",
+     "alert" : "Quotes"
+     },
+     "id" : "66"
+     }
+     */
+    
+    /*
+     {
+     "id" : "77",
+     "type" : 12,
+     "aps" : {
+     "badge" : 1,
+     "sound" : "default",
+     "alert" : "Bapu Photo"
+     }
+     }
+     */
+    
+    if (notification.object as? JSON) != nil {
+      
+      let dictResult = notification.object as? JSON
+      
+      
+      if dictResult!["type"].intValue == 1{
+        //Quotes
+        
+        DispatchQueue.main.async {
+          let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+          let vc = storyboard.instantiateViewController(withIdentifier: "KathaChopaiDetailsVC") as! KathaChopaiDetailsVC
+          vc.strTitle = "Quotes"
+          vc.strId = dictResult!["id"].stringValue
+          self.navigationController?.pushViewController(vc, animated:  true)
+        }
+      }else if dictResult!["type"].intValue == 12{
+        //Bapu Photo
+        
+        DispatchQueue.main.async {
+//          let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+//          let vc = storyboard.instantiateViewController(withIdentifier: "KathaChopaiDetailsVC") as! KathaChopaiDetailsVC
+//          vc.strTitle = "Bapu Photo"
+//          vc.strId = dictResult!["id"].stringValue
+//          self.navigationController?.pushViewController(vc, animated:  true)
+        }
+      }
+    }
+  }
     
     //MARK:- Button Event
     @IBAction func btnMenu(_ sender: Any) {
@@ -184,12 +306,12 @@ class DashboardVC: UIViewController, UIScrollViewDelegate {
   }
   
   @IBAction func swipeUp(_ sender: Any) {
-      
-        tblHome.reloadData()
         scrollView.isScrollEnabled = true
-
+    scrollView.scrollRectToVisible(self.view.frame, animated: true)
     }
 }
+
+
 
 
 //MARK TableView Delegate
@@ -251,14 +373,14 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
       cell.btnFavourite.isHidden = true
       cell.btnShare.isHidden = true
       
-      cell.btnFavourite.tag = indexPath.row
-      cell.btnShare.tag = indexPath.row
+      //cell.btnFavourite.tag = indexPath.row
+      //cell.btnShare.tag = indexPath.row
       cell.btnTitle.tag = indexPath.row
       
-      cell.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
+      //cell.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
       
-      cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
-      cell.btnFavourite.addTarget(self, action: #selector(btnFavourite(_:)), for: UIControl.Event.touchUpInside)
+      //cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
+      //cell.btnFavourite.addTarget(self, action: #selector(btnFavourite(_:)), for: UIControl.Event.touchUpInside)
       cell.btnTitle.addTarget(self, action: #selector(btnToSpecificScreen(_:)), for: UIControl.Event.touchUpInside)
       self.constraintHeightTableView.constant = self.tblHome.contentSize.height
     self.view.layoutIfNeeded()
@@ -267,7 +389,7 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
       return cell
       
     }
-    else if data["list_heading"].stringValue == "Katha Chopai"{
+    else if data["list_heading"].stringValue == "KathaChopai"{
       //Katha Chopai
       
       let cellIdentifier = "KathaChopaiTableViewCell"
@@ -281,14 +403,18 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
       cell.lblDate.text = Utility.dateToString(dateStr: data["from_date"].stringValue, strDateFormat: "dd MMM yyyy")
       cell.lblDescription1.text = data["quotes_hindi"].stringValue
       cell.btnTitle.setTitle(data["list_heading"].stringValue, for: .normal)
-      cell.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
+      //cell.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
       
-      cell.btnFavourite.tag = indexPath.row
-      cell.btnShare.tag = indexPath.row
+      //cell.btnFavourite.tag = indexPath.row
+      //cell.btnShare.tag = indexPath.row
       cell.btnTitle.tag = indexPath.row
       
-      cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
-      cell.btnFavourite.addTarget(self, action: #selector(btnFavourite(_:)), for: UIControl.Event.touchUpInside)
+      //cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
+      //cell.btnFavourite.addTarget(self, action: #selector(btnFavourite(_:)), for: UIControl.Event.touchUpInside)
+      
+      cell.btnFavourite.isHidden = true
+      cell.btnShare.isHidden = true
+
       cell.btnTitle.addTarget(self, action: #selector(btnToSpecificScreen(_:)), for: UIControl.Event.touchUpInside)
       cell.btnTitle.addTarget(self, action: #selector(btnToSpecificScreen(_:)), for: UIControl.Event.touchUpInside)
       
@@ -300,7 +426,7 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
       
       
     }
-    else if data["list_heading"].stringValue == "Ram Charit Manas"{
+    else if data["list_heading"].stringValue == "Ramcharit"{
       //Ram charit manas
       
       let cellIdentifier = "KathaChopaiTableViewCell"
@@ -313,15 +439,19 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
       cell.lblTitle.text = "\(data["title"].stringValue)-\(data["title_no"].stringValue)"
       cell.lblDate.text = Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd MMM yyyy")
       cell.lblDescription1.text = data["description"].stringValue
-      cell.btnTitle.setTitle(data["list_heading"].stringValue, for: .normal)
-      cell.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
+      cell.btnTitle.setTitle("Ram Charit Manas", for: .normal)
+      //cell.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
       
-      cell.btnFavourite.tag = indexPath.row
-      cell.btnShare.tag = indexPath.row
+      //cell.btnFavourite.tag = indexPath.row
+      //cell.btnShare.tag = indexPath.row
       cell.btnTitle.tag = indexPath.row
       
-      cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
-      cell.btnFavourite.addTarget(self, action: #selector(btnFavourite(_:)), for: UIControl.Event.touchUpInside)
+      //cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
+      //cell.btnFavourite.addTarget(self, action: #selector(btnFavourite(_:)), for: UIControl.Event.touchUpInside)
+      
+      cell.btnFavourite.isHidden = true
+      cell.btnShare.isHidden = true
+
       cell.btnTitle.addTarget(self, action: #selector(btnToSpecificScreen(_:)), for: UIControl.Event.touchUpInside)
       cell.btnTitle.addTarget(self, action: #selector(btnToSpecificScreen(_:)), for: UIControl.Event.touchUpInside)
       
@@ -354,14 +484,18 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
       cell.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
       
       
-      cell.btnShare.tag = indexPath.row
+      //cell.btnShare.tag = indexPath.row
       cell.btnYoutube.tag = indexPath.row
-      cell.btnFavourite.tag = indexPath.row
+      //cell.btnFavourite.tag = indexPath.row
       cell.btnTitle.tag = indexPath.row
       
-      cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
+      //cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
       cell.btnYoutube.addTarget(self, action: #selector(btnYoutube), for: UIControl.Event.touchUpInside)
-      cell.btnFavourite.addTarget(self, action: #selector(btnFavourite), for: UIControl.Event.touchUpInside)
+      //cell.btnFavourite.addTarget(self, action: #selector(btnFavourite), for: UIControl.Event.touchUpInside)
+      
+      cell.btnFavourite.isHidden = true
+      cell.btnShare.isHidden = true
+
       cell.btnTitle.addTarget(self, action: #selector(btnToSpecificScreen(_:)), for: UIControl.Event.touchUpInside)
       self.constraintHeightTableView.constant = self.tblHome.contentSize.height
     self.view.layoutIfNeeded()
@@ -390,14 +524,14 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
       
       cell.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
       
-      cell.btnShare.tag = indexPath.row
+      //cell.btnShare.tag = indexPath.row
       cell.btnYoutube.tag = indexPath.row
-      cell.btnFavourite.tag = indexPath.row
+      //cell.btnFavourite.tag = indexPath.row
       cell.btnTitle.tag = indexPath.row
       
-      cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
+      //cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
       cell.btnYoutube.addTarget(self, action: #selector(btnYoutube), for: UIControl.Event.touchUpInside)
-      cell.btnFavourite.addTarget(self, action: #selector(btnFavourite), for: UIControl.Event.touchUpInside)
+      //cell.btnFavourite.addTarget(self, action: #selector(btnFavourite), for: UIControl.Event.touchUpInside)
       cell.btnTitle.addTarget(self, action: #selector(btnToSpecificScreen(_:)), for: UIControl.Event.touchUpInside)
       self.constraintHeightTableView.constant = self.tblHome.contentSize.height
     self.view.layoutIfNeeded()
@@ -419,15 +553,19 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
       cell.lblDuration.text = "(Duration: \(data["video_duration"].stringValue))"
       cell.btnTitle.setTitle(data["list_heading"].stringValue, for: .normal)
       
-      cell.btnShare.tag  = indexPath.row
+      //cell.btnShare.tag  = indexPath.row
       cell.btnTitle.tag = indexPath.row
       
-      cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
+      //cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
       
-      cell.btnFavourite.tag  = indexPath.row
-      cell.btnFavourite.addTarget(self, action: #selector(btnFavourite), for: UIControl.Event.touchUpInside)
+      //cell.btnFavourite.tag  = indexPath.row
+      //cell.btnFavourite.addTarget(self, action: #selector(btnFavourite), for: UIControl.Event.touchUpInside)
       
-      cell.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
+      //cell.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
+      
+      cell.btnFavourite.isHidden = true
+      cell.btnShare.isHidden = true
+
       cell.btnTitle.addTarget(self, action: #selector(btnToSpecificScreen(_:)), for: UIControl.Event.touchUpInside)
       self.constraintHeightTableView.constant = self.tblHome.contentSize.height
     self.view.layoutIfNeeded()
@@ -452,28 +590,71 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
       cell.lblDuration.numberOfLines = 4
       cell.btnTitle.setTitle("Shayari", for: .normal)
       
-      cell.btnShare.tag  = indexPath.row
-      cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
+      //cell.btnShare.tag  = indexPath.row
+      //cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
       
-      cell.btnFavourite.tag  = indexPath.row
-      cell.btnFavourite.addTarget(self, action: #selector(btnFavourite), for: UIControl.Event.touchUpInside)
+      //cell.btnFavourite.tag  = indexPath.row
+      //cell.btnFavourite.addTarget(self, action: #selector(btnFavourite), for: UIControl.Event.touchUpInside)
       
-      cell.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
+      //cell.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
+      
+      cell.btnFavourite.isHidden = true
+      cell.btnShare.isHidden = true
+
       cell.viewMusicIndicator.isHidden = true
       
       cell.btnTitle.tag = indexPath.row
       
       cell.btnTitle.addTarget(self, action: #selector(btnToSpecificScreen(_:)), for: UIControl.Event.touchUpInside)
       self.constraintHeightTableView.constant = self.tblHome.contentSize.height
-    self.view.layoutIfNeeded()
+      self.view.layoutIfNeeded()
     
     print("TableView Height: \(constraintHeightTableView.constant)")
       
       return cell
       
-    }else{
+    }
+    else if data["list_heading"].stringValue == "Event"{
+      //Quotes
+      
+      let cellIdentifier = "KathaChopaiTableViewCell"
+      
+      guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? KathaChopaiTableViewCell  else {
+        fatalError("The dequeued cell is not an instance of MealTableViewCell.")
+        
+      }
+      
+      cell.lblTitle.text = data["title"].stringValue
+      cell.lblDate.text = Utility.dateToString(dateStr: data["from_date"].stringValue, strDateFormat: "dd MMM yyyy")
+      //cell.lblDescription1.text = data["quotes_gujarati"].stringValue
+      //cell.btnTitle.setTitle(data["list_heading"].stringValue, for: .normal)
+      
+      cell.btnFavourite.isHidden = true
+      cell.btnShare.isHidden = true
+      
+      cell.btnFavourite.tag = indexPath.row
+      cell.btnShare.tag = indexPath.row
+      
+      cell.btnTitle.tag = indexPath.row
+      cell.btnTitle.setTitle(data["list_heading"].stringValue, for: .normal)
+      
+      
+      cell.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
+      
+      cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
+      cell.btnFavourite.addTarget(self, action: #selector(btnFavourite(_:)), for: UIControl.Event.touchUpInside)
+      cell.btnTitle.addTarget(self, action: #selector(btnToSpecificScreen(_:)), for: UIControl.Event.touchUpInside)
+      self.constraintHeightTableView.constant = self.tblHome.contentSize.height
+      self.view.layoutIfNeeded()
+      
+      print("TableView Height: \(constraintHeightTableView.constant)")
+      return cell
+      
+    }
+    else{
       return UITableViewCell()
     }
+    
   }
   
 
@@ -506,19 +687,31 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
     if data["list_heading"].stringValue == "Quotes"{
       //Quotes
       
-     
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "KathaChopaiDetailsVC") as! KathaChopaiDetailsVC
+      vc.strTitle = "Quotes"
+      vc.strId = data["quotes_id"].stringValue
+      navigationController?.pushViewController(vc, animated:  true)
       
     }
-    else if data["list_heading"].stringValue == "Katha Chopai"{
+    else if data["list_heading"].stringValue == "KathaChopai"{
       //Katha Chopai
       
-     
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "KathaChopaiDetailsVC") as! KathaChopaiDetailsVC
+      vc.strTitle = "Katha Chopai"
+      vc.strId = data["katha_chopai_id"].stringValue
+      navigationController?.pushViewController(vc, animated:  true)
       
     }
-    else if data["list_heading"].stringValue == "Ram Charit Manas"{
+    else if data["list_heading"].stringValue == "Ramcharit"{
       //Ram charit manas
       
-    
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "KathaChopaiDetailsVC") as! KathaChopaiDetailsVC
+      vc.strTitle = "Ram Charit Manas"
+      vc.strId = data["ram_charit_id"].stringValue
+      navigationController?.pushViewController(vc, animated:  true)
       
     }
     else if data["list_heading"].stringValue == "Stuti"{
@@ -545,7 +738,15 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
       
       let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "UpComingKathaDetailsVC") as! UpComingKathaDetailsVC
-      vc.arrUpcomingKathaDetails = data.dictionaryValue
+      vc.strId = data["upcoming_katha_id"].stringValue
+      navigationController?.pushViewController(vc, animated:  true)
+      
+    }
+    else if data["list_heading"].stringValue == "Event"{
+      
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "EventsDetailsVC") as! EventsDetailsVC
+      vc.strId = data["event_id"].stringValue
       navigationController?.pushViewController(vc, animated:  true)
       
     }
@@ -563,30 +764,30 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
         //Quotes
         
         paramater = ["app_id":Utility.getDeviceID(),
-                     "favourite_for":data["favourite_for"].stringValue,
+                     "favourite_for":1,
                      "favourite_id":data["quote_id"].stringValue]
         
       }
-      else if data["list_heading"].stringValue == "Katha Chopai"{
+      else if data["list_heading"].stringValue == "KathaChopai"{
         //Katha Chopai
         
         paramater = ["app_id":Utility.getDeviceID(),
-                     "favourite_for":data["favourite_for"].stringValue,
+                     "favourite_for":2,
                      "favourite_id":data["katha_chopai_id"].stringValue]
         
       }
-      else if data["list_heading"].stringValue == "Ram Charit Manas"{
+      else if data["list_heading"].stringValue == "Ramcharit"{
         //Ram charit manas
         
         paramater = ["app_id":Utility.getDeviceID(),
-                     "favourite_for":data["favourite_for"].stringValue,
+                     "favourite_for":3,
                      "favourite_id":data["ram_charit_manas_id"].stringValue]
         
       }
       else if data["list_heading"].stringValue == "Stuti"{
         
         paramater = ["app_id":Utility.getDeviceID(),
-                     "favourite_for":data["favourite_for"].stringValue,
+                     "favourite_for":5,
                      "favourite_id":data["stuti_id"].stringValue]
         
       }else if data["list_heading"].stringValue == "Other Stuti"{
@@ -611,7 +812,7 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
       }else if data["list_heading"].stringValue == "Daily Katha Clip"{
         
         paramater = ["app_id":Utility.getDeviceID(),
-                     "favourite_for":data["favourite_for"].stringValue,
+                     "favourite_for":4,
                      "favourite_id":data["daily_katha_id"].stringValue]
         
       }
@@ -629,12 +830,14 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
           
           if jsonResponce!["status"].stringValue == "true"{
             
+            self.arrHome.removeAll()
             self.getHome(pageNo: 0)
             
           }
           else if jsonResponce!["status"].stringValue == "false"{
             
             if jsonResponce!["status"].stringValue == "No Data Found"{
+              self.arrHome.removeAll()
               self.getHome(pageNo: 0)
               
             }
@@ -666,7 +869,7 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
       
       
     }
-    else if data["list_heading"].stringValue == "Katha Chopai"{
+    else if data["list_heading"].stringValue == "KathaChopai"{
       //Katha Chopai
       
       share_Content = "\(data["title"].stringValue)-\(data["title_no"].stringValue) \n\nDate: \(Utility.dateToString(dateStr: data["from_date"].stringValue, strDateFormat: "dd MMM yyyy")) \n\n \(data["quotes_hindi"].stringValue) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
@@ -674,7 +877,7 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
       
       
     }
-    else if data["list_heading"].stringValue == "Ram Charit Manas"{
+    else if data["list_heading"].stringValue == "Ramcharit"{
       //Ram charit manas
       share_Content = "\(data["title"].stringValue)-\(data["title_no"].stringValue) \n\nDate: \(Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd MMM yyyy")) \n\n \(data["description"].stringValue) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
       
@@ -731,24 +934,29 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
     let indexPath = self.tblHome.indexPathForRow(at: buttonPosition)
     
     let data = arrHome[indexPath!.row]
-    
-    var youtubeLink = String()
-    
-    if data["favourite_for"].intValue == 4{
+
+    if data["youtube_link"].stringValue.contains("youtube") {
       
-      youtubeLink = data["youtube_link"].stringValue
-      
-    }else{
-      youtubeLink = data["youtube_link"].stringValue
-    }
-    
-    if Utility.canOpenURL(data["youtube_link"].stringValue){
-      DispatchQueue.main.async {
-        UIApplication.shared.open(URL(string: youtubeLink)!, options: [:])
+      let videoURL = URL(string: "\(data["youtube_link"].stringValue)")
+      if Utility.canOpenURL(data["youtube_link"].stringValue){
+        DispatchQueue.main.async {
+          UIApplication.shared.open(videoURL!, options: [:])
+        }
       }
+      
     }else{
       
+      let videoURL = URL(string: "\(BASE_URL_IMAGE)\(data["video_file"].stringValue)")
+      
+      let player = AVPlayer(url: videoURL!)
+      let playerViewController = AVPlayerViewController()
+      playerViewController.player = player
+      self.present(playerViewController, animated: true) {
+        playerViewController.player!.play()
+        
+      }
     }
+  
     
   }
   
@@ -768,7 +976,7 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
       navigationController?.pushViewController(vc, animated:  true)
       
     }
-    else if data["list_heading"].stringValue == "Katha Chopai"{
+    else if data["list_heading"].stringValue == "KathaChopai"{
       //Katha Chopai
       
       let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
@@ -777,7 +985,7 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
       navigationController?.pushViewController(vc, animated:  true)
       
     }
-    else if data["list_heading"].stringValue == "Ram Charit Manas"{
+    else if data["list_heading"].stringValue == "Ramcharit"{
       //Ram charit manas
       let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "KathaChopaiVC") as! KathaChopaiVC
@@ -832,6 +1040,15 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
       navigationController?.pushViewController(vc, animated:  true)
       
     }
+    else if data["list_heading"].stringValue == "Event"{
+      
+      //Events
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "EventsVC") as! EventsVC
+      navigationController?.pushViewController(vc, animated:  true)
+      
+    }
+    
     
   }
   
@@ -846,18 +1063,23 @@ extension DashboardVC : iCarouselDataSource, iCarouselDelegate{
   func carousel(_ carousel: iCarousel, valueFor option: iCarouselOption, withDefault value: CGFloat) -> CGFloat {
     
    
-      return value * 0.5
+    switch (option) {
+    case .spacing: return 1.34 // 8 points spacing
+    case .wrap:return 1;
+    default: return value
+    }
    
     
   }
+  
   func carousel(_ carousel: iCarousel, viewForItemAt index: Int, reusing view: UIView?) -> UIView {
     var itemView: UIImageView
     if (view == nil)
     {
       let screenWidth = screenSize.width * 0.70
-
+      
       let screenHeight = screenSize.height
-
+      
       itemView = UIImageView(frame:CGRect(x:0, y:0, width:screenWidth, height:screenHeight - 160))
       itemView.contentMode = .scaleAspectFit
     }
@@ -867,27 +1089,29 @@ extension DashboardVC : iCarouselDataSource, iCarouselDelegate{
     }
     
     let image = arrSlider[index]
-    let placeHolder = UIImage(named: "placeholder_doc")
-    itemView.kf.setImage(with: URL(string: "\(BASE_URL_IMAGE)\(image["image"].stringValue)"), placeholder: placeHolder, options: [.transition(ImageTransition.fade(1))])
+    
+    let placeHolder = UIImage(named: "youtube_placeholder")
+    let imageStr = "\(BASE_URL_IMAGE)\(image["image"].stringValue)"
+    let imageString = imageStr.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)
+    
+    
+    itemView.kf.setImage(with: URL(string: imageString!), placeholder: placeHolder, options: [.transition(ImageTransition.fade(1))])
     
     return itemView
   }
   
   func carouselCurrentItemIndexDidChange(_ carousel: iCarousel) {
- 
+    
     if arrSlider.count != 0{
-     
-       /*let title = arrSlider[carousel.currentItemIndex]
-     
-      if title["link"].stringValue.count != 0 {
-        lblSliderTitle.text = "Video"
-      }else{
-        lblSliderTitle.text = "Image"
-      }*/
       
+   
       let image = arrSlider[carousel.currentItemIndex]
-      let placeHolder = UIImage(named: "placeholder_doc")
-      self.imgViewMain.kf.setImage(with: URL(string: "\(BASE_URL_IMAGE)\(image["image"].stringValue)"), placeholder: placeHolder, options: [.transition(ImageTransition.fade(1))])
+      
+      let placeHolder = UIImage(named: "youtube_placeholder")
+      let imageStr = "\(BASE_URL_IMAGE)\(image["image"].stringValue)"
+      let imageString = imageStr.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)
+      
+      self.imgViewMain.kf.setImage(with: URL(string: imageString!), placeholder: placeHolder, options: [.transition(ImageTransition.fade(1))])
       
       self.pageControl.currentPage = carousel.currentItemIndex
     }
@@ -895,9 +1119,51 @@ extension DashboardVC : iCarouselDataSource, iCarouselDelegate{
     
   }
   
+  
+  
   private func carousel(carousel: iCarousel, didSelectItemAtIndex index: Int)
   {
     print(index)
+  }
+  
+  @objc private func reachabilityChanged( notification: NSNotification )
+  {
+    guard let reachability = notification.object as? Reachability else
+    {
+      return
+    }
+    
+    if reachability.connection == .wifi || reachability.connection == .cellular {
+     
+      
+      Utility.internet_connection_hide(onViewController: self)
+
+      if Utility.topViewController(viewController: DashboardVC()) == true{
+        
+        self.arrHome.removeAll()
+        self.getHome(pageNo: 0)
+        
+        if arrSlider.count == 0{
+          self.getSliderList()
+        }
+        
+        
+        print("Reachable via WiFi & Cellular")
+      }
+      
+    }
+    else
+    {
+      
+      Utility.internet_connection_Show(onViewController: self)
+
+      if Utility.topViewController(viewController: self) == true{
+
+      print("Network not reachable")
+        
+      }
+    }
+  
   }
   
 }
@@ -1028,6 +1294,14 @@ extension DashboardVC: MenuNavigationDelegate{
       
       let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "KathaEBookVC") as! KathaEBookVC
+      navigationController?.pushViewController(vc, animated:  true)
+      
+    }else if ScreenName == "Privacy Notice"{
+      //Privacy Notice
+
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "AboutTheAppVC") as! AboutTheAppVC
+      vc.strTitle = "Privacy Notice"
       navigationController?.pushViewController(vc, animated:  true)
       
     }

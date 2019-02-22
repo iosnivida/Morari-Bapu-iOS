@@ -203,14 +203,14 @@ extension SearchVC : UITableViewDelegate, UITableViewDataSource{
       
       let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "EventsDetailsVC") as! EventsDetailsVC
-      vc.arrEvents = data.dictionaryValue
+      vc.strId = data["module_id"].stringValue
       navigationController?.pushViewController(vc, animated:  true)
       
     }else if data["module_name"].stringValue == "Quotes"{
       
       let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "KathaChopaiDetailsVC") as! KathaChopaiDetailsVC
-      vc.arrKathaDetails = data.dictionaryValue
+      vc.strId = data["module_id"].stringValue
       vc.strTitle = "Quotes"
       navigationController?.pushViewController(vc, animated:  true)
       
@@ -218,7 +218,7 @@ extension SearchVC : UITableViewDelegate, UITableViewDataSource{
       
     let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
     let vc = storyboard.instantiateViewController(withIdentifier: "KathaChopaiDetailsVC") as! KathaChopaiDetailsVC
-    vc.arrKathaDetails = data.dictionaryValue
+    vc.strId = data["module_id"].stringValue
     vc.strTitle = "Katha Chopai"
     navigationController?.pushViewController(vc, animated:  true)
   }
@@ -440,6 +440,14 @@ extension SearchVC : MenuNavigationDelegate{
       
       let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "KathaEBookVC") as! KathaEBookVC
+      navigationController?.pushViewController(vc, animated:  true)
+      
+    }else if ScreenName == "Privacy Notice"{
+      //Privacy Notice
+
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "AboutTheAppVC") as! AboutTheAppVC
+      vc.strTitle = "Privacy Notice"
       navigationController?.pushViewController(vc, animated:  true)
       
     }

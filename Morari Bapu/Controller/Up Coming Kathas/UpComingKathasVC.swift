@@ -31,19 +31,26 @@ class UpComingKathasVC: UIViewController {
     tblUpComingKathas.rowHeight = 108
     tblUpComingKathas.estimatedRowHeight = UITableView.automaticDimension
     
-  }
-  
-  override func viewWillAppear(_ animated: Bool) {
-    super.viewWillAppear(animated)
-   
     currentPageNo = 1
     
     lblTitle.text = "Upcoming Kathas"
     
     arrUpComingKathas.removeAll()
     getUpcomingKathas(pageNo: currentPageNo)
-
     
+    // Add reachability observer
+    if let reachability = AppDelegate.sharedAppDelegate()?.reachability
+    {
+      NotificationCenter.default.addObserver( self, selector: #selector( self.reachabilityChanged ),name: Notification.Name.reachabilityChanged, object: reachability )
+    }
+    
+  }
+  
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+   
+ 
+
   }
   
   //MARK:- Api Call
@@ -51,7 +58,7 @@ class UpComingKathasVC: UIViewController {
     
      let param = ["page" : pageNo,
                "app_id":Utility.getDeviceID(),
-               "favourite_for":"2"] as NSDictionary
+               "favourite_for":"14"] as NSDictionary
     
     WebServices().CallGlobalAPI(url: WebService_Upcoming_Katha_List,headers: [:], parameters: param, HttpMethod: "POST", ProgressView: true) { ( _ jsonResponce:JSON? , _ strErrorMessage:String) in
       
@@ -81,15 +88,17 @@ class UpComingKathasVC: UIViewController {
               self.tblUpComingKathas .reloadData()
             }
           }
-          else
-          {
+          
+          
+        }else if jsonResponce!["status"].stringValue == "false"{
+          
+          if jsonResponce!["message"].stringValue == "No Data Found"{
             
             DispatchQueue.main.async {
-              self.tblUpComingKathas.reloadData()
-              Utility.tableNoDataMessage(tableView: self.tblUpComingKathas, message: "No records",messageColor:UIColor.white, displayMessage: .Center)
+              self.tblUpComingKathas .reloadData()
+              Utility.tableNoDataMessage(tableView: self.tblUpComingKathas, message: "Coming Soon", messageColor: UIColor.white, displayMessage: .Center)
             }
           }
-          
         }
         else {
           
@@ -120,7 +129,30 @@ class UpComingKathasVC: UIViewController {
   @IBAction func backToHome(_ sender: Any) {
     self.navigationController?.popToRootViewController(animated: true)
   }
-  
+
+  //MARK:- Internet Checking
+  @objc private func reachabilityChanged( notification: NSNotification )
+  {
+    guard let reachability = notification.object as? Reachability else
+    {
+      return
+    }
+    
+    if reachability.connection == .wifi || reachability.connection == .cellular {
+      
+      Utility.internet_connection_hide(onViewController: self)
+      arrUpComingKathas.removeAll()
+      getUpcomingKathas(pageNo: 1)
+      print("Reachable via WiFi & Cellular")
+      
+    }
+    else
+    {
+      Utility.internet_connection_Show(onViewController: self)
+      print("Network not reachable")
+    }
+    
+  }
   
 }
 
@@ -151,6 +183,16 @@ extension UpComingKathasVC : UITableViewDelegate, UITableViewDataSource{
     cell.lblDate.text = Utility.dateToString(dateStr: data["from_date"].stringValue, strDateFormat: "MM, yyyy")
     cell.lblScheduleDate.text = "\(Utility.dateToString(dateStr: data["from_date"].stringValue, strDateFormat: "dd'th' MMM, yyyy")) To \(Utility.dateToString(dateStr: data["to_date"].stringValue, strDateFormat: "dd'th' MMM, yyyyy"))"
     
+    //Notification readable or not
+    if data["is_read"].boolValue == false{
+      //Non-Readable notification
+      cell.viewBackground.backgroundColor = UIColor.colorFromHex("#d3d3d3")
+      
+    }else{
+      //Readable notification
+      cell.viewBackground.backgroundColor = UIColor.colorFromHex("#ffffff")
+    }
+    
     return cell
     
   }
@@ -165,9 +207,15 @@ extension UpComingKathasVC : UITableViewDelegate, UITableViewDataSource{
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     
-    let data = arrUpComingKathas[indexPath.row]
+    var data = arrUpComingKathas[indexPath.row]
     
     if data["is_read"].intValue == 0{
+      
+      arrUpComingKathas[indexPath.row] = data
+      
+      let indexPath = NSIndexPath(row: indexPath.row, section: 0)
+      tblUpComingKathas.reloadRows(at: [indexPath as IndexPath], with: UITableView.RowAnimation.none)
+      
       
         let param = ["app_id":Utility.getDeviceID(),
                      "upcoming_katha_id":data["id"].stringValue] as NSDictionary
@@ -178,7 +226,7 @@ extension UpComingKathasVC : UITableViewDelegate, UITableViewDataSource{
       
       let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "UpComingKathaDetailsVC") as! UpComingKathaDetailsVC
-      vc.arrUpcomingKathaDetails = data.dictionaryValue
+      vc.strId = data["id"].stringValue
       navigationController?.pushViewController(vc, animated:  true)
     
   }
@@ -325,6 +373,14 @@ extension UpComingKathasVC : MenuNavigationDelegate{
       
       let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "KathaEBookVC") as! KathaEBookVC
+      navigationController?.pushViewController(vc, animated:  true)
+      
+    }else if ScreenName == "Privacy Notice"{
+      //Privacy Notice
+
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "AboutTheAppVC") as! AboutTheAppVC
+      vc.strTitle = "Privacy Notice"
       navigationController?.pushViewController(vc, animated:  true)
       
     }

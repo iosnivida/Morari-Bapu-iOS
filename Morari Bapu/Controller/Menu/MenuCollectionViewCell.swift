@@ -10,6 +10,8 @@ import UIKit
 
 class MenuCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var imgMenu: UIImageView!
-  @IBOutlet weak var lblCounter: UILabel!
+    @IBOutlet weak var lblCounter: UILabel!
+  
+  @IBOutlet weak var lblTitle: UILabel!
   
 }

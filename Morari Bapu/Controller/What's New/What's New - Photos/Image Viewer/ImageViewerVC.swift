@@ -13,13 +13,26 @@ import MobileCoreServices
 import AVFoundation
 import Photos
 
+enum ImageViewerScreenIdentify {
+  case Whats_New_Photos
+  case Media_Photos
+}
+
+protocol ImageViewerDelegate: class {
+  func result(_ favouritesList: NSMutableArray)
+}
+
 
 class ImageViewerVC: UIViewController, UIScrollViewDelegate {
   
   @IBOutlet weak var cvImageViewwer: UICollectionView!
   
+  var screenDirection = ImageViewerScreenIdentify.Whats_New_Photos
+  weak var delegate: ImageViewerDelegate?
+
   var arrImages : [JSON] = []
-  
+  var arrFavourites = NSMutableArray()
+
   var indexPosition = IndexPath()
   
   override func viewDidLoad() {
@@ -75,10 +88,25 @@ extension ImageViewerVC: UICollectionViewDelegateFlowLayout, UICollectionViewDel
     
     cell.btnDownload.tag = indexPath.row
     cell.btnShare.tag = indexPath.row
+    cell.btnFavourites.tag = indexPath.row
+    
+    cell.btnFavourites.imageColorChange(imageColor: .white)
     
     cell.btnDownload.addTarget(self, action: #selector(btnDownload), for: UIControl.Event.touchUpInside)
     cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
-
+    cell.btnFavourites.addTarget(self, action: #selector(btnFavourites), for: UIControl.Event.touchUpInside)
+    
+    let predicate: NSPredicate = NSPredicate(format: "SELF contains[cd] %@", dict["id"].stringValue)
+    let result = self.arrFavourites.filtered(using: predicate)
+    
+    if result.count != 0{
+      cell.btnFavourites.setImage(UIImage(named: "favorite"), for: .normal)
+      cell.btnFavourites.imageColorChange(imageColor: .white)
+    }else{
+      cell.btnFavourites.setImage(UIImage(named: "unfavorite"), for: .normal)
+      cell.btnFavourites.imageColorChange(imageColor: .white)
+    }
+    
     return cell
   }
   
@@ -163,7 +191,6 @@ extension ImageViewerVC: UICollectionViewDelegateFlowLayout, UICollectionViewDel
       }
     }
     
-    
 
   }
   
@@ -171,12 +198,13 @@ extension ImageViewerVC: UICollectionViewDelegateFlowLayout, UICollectionViewDel
   @IBAction func btnShare(_ sender: UIButton) {
     
       var dict = arrImages[sender.tag]
-
+    
       let imageUrl = URL(string: "\(BASE_URL_IMAGE)\(dict["image_file"].stringValue)")
-      
+      let text = "\n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
+    
       let data = try? Data(contentsOf: imageUrl!) //make sure your image in this url does exist, otherwise unwrap in a if let check / try-catch
       let image = UIImage(data: data!)
-      let imageShare = [image]
+      let imageShare = [image as Any  ,text] as [Any]
     
     let activityViewController = UIActivityViewController(activityItems: imageShare as [Any] , applicationActivities: nil)
       activityViewController.popoverPresentationController?.sourceView = self.view
@@ -187,4 +215,64 @@ extension ImageViewerVC: UICollectionViewDelegateFlowLayout, UICollectionViewDel
      
   }
   
+  @IBAction func btnFavourites(_ sender: UIButton) {
+ 
+    if arrImages.count != 0{
+      
+      let data = arrImages[sender.tag]
+     
+      var paramater = NSDictionary()
+      
+      if screenDirection == .Whats_New_Photos{
+        //Whats_New_Photos
+        
+        paramater = ["app_id":Utility.getDeviceID(),
+                     "favourite_for":"11",
+                     "favourite_id":data["id"].stringValue]
+        
+      }else{
+        //Media_Photos
+        
+        paramater = ["app_id":Utility.getDeviceID(),
+                     "favourite_for":"12",
+                     "favourite_id":data["id"].stringValue]
+        
+      }
+      
+      WebServices().CallGlobalAPI(url: WebService_Favourite,headers: [:], parameters: paramater as NSDictionary, HttpMethod: "POST", ProgressView: true) { ( _ jsonResponce:JSON? , _ strErrorMessage:String) in
+        
+        if(jsonResponce?.error != nil) {
+          
+          var errorMess = jsonResponce?.error?.localizedDescription
+          errorMess = MESSAGE_Err_Service
+          Utility().showAlertMessage(vc: self, titleStr: "", messageStr: errorMess!)
+        }
+        else {
+          
+          if jsonResponce!["status"].stringValue == "true"{
+            
+            if jsonResponce!["message"].stringValue == "Added in your favourite list"{
+              
+              self.arrFavourites.add(data["id"].stringValue)
+              self.cvImageViewwer.reloadData()
+              self.delegate?.result(self.arrFavourites)
+             
+            }else{
+              self.arrFavourites.removeObject(at: self.arrFavourites.index(of: data["id"].stringValue))
+              self.cvImageViewwer.reloadData()
+              self.delegate?.result(self.arrFavourites)
+              
+            }
+
+            
+          }
+          else {
+            Utility().showAlertMessage(vc: self, titleStr: "", messageStr: jsonResponce!["message"].stringValue)
+          }
+        }
+      }
+      
+    }
+    
+  }
 }

@@ -20,7 +20,8 @@ class YoutubeTableViewCell: UITableViewCell {
   @IBOutlet weak var btnShare: UIButton!
   @IBOutlet weak var btnFavourite: UIButton!
   @IBOutlet weak var btnTitle: UIButton!
-
+  @IBOutlet weak var viewBackground: UIView!
+  
   @IBOutlet weak var constraintRightShare: NSLayoutConstraint!
   
     override func awakeFromNib() {

@@ -19,6 +19,7 @@ class AudioTableViewCell: UITableViewCell {
   @IBOutlet weak var btnTitle: UIButton!
   @IBOutlet weak var btnFavourite: UIButton!
   @IBOutlet weak var constraintShareRight: NSLayoutConstraint!
+  @IBOutlet weak var viewBackground: UIView!
   
     override func awakeFromNib() {
         super.awakeFromNib()

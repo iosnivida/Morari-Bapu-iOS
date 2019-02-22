@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftyJSON
 
 open class PullUpController: UIViewController {
     
@@ -63,6 +64,14 @@ open class PullUpController: UIViewController {
     open var pullUpControllerBounceOffset: CGFloat {
         return 0
     }
+  
+    open var playAudioPostion:  Int {
+      return 0
+    }
+  
+      open var audioList: [JSON] {
+        return []
+      }
     
     /**
      A CGFloat value that represent the current point, expressed in the pull up controller coordinate system,
@@ -94,7 +103,10 @@ open class PullUpController: UIViewController {
         sc_allStickyPoints.append(contentsOf: pullUpControllerMiddleStickyPoints)
         return sc_allStickyPoints.sorted()
     }
-    
+  
+    private var postion: Int?
+    private var arrAudioList: [JSON]?
+  
     private var leftConstraint: NSLayoutConstraint?
     private var topConstraint: NSLayoutConstraint?
     private var bottomConstraint: NSLayoutConstraint?
@@ -127,6 +139,7 @@ open class PullUpController: UIViewController {
      - parameter point: The target point, expressed in the pull up controller coordinate system
      */
     open func pullUpControllerWillMove(to point: CGFloat) { }
+  
     
     /**
      This method is called after the pull up controller's view move to a sticky point.
@@ -482,6 +495,16 @@ extension UIViewController {
             },
             completion: nil)
     }
+  
+  open func audioDetails(_ position: Int,
+                                _ arrAudioList:[JSON]) {
+
+    DispatchQueue.main.async {
+      NotificationCenter.default.post(name: NSNotification.Name(rawValue: "audioPlayList"), object: arrAudioList)
+    }
+    
+    
+  }
     
     /**
      Adds the specified pull up view controller as a child of the current view controller.

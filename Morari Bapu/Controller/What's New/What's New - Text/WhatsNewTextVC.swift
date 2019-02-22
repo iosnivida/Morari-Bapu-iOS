@@ -43,7 +43,8 @@ class WhatsNewTextVC: UIViewController {
   func getWhatsNewText(pageNo:Int){
     
     let param = ["page" : pageNo,
-                 "app_id":Utility.getDeviceID()] as NSDictionary
+                 "app_id":Utility.getDeviceID(),
+                 "favourite_for":"17"] as NSDictionary
     
     WebServices().CallGlobalAPI(url: WebService_Whats_New_Text,headers: [:], parameters: param, HttpMethod: "POST", ProgressView: true) { ( _ jsonResponce:JSON? , _ strErrorMessage:String) in
       
@@ -71,16 +72,16 @@ class WhatsNewTextVC: UIViewController {
               Utility.tableNoDataMessage(tableView: self.tblText, message: "", messageColor: UIColor.black, displayMessage: .Center)
             }
           }
-          else
-          {
+          
+        }else if jsonResponce!["status"].stringValue == "false"{
+          
+          if jsonResponce!["message"].stringValue == "No Data Found"{
             
             DispatchQueue.main.async {
-              self.tblText .reloadData()
-              Utility.tableNoDataMessage(tableView: self.tblText, message: "No text", messageColor: UIColor.black, displayMessage: .Center)
-              
+              self.tblText.reloadData()
+              Utility.tableNoDataMessage(tableView: self.tblText, message: "Coming Soon", messageColor: UIColor.white, displayMessage: .Center)
             }
           }
-          
         }
         else {
           self.is_Api_Being_Called = false
@@ -238,6 +239,14 @@ extension WhatsNewTextVC: MenuNavigationDelegate{
       let vc = storyboard.instantiateViewController(withIdentifier: "KathaEBookVC") as! KathaEBookVC
       navigationController?.pushViewController(vc, animated:  true)
       
+    }else if ScreenName == "Privacy Notice"{
+      //Privacy Notice
+
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "AboutTheAppVC") as! AboutTheAppVC
+      vc.strTitle = "Privacy Notice"
+      navigationController?.pushViewController(vc, animated:  true)
+      
     }
   }
 }
@@ -266,8 +275,19 @@ extension WhatsNewTextVC : UITableViewDelegate, UITableViewDataSource{
     
     cell.lblTitle.text = data["title"].stringValue
     cell.lblCreatedBy.text = "Created By: \(data["created_name"].stringValue)"
-    cell.lblDescription.attributedText = NSAttributedString(html: data["description"].stringValue)
-
+    //cell.lblDescription.attributedText = NSAttributedString(html: data["description"].stringValue)
+    cell.lblDescription.text = data["description"].stringValue
+    cell.lblDescription.numberOfLines = 2
+    
+    //Notification readable or not
+    if data["is_read"].boolValue == false{
+      //Non-Readable notification
+      cell.viewBackground.backgroundColor = UIColor.colorFromHex("#d3d3d3")
+      
+    }else{
+      //Readable notification
+      cell.viewBackground.backgroundColor = UIColor.colorFromHex("#ffffff")
+    }
     
     return cell
     
@@ -284,8 +304,16 @@ extension WhatsNewTextVC : UITableViewDelegate, UITableViewDataSource{
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     
-    let data = arrText[indexPath.row]
+    var data = arrText[indexPath.row]
 
+    data["is_read"] = true;
+    
+    arrText[indexPath.row] = data
+    
+    let indexPath = NSIndexPath(row: indexPath.row, section: 0)
+    tblText.reloadRows(at: [indexPath as IndexPath], with: UITableView.RowAnimation.none)
+    
+    
     if data["is_read"].intValue == 0{
       
         let param = ["app_id":Utility.getDeviceID(),
@@ -293,6 +321,14 @@ extension WhatsNewTextVC : UITableViewDelegate, UITableViewDataSource{
         
         Utility.readUnread(api_Url: WebService_Text_Whats_New_Read_Unread, parameters: param)
     }
+    
+    
+    let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+    let vc = storyboard.instantiateViewController(withIdentifier: "WhatsNewTextDetailsVC") as! WhatsNewTextDetailsVC
+    vc.strTitle = "Text"
+    vc.strId = data["id"].stringValue
+    navigationController?.pushViewController(vc, animated:  true)
+    
   }
   
   func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {

@@ -319,7 +319,122 @@ extension FavouriteVC : UITableViewDelegate, UITableViewDataSource{
       
       return cell
       
-    }else if data["list_heading"].stringValue == "Article"{
+    }
+    else if data["list_heading"].stringValue == "NewText"{
+      //Text
+      
+      let cellIdentifier = "KathaChopaiTableViewCell"
+      
+      guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? KathaChopaiTableViewCell  else {
+        fatalError("The dequeued cell is not an instance of MealTableViewCell.")
+        
+      }
+      
+      cell.lblTitle.text = "\(data["title"].stringValue)"
+      cell.lblDate.text = data["date"].stringValue
+      cell.lblDescription1.text = data["description"].stringValue
+      cell.btnTitle.setTitle("What's New(Text)", for: .normal)
+      cell.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
+      
+      cell.btnFavourite.tag = indexPath.row
+      cell.btnShare.tag = indexPath.row
+      cell.btnTitle.tag = indexPath.row
+      
+      cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
+      cell.btnFavourite.addTarget(self, action: #selector(btnFavourite(_:)), for: UIControl.Event.touchUpInside)
+      cell.btnTitle.addTarget(self, action: #selector(btnToSpecificScreen(_:)), for: UIControl.Event.touchUpInside)
+      cell.btnTitle.addTarget(self, action: #selector(btnToSpecificScreen(_:)), for: UIControl.Event.touchUpInside)
+      
+      
+      return cell
+      
+    }else if data["list_heading"].stringValue == "BapuThought"{
+      //Thought
+      
+      let cellIdentifier = "KathaChopaiTableViewCell"
+      
+      guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? KathaChopaiTableViewCell  else {
+        fatalError("The dequeued cell is not an instance of MealTableViewCell.")
+        
+      }
+      
+      cell.lblTitle.text = "\(data["title"].stringValue)"
+      cell.lblDate.text = data["date"].stringValue
+      cell.lblDescription1.text = data["description"].stringValue
+      cell.btnTitle.setTitle("Thought", for: .normal)
+      cell.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
+      
+      cell.btnFavourite.tag = indexPath.row
+      cell.btnShare.tag = indexPath.row
+      cell.btnTitle.tag = indexPath.row
+      
+      cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
+      cell.btnFavourite.addTarget(self, action: #selector(btnFavourite(_:)), for: UIControl.Event.touchUpInside)
+      cell.btnTitle.addTarget(self, action: #selector(btnToSpecificScreen(_:)), for: UIControl.Event.touchUpInside)
+      cell.btnTitle.addTarget(self, action: #selector(btnToSpecificScreen(_:)), for: UIControl.Event.touchUpInside)
+      
+      
+      return cell
+      
+    }else if data["list_heading"].stringValue == "NewImage"{
+      //Thought
+      
+      let cellIdentifier = "BapuDarshanUITableViewCell"
+      
+      guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? BapuDarshanUITableViewCell  else {
+        fatalError("The dequeued cell is not an instance of MealTableViewCell.")
+        
+      }
+      
+      
+      let placeHolder = UIImage(named: "youtube_placeholder")
+      cell.imgBapuDarshan.kf.indicatorType = .activity
+      cell.imgBapuDarshan.kf.setImage(with: URL(string: "\(BASE_URL_IMAGE)\(data["image_file"].stringValue)"), placeholder: placeHolder, options: [.transition(ImageTransition.fade(1))])
+      
+      cell.btnTitle.setTitle("Bapu's Photo", for: .normal)
+      cell.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
+      
+      cell.btnFavourite.tag = indexPath.row
+      cell.btnShare.tag = indexPath.row
+      cell.btnTitle.tag = indexPath.row
+      
+      cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
+      cell.btnFavourite.addTarget(self, action: #selector(btnFavourite(_:)), for: UIControl.Event.touchUpInside)
+      cell.btnTitle.addTarget(self, action: #selector(btnToSpecificScreen(_:)), for: UIControl.Event.touchUpInside)
+      
+      
+      return cell
+      
+    }else if data["list_heading"].stringValue == "BapuDarshan"{
+      //Thought
+      
+      let cellIdentifier = "BapuDarshanUITableViewCell"
+      
+      guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? BapuDarshanUITableViewCell  else {
+        fatalError("The dequeued cell is not an instance of MealTableViewCell.")
+        
+      }
+      
+      let placeHolder = UIImage(named: "youtube_placeholder")
+      cell.imgBapuDarshan.kf.indicatorType = .activity
+      cell.imgBapuDarshan.kf.setImage(with: URL(string: "\(BASE_URL_IMAGE)\(data["image_file"].stringValue)"), placeholder: placeHolder, options: [.transition(ImageTransition.fade(1))])
+      
+      cell.btnTitle.setTitle("What's New(Photo)", for: .normal)
+      cell.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
+      
+      cell.btnFavourite.tag = indexPath.row
+      cell.btnShare.tag = indexPath.row
+      cell.btnTitle.tag = indexPath.row
+      
+      cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
+      cell.btnFavourite.addTarget(self, action: #selector(btnFavourite(_:)), for: UIControl.Event.touchUpInside)
+      cell.btnTitle.addTarget(self, action: #selector(btnToSpecificScreen(_:)), for: UIControl.Event.touchUpInside)
+      
+      
+      return cell
+      
+    }
+    else if data["list_heading"].stringValue == "Article"{
       //Articles
       
       if data["image"].stringValue == "" && data["video"].stringValue == ""{
@@ -502,6 +617,29 @@ extension FavouriteVC : UITableViewDelegate, UITableViewDataSource{
                      "favourite_for":data["favourite_for"].stringValue,
                      "favourite_id":data["article_id"].stringValue]
         
+      }else if data["list_heading"].stringValue == "NewText"{
+        
+        paramater = ["app_id":Utility.getDeviceID(),
+                     "favourite_for":data["favourite_for"].stringValue,
+                     "favourite_id":data["new_text_id"].stringValue]
+      }else if data["list_heading"].stringValue == "BapuThought"{
+        
+        paramater = ["app_id":Utility.getDeviceID(),
+                     "favourite_for":data["favourite_for"].stringValue,
+                     "favourite_id":data["bapu_thought_id"].stringValue]
+        
+      }else if data["list_heading"].stringValue == "NewImage"{
+        
+        paramater = ["app_id":Utility.getDeviceID(),
+                     "favourite_for":data["favourite_for"].stringValue,
+                     "favourite_id":data["new_image_id"].stringValue]
+        
+      }else if data["list_heading"].stringValue == "BapuDarshan"{
+        
+        paramater = ["app_id":Utility.getDeviceID(),
+                     "favourite_for":data["favourite_for"].stringValue,
+                     "favourite_id":data["bapu_darshan_id"].stringValue]
+        
       }
       
       
@@ -552,38 +690,38 @@ extension FavouriteVC : UITableViewDelegate, UITableViewDataSource{
     if data["list_heading"].stringValue == "Quotes"{
       //Quotes
       
-      share_Content = "\(data["title"].stringValue) \n\nDate: \(Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd MMM yyyy")) \n\n \(data["quotes_gujarati"].stringValue) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
+      share_Content = "Quotes \n\n\(data["title"].stringValue) \n\nDate: \(Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd MMM yyyy")) \n\n \(data["quotes_gujarati"].stringValue) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
       
       
     }
     else if data["list_heading"].stringValue == "Katha Chopai"{
       //Katha Chopai
       
-      share_Content = "\(data["title"].stringValue)-\(data["title_no"].stringValue) \n\nDate: \(Utility.dateToString(dateStr: data["from_date"].stringValue, strDateFormat: "dd MMM yyyy")) \n\n \(data["quotes_hindi"].stringValue) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
+      share_Content = "Katha Chopai \n\n\(data["title"].stringValue)-\(data["title_no"].stringValue) \n\nDate: \(Utility.dateToString(dateStr: data["from_date"].stringValue, strDateFormat: "dd MMM yyyy")) \n\n \(data["quotes_hindi"].stringValue) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
       
       
       
     }
     else if data["list_heading"].stringValue == "Ram Charit Manas"{
       //Ram charit manas
-      share_Content = "\(data["title"].stringValue)-\(data["title_no"].stringValue) \n\nDate: \(Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd MMM yyyy")) \n\n \(data["description"].stringValue) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
+      share_Content = "Ram Charit Manas \n\n\(data["title"].stringValue)-\(data["title_no"].stringValue) \n\nDate: \(Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd MMM yyyy")) \n\n \(data["description"].stringValue) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
       
       
       
     }
     else if data["list_heading"].stringValue == "Stuti"{
       
-      share_Content = "\(data["title"].stringValue) \n\n(Duration: \(data["video_duration"].stringValue)) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
+      share_Content = "Stuti \n\n\(data["title"].stringValue) \n\n(Duration: \(data["video_duration"].stringValue)) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
       
       
     }else if data["list_heading"].stringValue == "Other Stuti"{
       
-      share_Content = "\(data["title"].stringValue) \n\n(Duration: \(data["video_duration"].stringValue)) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
+      share_Content = "Other Stuti \n\n\(data["title"].stringValue) \n\n(Duration: \(data["video_duration"].stringValue)) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
       
       
     }else if data["list_heading"].stringValue == "Sankirtan"{
       
-      share_Content = "\(data["title"].stringValue) \n\n(Duration: \(data["video_duration"].stringValue)) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
+      share_Content = "Sankirtan \n\n\(data["title"].stringValue) \n\n(Duration: \(data["video_duration"].stringValue)) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
       
       
     }
@@ -594,19 +732,66 @@ extension FavouriteVC : UITableViewDelegate, UITableViewDataSource{
       
     }else if data["list_heading"].stringValue == "Daily Katha Video"{
       
-      share_Content = "\(data["title"].stringValue) \n(Duration: \(data["video_duration"].stringValue)) \n \(Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd-MM-yyyy")) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
+      share_Content = "Daily Katha Video \n\n\(data["title"].stringValue) \n(Duration: \(data["video_duration"].stringValue)) \n \(Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd-MM-yyyy")) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
       
       
     }else if data["list_heading"].stringValue == "Article"{
       
-      share_Content = "\(data["description"].stringValue) \n\nThis message has been sent via the Morari Bapu App. You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
+      share_Content = "Article \n\n\(data["description"].stringValue) \n\nThis message has been sent via the Morari Bapu App. You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
 
       
+    }else if data["list_heading"].stringValue == "NewText"{
+      
+      share_Content = "Text \n\n\(data["title"].stringValue) \n\nDate: \(data["date"].stringValue) \n\n\(data["description"].stringValue)  \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
+      
+    }else if data["list_heading"].stringValue == "BapuThought"{
+      
+      share_Content = "Text \n\n\(data["title"].stringValue) \n\nDate: \(data["date"].stringValue) \n\n\(data["description"].stringValue)  \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
+      
+    }else if data["list_heading"].stringValue == "BapuDarshan"{
+      
+      share_Content = "Text \n\n\(data["title"].stringValue) \n\nDate: \(data["date"].stringValue) \n\n\(data["description"].stringValue)  \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
+      
+    }else if data["list_heading"].stringValue == "NewImage"{
+      
+      let imageUrl = URL(string: "\(BASE_URL_IMAGE)\(data["image_file"].stringValue)")
+      let text = "\n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
+      
+      let data = try? Data(contentsOf: imageUrl!) //make sure your image in this url does exist, otherwise unwrap in a if let check / try-catch
+      let image = UIImage(data: data!)
+      let imageShare = [image as Any  ,text] as [Any]
+      
+      let activityViewController = UIActivityViewController(activityItems: imageShare as [Any] , applicationActivities: nil)
+      activityViewController.popoverPresentationController?.sourceView = self.view
+      
+      DispatchQueue.main.async {
+        self.present(activityViewController, animated: true, completion: nil)
+      }
+      
+      return
+      
+    }else if data["list_heading"].stringValue == "BapuDarshan"{
+      
+      let imageUrl = URL(string: "\(BASE_URL_IMAGE)\(data["image_file"].stringValue)")
+      let text = "\n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
+      
+      let data = try? Data(contentsOf: imageUrl!) //make sure your image in this url does exist, otherwise unwrap in a if let check / try-catch
+      let image = UIImage(data: data!)
+      let imageShare = [image as Any  ,text] as [Any]
+      
+      let activityViewController = UIActivityViewController(activityItems: imageShare as [Any] , applicationActivities: nil)
+      activityViewController.popoverPresentationController?.sourceView = self.view
+      
+      DispatchQueue.main.async {
+        self.present(activityViewController, animated: true, completion: nil)
+      }
+      
+      return
     }
-    
     
     // set up activity view controller
     let textToShare = [share_Content]
+    
     let activityViewController = UIActivityViewController(activityItems: textToShare, applicationActivities: nil)
     activityViewController.popoverPresentationController?.sourceView = self.view // so that iPads won't crash
     
@@ -618,6 +803,8 @@ extension FavouriteVC : UITableViewDelegate, UITableViewDataSource{
     DispatchQueue.main.async {
       self.present(activityViewController, animated: true, completion: nil)
     }
+    
+   
   }
   
   @IBAction func btnYoutube(_ sender: UIButton) {
@@ -721,8 +908,35 @@ extension FavouriteVC : UITableViewDelegate, UITableViewDataSource{
       vc.screenDirection = .Daily_Katha_Clip
       navigationController?.pushViewController(vc, animated:  true)
       
+    }else if data["list_heading"].stringValue == "NewText"{
+      
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "WhatsNewTextVC") as! WhatsNewTextVC
+      navigationController?.pushViewController(vc, animated:  true)
+      
+    }else if data["list_heading"].stringValue == "BapuThought"{
+      
+      //Bapu's Thoughts
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "BapuThoughtsVC") as! BapuThoughtsVC
+      navigationController?.pushViewController(vc, animated:  true)
+      
+    }else if data["list_heading"].stringValue == "BapuDarshan"{
+      
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "WhatsNewPhotosVC") as! WhatsNewPhotosVC
+      vc.screenDirection = .Media_Photos
+      navigationController?.pushViewController(vc, animated:  true)
+      
+    }else if data["list_heading"].stringValue == "NewImage"{
+      
+      //Bapu's Thoughts
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "WhatsNewPhotosVC") as! WhatsNewPhotosVC
+      vc.screenDirection = .Whats_New_Photos
+      navigationController?.pushViewController(vc, animated:  true)
+      
     }
-    
   }
   
   @IBAction func btnLinkWebSite(_ sender: UIButton) {
@@ -872,6 +1086,14 @@ extension FavouriteVC : MenuNavigationDelegate{
       
       let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "KathaEBookVC") as! KathaEBookVC
+      navigationController?.pushViewController(vc, animated:  true)
+      
+    }else if ScreenName == "Privacy Notice"{
+      //Privacy Notice
+
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "AboutTheAppVC") as! AboutTheAppVC
+      vc.strTitle = "Privacy Notice"
       navigationController?.pushViewController(vc, animated:  true)
       
     }

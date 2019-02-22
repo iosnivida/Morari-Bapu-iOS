@@ -16,7 +16,9 @@ class WhatsNewTextTableViewCell: UITableViewCell {
   @IBOutlet weak var lblTitle: UILabel!
   @IBOutlet weak var btnShare: UIButton!
   @IBOutlet weak var btnTitle: UIButton!
-
+  @IBOutlet weak var viewBackground: UIView!
+  @IBOutlet weak var btnFavourites: UIButton!
+  
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

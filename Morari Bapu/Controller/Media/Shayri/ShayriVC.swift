@@ -87,16 +87,16 @@ class ShayriVC: UIViewController {
               Utility.tableNoDataMessage(tableView: self.tblShayri, message: "", messageColor: UIColor.black, displayMessage: .Center)
             }
           }
-          else
-          {
+          
+        }else if jsonResponce!["status"].stringValue == "false"{
+          
+          if jsonResponce!["message"].stringValue == "No Data Found"{
             
             DispatchQueue.main.async {
-              self.tblShayri .reloadData()
-              Utility.tableNoDataMessage(tableView: self.tblShayri, message: "No Shayri", messageColor: UIColor.black, displayMessage: .Center)
-              
+              self.tblShayri.reloadData()
+              Utility.tableNoDataMessage(tableView: self.tblShayri, message: "Coming Soon", messageColor: UIColor.white, displayMessage: .Center)
             }
           }
-          
         }
         else {
           self.is_Api_Being_Called = false
@@ -151,6 +151,16 @@ extension ShayriVC : UITableViewDelegate, UITableViewDataSource{
     
     cell.lblTitle.text = data["title"].stringValue
     cell.lblDescription.text = data["shayari_hindi"].stringValue
+    
+    //Notification readable or not
+    if data["is_read"].boolValue == false{
+      //Non-Readable notification
+      cell.viewBackground.backgroundColor = UIColor.colorFromHex("#d3d3d3")
+      
+    }else{
+      //Readable notification
+      cell.viewBackground.backgroundColor = UIColor.colorFromHex("#ffffff")
+    }
     
     return cell
     
@@ -334,6 +344,14 @@ extension ShayriVC: MenuNavigationDelegate{
       
       let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "KathaEBookVC") as! KathaEBookVC
+      navigationController?.pushViewController(vc, animated:  true)
+      
+    }else if ScreenName == "Privacy Notice"{
+      //Privacy Notice
+
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "AboutTheAppVC") as! AboutTheAppVC
+      vc.strTitle = "Privacy Notice"
       navigationController?.pushViewController(vc, animated:  true)
       
     }

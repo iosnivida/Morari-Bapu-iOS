@@ -14,7 +14,7 @@ class KathaEBookTableViewCell: UITableViewCell {
   @IBOutlet weak var lblDate: UILabel!
   @IBOutlet weak var btnViewEBook: UIButton!
   @IBOutlet weak var btnShare: UIButton!
-  
+  @IBOutlet weak var viewBackground: UIView!
   
   
   

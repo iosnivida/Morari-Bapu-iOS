@@ -15,7 +15,8 @@ class BapuThoughtsVC: UIViewController {
   
   @IBOutlet weak var tblThought: UITableView!
   var arrThought = [JSON]()
-  
+  var arrFavourite = NSMutableArray()
+
   var currentPageNo = Int()
   var totalPageNo = Int()
   var is_Api_Being_Called : Bool = false
@@ -42,7 +43,8 @@ class BapuThoughtsVC: UIViewController {
   func getShayri(pageNo:Int){
     
     let param = ["page" : pageNo,
-                 "app_id":Utility.getDeviceID()] as NSDictionary
+                 "app_id":Utility.getDeviceID(),
+                  "favourite_for":"18"] as NSDictionary
     
     WebServices().CallGlobalAPI(url: WebService_Media_Thought,headers: [:], parameters: param, HttpMethod: "POST", ProgressView: true) { ( _ jsonResponce:JSON? , _ strErrorMessage:String) in
       
@@ -62,6 +64,12 @@ class BapuThoughtsVC: UIViewController {
             self.arrThought.append(result)
           }
           
+          
+          for result in jsonResponce!["MyFavourite"].arrayValue {
+            self.arrFavourite.add(result.stringValue)
+          }
+          
+          
           if self.arrThought.count != 0{
             
             DispatchQueue.main.async {
@@ -69,16 +77,16 @@ class BapuThoughtsVC: UIViewController {
               Utility.tableNoDataMessage(tableView: self.tblThought, message: "", messageColor: UIColor.black, displayMessage: .Center)
             }
           }
-          else
-          {
+          
+        }else if jsonResponce!["status"].stringValue == "false"{
+          
+          if jsonResponce!["message"].stringValue == "No Data Found"{
             
             DispatchQueue.main.async {
               self.tblThought .reloadData()
-              Utility.tableNoDataMessage(tableView: self.tblThought, message: "No Thought", messageColor: UIColor.black, displayMessage: .Center)
-              
+              Utility.tableNoDataMessage(tableView: self.tblThought, message: "Coming Soon", messageColor: UIColor.white, displayMessage: .Center)
             }
           }
-          
         }
         else {
           
@@ -134,10 +142,34 @@ extension BapuThoughtsVC : UITableViewDelegate, UITableViewDataSource{
     
     cell.lblTitle.text = data["title"].stringValue
     
-    cell.lblDescription.attributedText = NSAttributedString(html: data["thought"].stringValue)
+    //cell.lblDescription.attributedText = NSAttributedString(html: data["thought"].stringValue)
+    cell.lblDescription.text = data["thought"].stringValue
     cell.btnShare.tag  = indexPath.row
+    cell.btnFavourites.tag  = indexPath.row
+    
     cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
+    cell.btnFavourites.addTarget(self, action: #selector(btnFavourites), for: UIControl.Event.touchUpInside)
 
+    //Notification readable or not
+    if data["is_read"].boolValue == false{
+      //Non-Readable notification
+      cell.viewBackground.backgroundColor = UIColor.colorFromHex("#d3d3d3")
+      
+    }else{
+      //Readable notification
+      cell.viewBackground.backgroundColor = UIColor.colorFromHex("#ffffff")
+    }
+    
+    let predicate: NSPredicate = NSPredicate(format: "SELF contains[cd] %@", data["id"].stringValue)
+    let result = self.arrFavourite.filtered(using: predicate)
+    
+    if result.count != 0{
+      cell.btnFavourites.setImage(UIImage(named: "favorite"), for: .normal)
+    }else{
+      cell.btnFavourites.setImage(UIImage(named: "unfavorite"), for: .normal)
+    }
+  
+    
     return cell
     
     
@@ -153,10 +185,17 @@ extension BapuThoughtsVC : UITableViewDelegate, UITableViewDataSource{
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     
-    let data = arrThought[indexPath.row]
-
+    var data = arrThought[indexPath.row]
+    
     if data["is_read"].intValue == 0{
-
+      
+      data["is_read"] = true;
+      
+      arrThought[indexPath.row] = data
+      
+      let indexPath = NSIndexPath(row: indexPath.row, section: 0)
+      tblThought.reloadRows(at: [indexPath as IndexPath], with: UITableView.RowAnimation.none)
+      
       let param = ["app_id":Utility.getDeviceID(),
                    "bapu_thought_id":data["id"].stringValue] as NSDictionary
       
@@ -184,7 +223,7 @@ extension BapuThoughtsVC : UITableViewDelegate, UITableViewDataSource{
     
     let data = arrThought[sender.tag]
     
-    let share_Content = "Thought \n\(data["title"].stringValue) \n\(data["thought"].stringValue)  \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
+    let share_Content = "Thought \n\n\(data["title"].stringValue) \n\(data["thought"].stringValue)  \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
     
     let textToShare = [share_Content]
     let activityViewController = UIActivityViewController(activityItems: textToShare, applicationActivities: nil)
@@ -195,6 +234,39 @@ extension BapuThoughtsVC : UITableViewDelegate, UITableViewDataSource{
     
     DispatchQueue.main.async {
       self.present(activityViewController, animated: true, completion: nil)
+    }
+    
+  }
+  
+  @IBAction func btnFavourites(_ sender: UIButton) {
+    
+    let data = arrThought[sender.tag]
+    
+    let paramater = ["app_id":Utility.getDeviceID(),
+                     "favourite_for":"18",
+                     "favourite_id":data["id"].stringValue]
+    
+    WebServices().CallGlobalAPI(url: WebService_Favourite,headers: [:], parameters: paramater as NSDictionary, HttpMethod: "POST", ProgressView: true) { ( _ jsonResponce:JSON? , _ strErrorMessage:String) in
+      
+      if(jsonResponce?.error != nil) {
+        
+        var errorMess = jsonResponce?.error?.localizedDescription
+        errorMess = MESSAGE_Err_Service
+        Utility().showAlertMessage(vc: self, titleStr: "", messageStr: errorMess!)
+      }
+      else {
+        
+        if jsonResponce!["status"].stringValue == "true"{
+        
+          self.arrThought.removeAll()
+          self.arrFavourite.removeAllObjects()
+          self.getShayri(pageNo: 1)
+          
+        }
+        else {
+          Utility().showAlertMessage(vc: self, titleStr: "", messageStr: jsonResponce!["message"].stringValue)
+        }
+      }
     }
     
   }
@@ -326,6 +398,14 @@ extension BapuThoughtsVC: MenuNavigationDelegate{
       
       let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "KathaEBookVC") as! KathaEBookVC
+      navigationController?.pushViewController(vc, animated:  true)
+      
+    }else if ScreenName == "Privacy Notice"{
+      //Privacy Notice
+
+      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let vc = storyboard.instantiateViewController(withIdentifier: "AboutTheAppVC") as! AboutTheAppVC
+      vc.strTitle = "Privacy Notice"
       navigationController?.pushViewController(vc, animated:  true)
       
     }

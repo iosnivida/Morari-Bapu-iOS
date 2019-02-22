@@ -13,34 +13,29 @@ let MontserratSemiBold                    = "MontserratAlternates-SemiBold"
 let Custome_Storyboard                     = "Custom"
 let Main_Storyboard                        = "Main"
 
+
 //var BASE_URL                                       = "http://vetolution.com:3004/api/v1/" //Live
 var BASE_URL                                         = "http://app.nivida.in/moraribapu/" //Development
 
 var BASE_URL_IMAGE                                   = "http://app.nivida.in/moraribapu/files/"
 
+let WebService_Notification_Token_Register           = "\(BASE_URL)NotificationUser/App_add_notification_id"
+
 let WebService_Slider_Dashboard                      = "\(BASE_URL)Slider/App_Get_Slider"
-let WebService_Dashboard_List                        = "\(BASE_URL)HomeApi/App_GetHome"
 
 let WebService_Daily_Katha_Clip                      = "\(BASE_URL)Kathavideo/App_GetDailyKathavideo"
-let WebService_Daily_Katha_Clip_Details              = "\(BASE_URL)Kathavideo/App_GetDailyKathavideoDetail"
 
 let WebService_Quotes_List                           = "\(BASE_URL)Quote/App_GetQuote"
-let WebService_Quotes_Details                        = "\(BASE_URL)Quote/App_QuoteDetail"
 
 let WebService_Stuti_List                            = "\(BASE_URL)Stuti/App_GetStuti"
-let WebService_Stuti_Details                         = "\(BASE_URL)Stuti/App_GetStutiDetail"
 
 let WebService_Chopai_List                           = "\(BASE_URL)KathaChopai/App_GetKathaChopai"
-let WebService_Katha_Chopai_Details                  = "\(BASE_URL)KathaChopai/App_GetKathaChopaiDetail"
 
 let WebService_Ram_Charit_Manas_List                 = "\(BASE_URL)Ramcharit/App_GetRamcharit"
-let WebService_Ram_Charit_Manas_Detail               = "\(BASE_URL)Ramcharit/App_GetRamcharitDetail"
 
 let WebService_Event_List                           = "\(BASE_URL)Event/App_GetEvent"
-let WebService_Event_Detail                         = "\(BASE_URL)Event/App_GetEventDetail"
 
 let WebService_Upcoming_Katha_List                  = "\(BASE_URL)UpcomingKatha/App_GetUpcomingKatha"
-let WebService_Upcoming_Katha_Detail                = "\(BASE_URL)UpcomingKatha/App_GetUpcomingKathaDetail"
 
 let WebService_Live_Katha_Audio                     = "\(BASE_URL)LiveKathaAudio/App_GetLiveKathaAudio"
 let WebService_Live_Katha_Video                     = "\(BASE_URL)LiveKathaVideo/App_GetLiveKathaVideo"
@@ -52,6 +47,25 @@ let WebService_Search                               = "\(BASE_URL)SearchModule/A
 
 let WebService_Feedback                             = "\(BASE_URL)Feedback/App_Add_Feedback"
 
+
+//Details
+
+let WebService_Dashboard_List                        = "\(BASE_URL)HomeApi/App_GetHome"
+let WebService_Daily_Katha_Clip_Details              = "\(BASE_URL)Kathavideo/App_GetDailyKathavideoDetail"
+let WebService_Quotes_Details                        = "\(BASE_URL)Quote/App_QuoteDetail"
+let WebService_Stuti_Details                         = "\(BASE_URL)Stuti/App_GetStutiDetail"
+let WebService_Katha_Chopai_Details                  = "\(BASE_URL)KathaChopai/App_GetKathaChopaiDetail"
+let WebService_Ram_Charit_Manas_Detail               = "\(BASE_URL)Ramcharit/App_GetRamcharitDetail"
+let WebService_Event_Detail                         = "\(BASE_URL)Event/App_GetEventDetail"
+let WebService_Upcoming_Katha_Detail                = "\(BASE_URL)UpcomingKatha/App_GetUpcomingKathaDetail"
+
+let WebService_BapuDarshan_Details                  = "\(BASE_URL)BapuDarshan/App_GetBapuDarshanDetail"
+let WebService_New_Video_Details                    = "\(BASE_URL)NewVideo/App_NewVideoDetail"
+let WebService_Katha_EBook_Details                  = "\(BASE_URL)NewVideo/App_NewVideoDetail"
+let WebService_Test_Details                         = "\(BASE_URL)NewText/App_NewTextDetail"
+let WebService_Article_Details                      = "\(BASE_URL)App_ArticleDetail"
+let WebService_Audio_Details                        = "\(BASE_URL)NewAudio/App_NewAudioDetail"
+
 //Settings
 let WebService_FAQ                                  = "\(BASE_URL)FAQ/App_GetFAQ"
 
@@ -61,6 +75,8 @@ let WebService_Whats_New_Text                       = "\(BASE_URL)NewText/App_Ge
 let WebService_Whats_New_Video                      = "\(BASE_URL)NewVideo/App_GetVideo"
 let WebService_Whats_New_Audio                      = "\(BASE_URL)NewAudio/App_GetAudio"
 let WebService_Whats_New_Photos                     = "\(BASE_URL)NewImage/App_GetImage"
+
+let WebService_Text_Details                         = "\(BASE_URL)NewText/App_NewTextDetail"
 
 let WebService_Stuti_Audio                          = "\(BASE_URL)Stuti/App_GetStuti"
 let WebService_Sankirtan_Audio                      = "\(BASE_URL)Sankirtan/App_GetSankirtan"
@@ -106,6 +122,7 @@ let WebService_Bapu_Thoughts_Read_Unread            = "\(BASE_URL)BapuThought/Ap
 
 //MARK:-- COLOR CONSTANT
 let color_Green_Light: UIColor                     = UIColor(red: 105.0/255.0, green: 192.0/255.0, blue: 164.0/255.0, alpha: 1.0)
+let color_Maroon: UIColor                          = UIColor(red: 123.0/255.0, green: 45.0/255.0, blue: 56.0/255.0, alpha: 1.0)
 
 //MARK:- -  Message
 let MESSAGE_Err_Network                     = "Please check network connections. try again"

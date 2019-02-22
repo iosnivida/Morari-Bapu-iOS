@@ -12,7 +12,7 @@ import Kingfisher
 import MediaPlayer
 import Jukebox
 
-class MusicPlayerVC: UIViewController {
+class MusicPlayerVC: PullUpController {
 
   @IBOutlet weak var imgThumbnil: UIImageView!
   @IBOutlet weak var lblTitleHeader: UILabel!
@@ -37,9 +37,6 @@ class MusicPlayerVC: UIViewController {
   @IBOutlet weak var indicator: UIActivityIndicatorView!
   
   @IBOutlet weak var btnSuffle: UIButton!
-  @IBOutlet weak var constraintTopView: NSLayoutConstraint!
-
-  @IBOutlet weak var constraintMainViewHeight: NSLayoutConstraint!
   
   @IBOutlet weak var constraintTopVolumeView: NSLayoutConstraint!
   
@@ -54,48 +51,129 @@ class MusicPlayerVC: UIViewController {
   //Jukbok
   var jukebox : Jukebox!
   
+  
+  @IBOutlet private weak var viewMusicBar: UIView!
+
+  
+  var initialPointOffset: CGFloat {
+    return pullUpControllerPreferredSize.height
+  }
+  
+  public var portraitSize: CGSize = .zero
+  public var landscapeFrame: CGRect = .zero
+  
+  
   override func viewDidLoad() {
         super.viewDidLoad()
 
-
+      playPosition = 0
       // begin receiving remote events
       UIApplication.shared.beginReceivingRemoteControlEvents()
 
       self.constraintTopVolumeView.constant = -70
       self.view.layoutIfNeeded()
     
-      self.constraintTopView.constant = self.view.frame.height - 50
-      self.constraintMainViewHeight.constant = self.view.frame.height - 20
+//      self.constraintTopView.constant = self.view.frame.height - 50
+//      self.constraintMainViewHeight.constant = self.view.frame.height - 20
       self.view.layoutIfNeeded()
 
     
-        for audio in arrAudioList{
-          
-          // configure jukebox
-          
-          if jukebox == nil{
-            
-              jukebox = Jukebox(delegate: self, items: [
-                JukeboxItem(URL: URL(string: "\(BASE_URL_IMAGE)\(audio["audio_file"].stringValue)")!)
-                ])!
-            
-          }else{
-            
-            /// Later add another item
-            let delay = DispatchTime.now() + Double(Int64(3 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
-            DispatchQueue.main.asyncAfter(deadline: delay) {
-              self.jukebox.append(item: JukeboxItem (URL: URL(string: "\(BASE_URL_IMAGE)\(audio["audio_file"].stringValue)")!), loadingAssets: true)
-            }
-          }
-        }
+ 
     
+    portraitSize = CGSize(width: min(UIScreen.main.bounds.width, UIScreen.main.bounds.height),
+                          height: viewMusicBar.frame.size.height + 20)
     
-        self.jukebox.play()
+    view.layer.cornerRadius = 12
     
-        updateAudioPlayer(positon: playPosition)
+    NotificationCenter.default.addObserver(self, selector: #selector(self.audioPlayList), name: NSNotification.Name(rawValue: "audioPlayList"), object: nil)
     
   }
 
+  
+  @objc func audioPlayList(_ notification: Notification) {
+    print(notification)
+    
+    arrAudioList =  notification.object as! [JSON]
+    
+    for audio in arrAudioList{
+      
+      // configure jukebox
+      
+      if jukebox == nil{
+        
+        jukebox = Jukebox(delegate: self, items: [
+          JukeboxItem(URL: URL(string: "\(BASE_URL_IMAGE)\(audio["audio_file"].stringValue)")!)
+          ])!
+        
+      }else{
+        
+        /// Later add another item
+        let delay = DispatchTime.now() + Double(Int64(3 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
+        DispatchQueue.main.asyncAfter(deadline: delay) {
+          self.jukebox.append(item: JukeboxItem (URL: URL(string: "\(BASE_URL_IMAGE)\(audio["audio_file"].stringValue)")!), loadingAssets: true)
+        }
+      }
+    }
+    
+      DispatchQueue.main.async {
+     self.jukebox.play(atIndex: self.playPosition)
+     self.updateAudioPlayer(positon: self.playPosition)
+     }
+    
+  }
+  
+    override func pullUpControllerWillMove(to stickyPoint: CGFloat) {
+      //        print("will move to \(stickyPoint)")
+    }
+  
+    override func pullUpControllerDidMove(to stickyPoint: CGFloat) {
+      //        print("did move to \(stickyPoint)")
+    }
+  
+    override func pullUpControllerDidDrag(to point: CGFloat) {
+      //        print("did drag to \(point)")
+    }
+  
+  // MARK: - PullUpController
+  
+  override var pullUpControllerPreferredSize: CGSize {
+    return portraitSize
+  }
+  
+  override var pullUpControllerPreferredLandscapeFrame: CGRect {
+    return landscapeFrame
+  }
+  
+  override var pullUpControllerMiddleStickyPoints: [CGFloat] {
+    return [viewMusicBar.frame.maxY, self.view.frame.maxY]
+    
+  }
+  
+  override var pullUpControllerBounceOffset: CGFloat {
+    return 20
+  }
+  
+  override func pullUpControllerAnimate(action: PullUpController.Action,
+                                        withDuration duration: TimeInterval,
+                                        animations: @escaping () -> Void,
+                                        completion: ((Bool) -> Void)?) {
+    switch action {
+    case .move:
+      UIView.animate(withDuration: 0.3,
+                     delay: 0,
+                     usingSpringWithDamping: 1.0,
+                     initialSpringVelocity: 0,
+                     options: .curveEaseInOut,
+                     animations: animations,
+                     completion: completion)
+    default:
+      UIView.animate(withDuration: 0.3,
+                     animations: animations,
+                     completion: completion)
+    }
+  }
+  
+  
   func updateAudioPlayer(positon:Int){
     
     let dict = arrAudioList[positon]
@@ -123,6 +201,8 @@ class MusicPlayerVC: UIViewController {
       self.lblStartTimer.text = "00:00"
       self.lblEndTimer.text = dict["duration"].stringValue
 
+      
+      
     }
     
    /* "description" : "It often happens that we overestimate our strengths. Something drastic has to happen before we realise our limitations and Brahma was no exception to this. Not aware that beside Lord Narayana’s powers his own powers were insignificant, Brahma steals the cows that Krishna and His friends are looking after in Gokula.",
@@ -146,9 +226,10 @@ class MusicPlayerVC: UIViewController {
     
     if isUpDown == false{
       
+      pullUpControllerMoveToVisiblePoint(pullUpControllerMiddleStickyPoints[0], animated: true, completion: nil)
+
       UIView.animate(withDuration: 0.3, animations: {
         self.isUpDown = true
-        self.constraintTopView.constant = 20
         self.btnPlayPauseHeader.alpha = 0.0
         self.btnNextHeader.alpha = 0.0
         self.btnPreviousHeader.alpha = 0.0
@@ -156,12 +237,13 @@ class MusicPlayerVC: UIViewController {
       })
       
     }else{
+      
+
       UIView.animate(withDuration: 0.3, animations: {
         self.btnPlayPauseHeader.alpha = 1.0
         self.btnNextHeader.alpha = 1.0
         self.btnPreviousHeader.alpha = 1.0
         self.isUpDown = false
-        self.constraintTopView.constant = self.view.frame.height - 50
         self.view.layoutIfNeeded()
       })
     }
@@ -170,7 +252,6 @@ class MusicPlayerVC: UIViewController {
   @IBAction func swipeUp(_ sender: Any) {
     UIView.animate(withDuration: 0.3, animations: {
       self.isUpDown = true
-      self.constraintTopView.constant = 20
       self.btnPlayPauseHeader.alpha = 0.0
       self.btnNextHeader.alpha = 0.0
       self.btnPreviousHeader.alpha = 0.0
@@ -184,7 +265,6 @@ class MusicPlayerVC: UIViewController {
       self.btnNextHeader.alpha = 1.0
       self.btnPreviousHeader.alpha = 1.0
       self.isUpDown = false
-      self.constraintTopView.constant = self.view.frame.height - 50
       self.view.layoutIfNeeded()
     })
   }
@@ -230,14 +310,15 @@ class MusicPlayerVC: UIViewController {
   
   @IBAction func btnSuffle(_ sender: Any) {
     
-    if isSuffle == true{
+    if isSuffle == false{
       
-      isSuffle = false
+      isSuffle = true
+      self.btnSuffle.imageColorChange(imageColor: .black)
       
     }else{
      
-      isSuffle = true
-      
+      isSuffle = false
+      self.btnSuffle.imageColorChange(imageColor: UIColor.init(red: 112.0/255.0, green: 112.0/255.0, blue: 112.0/255.0, alpha: 1.0))
     }
   }
   
@@ -247,13 +328,12 @@ class MusicPlayerVC: UIViewController {
     if isRepeat == false{
       
       isRepeat = true
-      
+      self.btnRepeat.imageColorChange(imageColor: .black)
       
     }else{
       
-      self.jukebox.seek(toSecond: 0, shouldPlay: false)
-      
       isRepeat = false
+      self.btnRepeat.imageColorChange(imageColor: UIColor.init(red: 112.0/255.0, green: 112.0/255.0, blue: 112.0/255.0, alpha: 1.0))
       
     }
   }
@@ -331,25 +411,28 @@ extension MusicPlayerVC: JukeboxDelegate{
   
   func jukeboxDidLoadItem(_ jukebox: Jukebox, item: JukeboxItem) {
     
+    print(self.playPosition)
+    
+    print("State: \(jukebox.state.description)")
     if isRepeat == true{
-      
-      self.jukebox.play(atIndex: jukebox.playIndex)
+      jukebox.seek(toSecond: 0, shouldPlay: true)
+    }else if isSuffle == true{
       updateAudioPlayer(positon: jukebox.playIndex)
-      
-    }else{
-      
+    }
+    else{
       updateAudioPlayer(positon: jukebox.playIndex)
-      
     }
     
- 
-    
     print("Jukebox did load: \(item.URL.lastPathComponent)")
+    
   }
   
   func jukeboxDidUpdateMetadata(_ jukebox: Jukebox, forItem: JukeboxItem) {
     print("Item updated:\n\(forItem)")
+    
   }
+  
+  
   
   override func remoteControlReceived(with event: UIEvent?) {
     if event?.type == .remoteControl {
@@ -391,15 +474,36 @@ extension MusicPlayerVC: JukeboxDelegate{
   
   @IBAction func prevAction() {
     
-    if let time = jukebox.currentItem?.currentTime, time > 5.0 || jukebox.playIndex == 0 {
-      jukebox.replayCurrentItem()
-    } else {
-      jukebox.playPrevious()
+    if isRepeat == true{
+      jukebox.seek(toSecond: 0, shouldPlay: true)
     }
+    else if isSuffle == true{
+      let randomIndex = Int(arc4random_uniform(UInt32(arrAudioList.count)))
+      jukebox.play(atIndex: randomIndex)
+      updateAudioPlayer(positon: randomIndex)
+    }
+    else{
+      if let time = jukebox.currentItem?.currentTime, time > 5.0 || jukebox.playIndex == 0 {
+        jukebox.replayCurrentItem()
+      } else {
+        jukebox.playPrevious()
+      }
+    }
+    
   }
   
-  @IBAction func nextAction() {
-    jukebox.playNext()
+  @IBAction func nextAction()
+  {
+    if isRepeat == true{
+      jukebox.seek(toSecond: 0, shouldPlay: true)
+    }else if isSuffle == true{
+      let randomIndex = Int(arc4random_uniform(UInt32(arrAudioList.count)))
+      jukebox.play(atIndex: randomIndex)
+      updateAudioPlayer(positon: randomIndex)
+    }
+    else{
+      jukebox.playNext()
+    }
   }
   
   @IBAction func playPauseAction() {
@@ -443,4 +547,3 @@ extension MusicPlayerVC: JukeboxDelegate{
   }
   
 }
-
