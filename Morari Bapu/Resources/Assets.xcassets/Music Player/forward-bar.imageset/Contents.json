@@ -6,11 +6,12 @@
     },
     {
       "idiom" : "iphone",
+      "filename" : "forward-button copy.png",
       "scale" : "2x"
     },
     {
       "idiom" : "iphone",
-      "filename" : "ic_noti_next.png",
+      "filename" : "forward-button.png",
       "scale" : "3x"
     }
   ],

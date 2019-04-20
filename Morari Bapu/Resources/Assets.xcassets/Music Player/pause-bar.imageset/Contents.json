@@ -6,19 +6,17 @@
     },
     {
       "idiom" : "iphone",
+      "filename" : "music-player-pause-lines copy.png",
       "scale" : "2x"
     },
     {
       "idiom" : "iphone",
-      "filename" : "ic_noti_next.png",
+      "filename" : "music-player-pause-lines.png",
       "scale" : "3x"
     }
   ],
   "info" : {
     "version" : 1,
     "author" : "xcode"
-  },
-  "properties" : {
-    "preserves-vector-representation" : true
   }
 }
