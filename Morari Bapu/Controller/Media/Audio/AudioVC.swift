@@ -10,7 +10,8 @@ import UIKit
 import Alamofire
 import SwiftyJSON
 import Kingfisher
-
+import LNPopupController
+import AudioPlayerManager
 
 enum AudioScreenIdentifier {
   case Stuti
@@ -31,28 +32,13 @@ class AudioVC: UIViewController {
   var currentPageNo = Int()
   var totalPageNo = Int()
   var is_Api_Being_Called : Bool = false
-  
-  private var originalPullUpControllerViewSize: CGSize = .zero
+  var playingIndex : Int = 0
 
-  private func makeSearchViewControllerIfNeeded() -> MusicPlayerVC {
-    let currentPullUpController = children
-      .filter({ $0 is MusicPlayerVC })
-      .first as? MusicPlayerVC
-    let pullUpController: MusicPlayerVC = currentPullUpController ?? UIStoryboard(name: Custome_Storyboard,bundle: nil).instantiateViewController(withIdentifier: "MusicPlayerVC") as! MusicPlayerVC
-    
-    
-    if originalPullUpControllerViewSize == .zero {
-      originalPullUpControllerViewSize = pullUpController.view.bounds.size
-    }
-    
-    return pullUpController
-  }
-  
   override func viewDidLoad() {
     super.viewDidLoad()
     
+    
     currentPageNo = 1
-
     
     tblAudio.tableFooterView =  UIView.init(frame: .zero)
     tblAudio.layoutMargins = .zero
@@ -78,36 +64,41 @@ class AudioVC: UIViewController {
     
     //***********************
     
-
+    // Add reachability observer
+    if let reachability = AppDelegate.sharedAppDelegate()?.reachability
+    {
+      NotificationCenter.default.addObserver( self, selector: #selector( self.reachabilityChanged ),name: Notification.Name.reachabilityChanged, object: reachability )
+    }
     
     //************************
+    self.setupMimiMusicPlayerView()
     
-  }
-  
-  //MARK:- Up-Down Controller
-  private func addPullUpController(position:Int, listOfAudio:[JSON]) {
-    let pullUpController = makeSearchViewControllerIfNeeded()
-    _ = pullUpController.view // call pullUpController.viewDidLoad()
-    addPullUpController(pullUpController,
-                        initialStickyPointOffset: pullUpController.initialPointOffset,
-                        animated: true)
-    audioDetails(position, listOfAudio)
     
+    if AudioPlayerManager.shared.isPlaying() == false{
+      
+      let storyboard = UIStoryboard(name: Custome_Storyboard, bundle: nil)
+      let mPlayer = storyboard.instantiateViewController(withIdentifier: "MusicPlayerVC") as! MusicPlayerVC
+      mPlayer.screenType = "HanumanChalisha"
+      mPlayer.playPosition = 0
+      self.navigationController?.popupBar.marqueeScrollEnabled = true
+      self.navigationController?.presentPopupBar(withContentViewController: mPlayer, animated: true, completion: nil)
+
+      /*let storyboard = UIStoryboard(name: Custome_Storyboard, bundle: nil)
+      let mPlayer = storyboard.instantiateViewController(withIdentifier: "MusicPlayerVC") as! MusicPlayerVC
+      mPlayer.screenType = "HanumanChalisha"
+      mPlayer.playPosition = 0      
+      self.navigationController?.pushViewController(mPlayer, animated: false)*/
+      
+    }
+    
+    
+    NotificationCenter.default.addObserver(self, selector: #selector(self.musicIndicator(_:)), name: NSNotification.Name(rawValue: "playPosition"), object: nil)
+
+    
+    //audioDetails(position, listOfAudio, "AudioList")
   }
   
-//
-//  @IBAction private func addButtonTapped() {
-//    guard
-//      children.filter({ $0 is MusicPlayerVC }).count == 0
-//      else { return }
-//    addPullUpController()
-//  }
-//
-  @IBAction private func removeButtonTapped() {
-    let pullUpController = makeSearchViewControllerIfNeeded()
-    removePullUpController(pullUpController, animated: true)
-  }
-  
+
   //MARK:- Api Call
   func getAudio(pageNo:Int){
     
@@ -207,7 +198,9 @@ class AudioVC: UIViewController {
   }
   
   @IBAction func btnHanumanChalisha(_ sender: Any) {
-    Utility.hanuman_chalisha_Show(onViewController: self)
+    let storyboardCustom : UIStoryboard = UIStoryboard(name: Custome_Storyboard, bundle: nil)
+    let objVC = storyboardCustom.instantiateViewController(withIdentifier: "HanumanChalishaVC") as? HanumanChalishaVC
+    self.navigationController?.pushViewController(objVC!, animated: true)
   }
   
   @IBAction func btnBack(_ sender: Any) {
@@ -217,6 +210,33 @@ class AudioVC: UIViewController {
   @IBAction func backToHome(_ sender: Any) {
     self.navigationController?.popToRootViewController(animated: true)
   }
+  
+  //LNPopupController
+  private func setupMimiMusicPlayerView() {
+    UIProgressView.appearance(whenContainedInInstancesOf: [LNPopupBar.self]).tintColor = UIColor.colorFromHex("#068201")
+    
+    self.navigationController?.popupBar.progressViewStyle = .top
+    self.navigationController?.popupBar.barStyle = .custom
+    self.navigationController?.popupInteractionStyle = .drag
+    self.navigationController!.popupContentView.popupCloseButtonStyle = .round
+    self.navigationController?.popupBar.imageView.layer.cornerRadius = 5
+    self.navigationController?.toolbar.barStyle = .blackOpaque
+    self.navigationController?.popupBar.tintColor = .white
+    let paragraphStyle = NSMutableParagraphStyle()
+    paragraphStyle.alignment = .left
+    self.navigationController?.popupBar.subtitleTextAttributes = [NSAttributedString.Key.paragraphStyle: paragraphStyle]
+    self.navigationController?.popupBar.titleTextAttributes = [NSAttributedString.Key.paragraphStyle: paragraphStyle]
+    self.navigationController?.updatePopupBarAppearance()
+  }
+  
+  //MARK:- Misic
+  @objc func musicIndicator(_ notification: NSNotification) {
+    
+    playingIndex = (notification.object as? Int)!
+    tblAudio.reloadData()
+    
+  }
+  
   
 }
 
@@ -271,8 +291,61 @@ extension AudioVC : UITableViewDelegate, UITableViewDataSource{
       cell.btnFavourite.setImage(UIImage(named: "unfavorite"), for: .normal)
     }
     
+    if UserDefaults.standard.string(forKey: "screentype") != nil && UserDefaults.standard.string(forKey: "playposition") != nil{
     
-    cell.viewMusicIndicator.isHidden = true
+      let screenType = UserDefaults.standard.string(forKey: "screentype") ?? ""
+      self.playingIndex = Int(UserDefaults.standard.string(forKey: "playposition") ?? "") ?? 0
+      
+      if screenType == "stuti" && screenDirection == .Stuti{
+        
+        if self.playingIndex == indexPath.row{
+          cell.viewMusicIndicator.isHidden = false
+          cell.viewMusicIndicator.state = .playing
+          cell.viewMusicIndicator.tintColor = .red
+          
+        }else{
+          cell.viewMusicIndicator.isHidden = true
+        }
+        
+      }else if screenType == "sankirtan" && screenDirection == .Sankirtan{
+        
+        if playingIndex == indexPath.row{
+          cell.viewMusicIndicator.isHidden = false
+          cell.viewMusicIndicator.state = .playing
+          cell.viewMusicIndicator.tintColor = .red
+          
+        }else{
+          cell.viewMusicIndicator.isHidden = true
+        }
+        
+      }else if screenType == "others" && screenDirection == .Others{
+        
+        if playingIndex == indexPath.row{
+          cell.viewMusicIndicator.isHidden = false
+          cell.viewMusicIndicator.state = .playing
+          cell.viewMusicIndicator.tintColor = .red
+          
+        }else{
+          cell.viewMusicIndicator.isHidden = true
+        }
+        
+      }else if screenType == "whatsnewaudio" && screenDirection == .WhatsNewAudio{
+        
+        if playingIndex == indexPath.row{
+          cell.viewMusicIndicator.isHidden = false
+          cell.viewMusicIndicator.state = .playing
+          cell.viewMusicIndicator.tintColor = .red
+          
+        }else{
+          cell.viewMusicIndicator.isHidden = true
+        }
+      }else{
+        cell.viewMusicIndicator.isHidden = true
+      }
+    }else{
+      cell.viewMusicIndicator.isHidden = true
+    }
+    
     
     //Notification readable or not
     if data["is_read"].boolValue == false{
@@ -359,10 +432,63 @@ extension AudioVC : UITableViewDelegate, UITableViewDataSource{
       
     }
     
+    playingIndex = indexPath.row
     
-      //Utility.music_Player_Show(onViewController: self, position: indexPath.row, listOfAudio: arrAudio)
-
-    self.addPullUpController(position:indexPath.row, listOfAudio:arrAudio)
+    tblAudio.reloadData()
+    
+    var playList : [String] = []
+    
+    for audio in arrAudio{
+      playList.append("\(BASE_URL_IMAGE)\(audio["audio_file"].stringValue)")
+    }
+    
+    AudioPlayerManager.shared.play(urlStrings: playList, at: indexPath.row)
+    
+    if screenDirection == .Stuti{
+      
+      let storyboard = UIStoryboard(name: Custome_Storyboard, bundle: nil)
+      let mPlayer = storyboard.instantiateViewController(withIdentifier: "MusicPlayerVC") as! MusicPlayerVC
+      mPlayer.playPosition = indexPath.row
+      mPlayer.playList = playList
+      mPlayer.arrAudioList = arrAudio
+      mPlayer.screenType = "stuti"
+      self.navigationController?.popupBar.marqueeScrollEnabled = true
+      self.navigationController?.presentPopupBar(withContentViewController: mPlayer, animated: true, completion: nil)
+      
+    }else if screenDirection == .Sankirtan{
+      
+      let storyboard = UIStoryboard(name: Custome_Storyboard, bundle: nil)
+      let mPlayer = storyboard.instantiateViewController(withIdentifier: "MusicPlayerVC") as! MusicPlayerVC
+      mPlayer.playPosition = indexPath.row
+      mPlayer.playList = playList
+      mPlayer.arrAudioList = arrAudio
+      mPlayer.screenType = "sankirtan"
+      self.navigationController?.popupBar.marqueeScrollEnabled = true
+      self.navigationController?.presentPopupBar(withContentViewController: mPlayer, animated: true, completion: nil)
+      
+    }else if screenDirection == .Others{
+ 
+      let storyboard = UIStoryboard(name: Custome_Storyboard, bundle: nil)
+      let mPlayer = storyboard.instantiateViewController(withIdentifier: "MusicPlayerVC") as! MusicPlayerVC
+      mPlayer.playPosition = indexPath.row
+      mPlayer.playList = playList
+      mPlayer.arrAudioList = arrAudio
+      mPlayer.screenType = "others"
+      self.navigationController?.popupBar.marqueeScrollEnabled = true
+      self.navigationController?.presentPopupBar(withContentViewController: mPlayer, animated: true, completion: nil)
+      
+    }else if screenDirection == .WhatsNewAudio{
+      
+      let storyboard = UIStoryboard(name: Custome_Storyboard, bundle: nil)
+      let mPlayer = storyboard.instantiateViewController(withIdentifier: "MusicPlayerVC") as! MusicPlayerVC
+      mPlayer.playPosition = indexPath.row
+      mPlayer.playList = playList
+      mPlayer.arrAudioList = arrAudio
+      mPlayer.screenType = "whatsnewaudio"
+      self.navigationController?.popupBar.marqueeScrollEnabled = true
+      self.navigationController?.presentPopupBar(withContentViewController: mPlayer, animated: true, completion: nil)
+      
+    }
     
   }
   
@@ -387,11 +513,11 @@ extension AudioVC : UITableViewDelegate, UITableViewDataSource{
     
     if screenDirection == .WhatsNewAudio{
       
-      share_Content = "Audio \n\nI am listening - \n\(data["title"].stringValue) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
+      share_Content = "Audio \n\nI am listening - \(data["title"].stringValue) \n\nvia MorariBapu - \(BASE_URL_IMAGE)\(data["audio_file"].stringValue) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
 
     }else{
       
-      share_Content = "Audio \n\nI am listening - \n\(data["name"].stringValue) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
+      share_Content = "Audio \n\nI am listening - \(data["name"].stringValue) \n\nvia MorariBapu - \(BASE_URL_IMAGE)\(data["audio_file"].stringValue) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
 
     }
     
@@ -603,3 +729,38 @@ extension AudioVC: MenuNavigationDelegate{
   
 }
 
+extension AudioVC : InternetConnectionDelegate{
+  
+  @objc private func reachabilityChanged( notification: NSNotification )
+  {
+    guard let reachability = notification.object as? Reachability else
+    {
+      return
+    }
+    
+    if reachability.connection == .wifi || reachability.connection == .cellular {
+      
+    }else{
+      
+      if let wd = UIApplication.shared.delegate?.window {
+        var vc = wd!.rootViewController
+        if(vc is UINavigationController){
+          vc = (vc as! UINavigationController).visibleViewController
+        }
+        
+        if(vc is AudioVC){
+          Utility.internet_connection_Show(onViewController: self)
+        }
+      }
+      
+    }
+    
+  }
+  
+  func reloadPage() {
+    
+      self.arrAudio.removeAll()
+      self.getAudio(pageNo: 0)
+    
+  }
+}

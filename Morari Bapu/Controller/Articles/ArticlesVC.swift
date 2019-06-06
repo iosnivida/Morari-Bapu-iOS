@@ -18,6 +18,7 @@ class ArticlesVC: UIViewController {
   
   @IBOutlet weak var tblArticles: UITableView!
   @IBOutlet weak var lblTitle: UILabel!
+  var arrFavourite = NSMutableArray()
   
   var arrArticles : [JSON] = []
   
@@ -40,6 +41,12 @@ class ArticlesVC: UIViewController {
     
     self.arrArticles.removeAll()
     self.getArticlesList(page:currentPageNo)
+    
+    // Add reachability observer
+    if let reachability = AppDelegate.sharedAppDelegate()?.reachability
+    {
+      NotificationCenter.default.addObserver( self, selector: #selector( self.reachabilityChanged ),name: Notification.Name.reachabilityChanged, object: reachability )
+    }
     
   }
   
@@ -64,6 +71,10 @@ class ArticlesVC: UIViewController {
           
           for result in jsonResponce!["data"].arrayValue {
             self.arrArticles.append(result)
+          }
+          
+          for result in jsonResponce!["MyFavourite"].arrayValue {
+            self.arrFavourite.add(result.stringValue)
           }
           
           self.totalPageNo = jsonResponce!["total_page"].intValue
@@ -104,7 +115,9 @@ class ArticlesVC: UIViewController {
   }
   
   @IBAction func btnHanumanChalisha(_ sender: Any) {
-    Utility.hanuman_chalisha_Show(onViewController: self)
+    let storyboardCustom : UIStoryboard = UIStoryboard(name: Custome_Storyboard, bundle: nil)
+    let objVC = storyboardCustom.instantiateViewController(withIdentifier: "HanumanChalishaVC") as? HanumanChalishaVC
+    self.navigationController?.pushViewController(objVC!, animated: true)
     
   }
   
@@ -141,8 +154,11 @@ extension ArticlesVC : UITableViewDelegate, UITableViewDataSource{
       guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? Articles1TableViewCell  else {
         fatalError("The dequeued cell is not an instance of MealTableViewCell.")
       }
+    
+      let predicate: NSPredicate = NSPredicate(format: "SELF contains[cd] %@", data["id"].stringValue)
+      let result = self.arrFavourite.filtered(using: predicate)
       
-      if data["is_favourite"].boolValue == true{
+      if result.count != 0{
         cell.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
       }else{
         cell.btnFavourite.setImage(UIImage(named: "unfavorite"), for: .normal)
@@ -194,7 +210,10 @@ extension ArticlesVC : UITableViewDelegate, UITableViewDataSource{
       cell.imgVideo.kf.indicatorType = .activity
       cell.imgVideo.kf.setImage(with: URL(string: "\(BASE_URL_IMAGE)\(data["image"].stringValue)"), placeholder: placeHolder, options: [.transition(ImageTransition.fade(1))])
       
-      if data["is_favourite"].boolValue == true{
+      let predicate: NSPredicate = NSPredicate(format: "SELF contains[cd] %@", data["id"].stringValue)
+      let result = self.arrFavourite.filtered(using: predicate)
+      
+      if result.count != 0{
         cell.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
       }else{
         cell.btnFavourite.setImage(UIImage(named: "unfavorite"), for: .normal)
@@ -348,10 +367,13 @@ extension ArticlesVC : UITableViewDelegate, UITableViewDataSource{
       Utility.readUnread(api_Url: WebService_Article_Read_Unread, parameters: param)
     }
     
-    if data["link"].stringValue.contains("youtube") {
+    //if data["link"].stringValue.contains("youtube") {
+    
+    if data["link"].stringValue != ""{
       
       let videoURL = URL(string: "\(data["link"].stringValue)")
-      if Utility.canOpenURL(data["link"].stringValue){
+      
+      if Utility.verifyUrl(urlString: data["link"].stringValue) == true{
         DispatchQueue.main.async {
           UIApplication.shared.open(videoURL!, options: [:])
         }
@@ -416,6 +438,7 @@ extension ArticlesVC : UITableViewDelegate, UITableViewDataSource{
           
           if jsonResponce!["status"].stringValue == "true"{
             self.arrArticles.removeAll()
+            self.arrFavourite.removeAllObjects()
             self.getArticlesList(page: 1)
           }
           else {
@@ -568,5 +591,42 @@ extension ArticlesVC : MenuNavigationDelegate{
       navigationController?.pushViewController(vc, animated:  true)
       
     }
+  }
+}
+
+extension ArticlesVC : InternetConnectionDelegate{
+  
+  @objc private func reachabilityChanged( notification: NSNotification )
+  {
+    guard let reachability = notification.object as? Reachability else
+    {
+      return
+    }
+    
+    if reachability.connection == .wifi || reachability.connection == .cellular {
+      
+    }else{
+      
+      if let wd = UIApplication.shared.delegate?.window {
+        var vc = wd!.rootViewController
+        if(vc is UINavigationController){
+          vc = (vc as! UINavigationController).visibleViewController
+        }
+        
+        if(vc is ArticlesVC){
+          Utility.internet_connection_Show(onViewController: self)
+        }
+      }
+      
+    }
+    
+  }
+  
+  func reloadPage() {
+    
+    self.arrArticles.removeAll()
+    self.arrFavourite.removeAllObjects()
+    self.getArticlesList(page: 1)
+    
   }
 }

@@ -24,6 +24,12 @@ class EventsVC: UIViewController {
       self.getKathaEBook()
     }
     
+    // Add reachability observer
+    if let reachability = AppDelegate.sharedAppDelegate()?.reachability
+    {
+      NotificationCenter.default.addObserver( self, selector: #selector( self.reachabilityChanged ),name: Notification.Name.reachabilityChanged, object: reachability )
+    }
+    
   }
   
   //MARK:- Api Call
@@ -85,7 +91,9 @@ class EventsVC: UIViewController {
   }
   
   @IBAction func btnHanumanChalisha(_ sender: Any) {
-    Utility.hanuman_chalisha_Show(onViewController: self)
+    let storyboardCustom : UIStoryboard = UIStoryboard(name: Custome_Storyboard, bundle: nil)
+    let objVC = storyboardCustom.instantiateViewController(withIdentifier: "HanumanChalishaVC") as? HanumanChalishaVC
+    self.navigationController?.pushViewController(objVC!, animated: true)
     
   }
   
@@ -306,3 +314,39 @@ extension EventsVC: MenuNavigationDelegate{
   }
 }
 
+extension EventsVC : InternetConnectionDelegate{
+  
+  @objc private func reachabilityChanged( notification: NSNotification )
+  {
+    guard let reachability = notification.object as? Reachability else
+    {
+      return
+    }
+    
+    if reachability.connection == .wifi || reachability.connection == .cellular {
+      
+    }else{
+      
+      if let wd = UIApplication.shared.delegate?.window {
+        var vc = wd!.rootViewController
+        if(vc is UINavigationController){
+          vc = (vc as! UINavigationController).visibleViewController
+        }
+        
+        if(vc is EventsVC){
+          Utility.internet_connection_Show(onViewController: self)
+        }
+      }
+      
+    }
+    
+  }
+  
+  func reloadPage() {
+    
+    DispatchQueue.main.async {
+      self.getKathaEBook()
+    }
+    
+  }
+}

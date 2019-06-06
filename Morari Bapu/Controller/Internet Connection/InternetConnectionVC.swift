@@ -9,23 +9,41 @@
 
 import UIKit
 
+protocol InternetConnectionDelegate: class {
+  func reloadPage()
+}
+
 class InternetConnectionVC: UIViewController {
 
+    weak var delegate: InternetConnectionDelegate?
+  
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+      // Add reachability observer
+      if let reachability = AppDelegate.sharedAppDelegate()?.reachability
+      {
+        NotificationCenter.default.addObserver( self, selector: #selector( self.reachabilityChanged ),name: Notification.Name.reachabilityChanged, object: reachability )
+      }
+      
+    }
+  
+  @objc private func reachabilityChanged( notification: NSNotification )
+  {
+    guard let reachability = notification.object as? Reachability else
+    {
+      return
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    if reachability.connection == .wifi || reachability.connection == .cellular {
+      
+      delegate?.reloadPage()
+      Utility.internet_connection_hide(onViewController: self)
+      
     }
-    */
+    
+  }
+
+    
 
 }

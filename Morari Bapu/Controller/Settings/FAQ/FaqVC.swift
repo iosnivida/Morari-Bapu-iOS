@@ -56,16 +56,17 @@ class FaqVC: UIViewController {
               Utility.tableNoDataMessage(tableView: self.tblFaq, message: "", messageColor: UIColor.black, displayMessage: .Center)
             }
           }
-          else
-          {
+          
+          
+        }else if jsonResponce!["status"].stringValue == "false"{
+          
+          if jsonResponce!["message"].stringValue == "No Data Found"{
             
             DispatchQueue.main.async {
               self.tblFaq .reloadData()
-              Utility.tableNoDataMessage(tableView: self.tblFaq, message: "No E-Book", messageColor: UIColor.black, displayMessage: .Center)
-              
+              Utility.tableNoDataMessage(tableView: self.tblFaq, message: "Coming Soon", messageColor: UIColor.white, displayMessage: .Center)
             }
           }
-          
         }
         else {
           Utility().showAlertMessage(vc: self, titleStr: "", messageStr: jsonResponce!["message"].stringValue)
@@ -81,7 +82,9 @@ class FaqVC: UIViewController {
   }
   
   @IBAction func btnHanumanChalisha(_ sender: Any) {
-    Utility.hanuman_chalisha_Show(onViewController: self)
+    let storyboardCustom : UIStoryboard = UIStoryboard(name: Custome_Storyboard, bundle: nil)
+    let objVC = storyboardCustom.instantiateViewController(withIdentifier: "HanumanChalishaVC") as? HanumanChalishaVC
+    self.navigationController?.pushViewController(objVC!, animated: true)
     
   }
   

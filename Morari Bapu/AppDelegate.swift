@@ -11,6 +11,7 @@ import CoreData
 import IQKeyboardManagerSwift
 import UserNotifications
 import SwiftyJSON
+import AudioPlayerManager
 
 
 @UIApplicationMain
@@ -24,7 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
      
       //IQKeyboardManager Library
       IQKeyboardManager.shared.enable = true
-      
+
       
       if #available(iOS 10.0, *) {
         // For iOS 10 display notification (sent via APNS)
@@ -51,12 +52,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       }
       catch
       {
-        print( "ERROR: Could not start reachability notifier." )
+        print( "ERROR: Could not start reachability notifier.")
       }
-      
       
         return true
     }
+  
   
     class func sharedAppDelegate() -> AppDelegate?
     {
@@ -82,6 +83,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
+      
+      UserDefaults.standard.set("", forKey: "playposition")
+      UserDefaults.standard.set("", forKey: "screentype")
+      
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         // Saves changes in the application's managed object context before the application terminates.
         self.saveContext()
@@ -146,7 +151,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
   }
 
-
+  // MARK: - Remote control
+  
+  override func  remoteControlReceived(with event: UIEvent?) {
+    AudioPlayerManager.shared.remoteControlReceivedWithEvent(event)
+  }
+  
 }
 
 
@@ -177,7 +187,25 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
     let jsonResponce = JSON(userInfo)
     
    
-    
+    if UIApplication.shared.applicationState == UIApplication.State.active {
+      
+      DispatchQueue.main.async {
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "notifications"), object: jsonResponce)
+      }
+      
+    }
+    else if UIApplication.shared.applicationState == UIApplication.State.inactive{
+      
+      DispatchQueue.main.async {
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "notifications"), object: jsonResponce)
+      }
+      
+    }
+    else if UIApplication.shared.applicationState == UIApplication.State.background{
+      DispatchQueue.main.async {
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "notifications"), object: jsonResponce)
+      }
+    }
     
     print("Notification Responce:\(jsonResponce)")
   }
@@ -192,10 +220,8 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
     
     let jsonResponce = JSON(userInfo)
     
-    
-   
-    
     print("Notification Responce:\(jsonResponce)")
+
     
   }
   
@@ -208,12 +234,18 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
     // With swizzling disabled you must let Messaging know about the message, for Analytics
     // Messaging.messaging().appDidReceiveMessage(userInfo)
     
+    
     let jsonResponce = JSON(userInfo)
     
     print("Notification Responce:\(jsonResponce)")
     
+    if UIApplication.shared.applicationState == UIApplication.State.active {
+      completionHandler([UNNotificationPresentationOptions.alert,UNNotificationPresentationOptions.sound,UNNotificationPresentationOptions.badge])
+
+    }
     
-      completionHandler([])
+    
+    completionHandler([])
       
     }
   
@@ -242,13 +274,12 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
       }
     
     }
-    else if UIApplication.shared.applicationState == UIApplication.State.background{
-      DispatchQueue.main.async {
-        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "notifications"), object: jsonResponce)
-      }
-    }
+    
     
     completionHandler()
   }
   
 }
+
+
+

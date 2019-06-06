@@ -25,6 +25,8 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>NSCalendarsUsageDescription</key>
+	<string>Wants to access your calander in order to create remind for Bapu UpComing Katha.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Image saved in your photos</string>
 	<key>NSPhotoLibraryUsageDescription</key>
@@ -38,7 +40,6 @@
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>audio</string>
-		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>

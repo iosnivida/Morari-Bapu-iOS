@@ -59,6 +59,12 @@ class WhatsNewVideoVC: UIViewController {
       lblTitle.text = "Daily Katha Clip"
     }
     
+    // Add reachability observer
+    if let reachability = AppDelegate.sharedAppDelegate()?.reachability
+    {
+      NotificationCenter.default.addObserver( self, selector: #selector( self.reachabilityChanged ),name: Notification.Name.reachabilityChanged, object: reachability )
+    }
+    
   }
   
   
@@ -146,7 +152,9 @@ class WhatsNewVideoVC: UIViewController {
   }
   
   @IBAction func btnHanumanChalisha(_ sender: Any) {
-    Utility.hanuman_chalisha_Show(onViewController: self)
+    let storyboardCustom : UIStoryboard = UIStoryboard(name: Custome_Storyboard, bundle: nil)
+    let objVC = storyboardCustom.instantiateViewController(withIdentifier: "HanumanChalishaVC") as? HanumanChalishaVC
+    self.navigationController?.pushViewController(objVC!, animated: true)
   }
   
   @IBAction func btnBack(_ sender: Any) {
@@ -466,11 +474,13 @@ extension WhatsNewVideoVC : UITableViewDelegate, UITableViewDataSource{
       }
       
     }
- 
-    if data["youtube_link"].stringValue.contains("youtube") {
+
+    if data["youtube_link"].stringValue != ""{
       
       let videoURL = URL(string: "\(data["youtube_link"].stringValue)")
-      if Utility.canOpenURL(data["youtube_link"].stringValue){
+      //if Utility.verifyUrl(urlString: data["youtube_link"].string) == true{
+      
+      if Utility.verifyUrl(urlString: data["youtube_link"].string) == true{
         DispatchQueue.main.async {
           UIApplication.shared.open(videoURL!, options: [:])
         }
@@ -541,6 +551,40 @@ extension WhatsNewVideoVC : UITableViewDelegate, UITableViewDataSource{
       
     }
   }
+}
+
+extension WhatsNewVideoVC : InternetConnectionDelegate{
   
+  @objc private func reachabilityChanged( notification: NSNotification )
+  {
+    guard let reachability = notification.object as? Reachability else
+    {
+      return
+    }
+    
+    if reachability.connection == .wifi || reachability.connection == .cellular {
+      
+    }else{
+      
+      if let wd = UIApplication.shared.delegate?.window {
+        var vc = wd!.rootViewController
+        if(vc is UINavigationController){
+          vc = (vc as! UINavigationController).visibleViewController
+        }
+        
+        if(vc is WhatsNewVideoVC){
+          Utility.internet_connection_Show(onViewController: self)
+        }
+      }
+      
+    }
+    
+  }
   
+  func reloadPage() {
+    
+    self.arrVideo.removeAll()
+    self.getWhatsNewVideo(pageNo: 1)
+    
+  }
 }

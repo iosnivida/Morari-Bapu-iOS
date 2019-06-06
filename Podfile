@@ -23,13 +23,16 @@ target 'Morari Bapu' do
   pod 'ESTMusicIndicator'
 
   # Pods for Doggie
+  pod 'MarqueeLabel/Swift', '~> 3.2.0'
 
   pod 'iCarousel', '~> 1.8'
   
   # Audio Player
-  pod 'Jukebox'
+  pod 'AudioPlayerManager', ' ~> 1.2.3'
 
   pod 'FolioReaderKit'
+  
+  pod 'SubtleVolume'
   
   # Pods for Morari Bapu
 

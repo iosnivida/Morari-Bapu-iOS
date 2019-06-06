@@ -23,7 +23,7 @@ protocol ImageViewerDelegate: class {
 }
 
 
-class ImageViewerVC: UIViewController, UIScrollViewDelegate {
+class ImageViewerVC: UIViewController {
   
   @IBOutlet weak var cvImageViewwer: UICollectionView!
   
@@ -67,6 +67,72 @@ class ImageViewerVC: UIViewController, UIScrollViewDelegate {
   @IBAction func btnClose(_ sender: Any) {
     Utility.image_Viewer_Hide(onViewController: self)
   }
+}
+
+//MARK:- Scrollview Delegate
+extension ImageViewerVC: UIScrollViewDelegate {
+  
+  func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+    
+    if scrollView == cvImageViewwer{
+      let x = cvImageViewwer.contentOffset.x
+      let w = cvImageViewwer.bounds.size.width
+      let currentPage = Int(ceil(x/w))
+      
+      var data = arrImages[currentPage]
+ 
+      if screenDirection == .Media_Photos{
+        
+        if data["is_read"].intValue == 0{
+          
+          data["is_read"] = true;
+          
+          arrImages[currentPage] = data
+          
+          let indexPath = NSIndexPath(row: currentPage, section: 0)
+          
+          var indexPaths = [IndexPath]()
+          indexPaths.append(indexPath as IndexPath)
+          
+          if cvImageViewwer != nil {
+            cvImageViewwer.reloadItems(at: indexPaths)
+          }
+          
+          let param = ["app_id":Utility.getDeviceID(),
+                       "bapudarshan_id":data["id"].stringValue] as NSDictionary
+          
+          Utility.readUnread(api_Url: WebService_Bapu_Photos_Read_Unread, parameters: param)
+        }
+        
+      }else if screenDirection == .Whats_New_Photos{
+        
+        if data["is_read"].intValue == 0{
+          
+          data["is_read"] = true;
+          
+          arrImages[currentPage] = data
+          
+          let indexPath = NSIndexPath(row: currentPage, section: 0)
+          
+          var indexPaths = [IndexPath]()
+          indexPaths.append(indexPath as IndexPath)
+          
+          if cvImageViewwer != nil {
+            cvImageViewwer.reloadItems(at: indexPaths)
+          }
+          
+          let param = ["app_id":Utility.getDeviceID(),
+                       "image_id":data["id"].stringValue] as NSDictionary
+          
+          Utility.readUnread(api_Url: WebService_Image_Whats_New_Read_Unread, parameters: param)
+        }
+        
+      }
+      
+    }
+  }
+  
+  
 }
 
 // MARK: CollectionView Delegate

@@ -1,6 +1,7 @@
 PODS:
   - AEXML (4.3.3)
   - Alamofire (4.7.3)
+  - AudioPlayerManager (1.2.3)
   - ESTMusicIndicator (0.2.0)
   - FolioReaderKit (1.4.0):
     - AEXML (= 4.3.3)
@@ -12,8 +13,8 @@ PODS:
   - FontBlaster (4.1.0)
   - iCarousel (1.8.3)
   - IQKeyboardManagerSwift (6.0.5)
-  - Jukebox (0.2.1)
   - Kingfisher (4.7.0)
+  - MarqueeLabel/Swift (3.2.0)
   - MenuItemKit (3.1.3)
   - Realm (3.13.1):
     - Realm/Headers (= 3.13.1)
@@ -21,6 +22,7 @@ PODS:
   - RealmSwift (3.13.1):
     - Realm (= 3.13.1)
   - SSZipArchive (2.1.1)
+  - SubtleVolume (1.0.2)
   - SVProgressHUD (2.2.5)
   - SwiftyJSON (4.1.0)
   - SwiftyUserDefaults (3.0.1)
@@ -29,12 +31,14 @@ PODS:
 
 DEPENDENCIES:
   - Alamofire (~> 4.7.2)
+  - AudioPlayerManager (~> 1.2.3)
   - ESTMusicIndicator
   - FolioReaderKit
   - iCarousel (~> 1.8)
   - IQKeyboardManagerSwift (~> 6.0.3)
-  - Jukebox
   - Kingfisher (~> 4.7.0)
+  - MarqueeLabel/Swift (~> 3.2.0)
+  - SubtleVolume
   - SVProgressHUD
   - SwiftyJSON (~> 4.1.0)
   - SwiftyUserDefaults (~> 3.0.1)
@@ -44,17 +48,19 @@ SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - AEXML
     - Alamofire
+    - AudioPlayerManager
     - ESTMusicIndicator
     - FolioReaderKit
     - FontBlaster
     - iCarousel
     - IQKeyboardManagerSwift
-    - Jukebox
     - Kingfisher
+    - MarqueeLabel
     - MenuItemKit
     - Realm
     - RealmSwift
     - SSZipArchive
+    - SubtleVolume
     - SVProgressHUD
     - SwiftyJSON
     - SwiftyUserDefaults
@@ -64,23 +70,25 @@ SPEC REPOS:
 SPEC CHECKSUMS:
   AEXML: 601f41fcaa7bda7605cad153b0f43db9ec006c0f
   Alamofire: c7287b6e5d7da964a70935e5db17046b7fde6568
+  AudioPlayerManager: 02601ac29abb8efc0043c851ee5f5c79e69d77fa
   ESTMusicIndicator: 80a123b51a7de3caa44dc91829b9619185dad0f6
   FolioReaderKit: 0ab8efee766eebd1cdbe88ca7791c7e966cad3be
   FontBlaster: 127aa66419478d1c62926c7fdb39841633344a45
   iCarousel: d782f635afac190c49bb8ee455882284cff8b85f
   IQKeyboardManagerSwift: c14eca30f6001457d6ddf25e313f23fb6578c41c
-  Jukebox: 81db618ccd3a1cc9b154f4ae0f5c4b54638666dd
   Kingfisher: da6b005aa96d37698e3e4f1ccfe96a5b9bbf27d6
+  MarqueeLabel: 440a502b91a9179bd98f9fff00ba1150650a1c0e
   MenuItemKit: 0f850e630b0a3d2bd80fec54db87ce0d2077ada2
   Realm: 50071da38fe079e0735e47c9f2eae738c68c5996
   RealmSwift: 8a1e6a02b7a08cd17a31e3115143fb69fe5f3fb9
   SSZipArchive: 14401ade5f8e82aba1ff03e9f88e9de60937ae60
+  SubtleVolume: 88618f8304a0e605d1adca14b95376dcbf9e03ce
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
   SwiftyJSON: c29297daf073d2aa016295d5809cdd68045c39b3
   SwiftyUserDefaults: 3d273b1739b68ada3145dc754a70ec775bc5c8be
   Toast-Swift: ba0b01b095aada709d915f9beb1d38184a2721c3
   ZFDragableModalTransition: 0d294eaaba6edfcb9839595de765f9ca06a4b524
 
-PODFILE CHECKSUM: 6c4835b9a69a90ea336d71419b5c53fb9a8fe176
+PODFILE CHECKSUM: 13426eb596821e8ee129766093491087c113d32e
 
 COCOAPODS: 1.5.3

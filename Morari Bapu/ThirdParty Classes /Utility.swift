@@ -373,10 +373,10 @@ class Utility: NSObject
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
-        dateFormatter.timeZone = TimeZone.current
-        
+      dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+
         let dt = dateFormatter.date(from: date)
-        dateFormatter.timeZone = TimeZone.current
+      dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
         dateFormatter.dateFormat = "yyyy-MM-dd"
         
         let dateStr =  dateFormatter.string(from: dt!)
@@ -458,7 +458,8 @@ class Utility: NSObject
   }
 
    
-    
+
+  
     //MARK:- Validation
     static func isValidEmail(testStr:String) -> Bool {
         // print("validate calendar: \(testStr)")
@@ -472,6 +473,18 @@ class Utility: NSObject
     
    return UIDevice.current.identifierForVendor!.uuidString
 
+  }
+  
+  static func verifyUrl(urlString: String?) -> Bool {
+    //Check for nil
+    if let urlString = urlString {
+      // create NSURL instance
+      if let url = NSURL(string: urlString) {
+        // check if your application can open the NSURL instance
+        return UIApplication.shared.canOpenURL(url as URL)
+      }
+    }
+    return false
   }
   
     //MARK:- DropDown (Show Hide)
@@ -564,6 +577,7 @@ class Utility: NSObject
       let objVC = storyboardCustom.instantiateViewController(withIdentifier: "InternetConnectionVC") as? InternetConnectionVC
       objVC?.modalPresentationStyle = .overCurrentContext
       objVC?.modalTransitionStyle = .crossDissolve
+      objVC?.delegate = (onViewController as! InternetConnectionDelegate)
       onViewController.present(objVC!, animated: false, completion: nil)
       //UIApplication.shared.delegate?.window!?.rootViewController?.present(objVC, animated: true, completion: nil)
     }
@@ -612,30 +626,6 @@ class Utility: NSObject
       .flatMap { $0.firstMatch(in: url, range: NSMakeRange(0, url.count)) }
       .flatMap { Range($0.range(at: 1), in: url) }
       .map { String(url[$0]) }
-  }
-  
-  
-
-  static func topViewController(viewController: UIViewController) -> Bool
-  {
-    
-    if let wd = UIApplication.shared.delegate?.window {
-      var vc = wd!.rootViewController
-      if(vc is UINavigationController){
-        vc = (vc as! UINavigationController).visibleViewController
-      }
-      
-//      if(vc is viewController){
-//        print("Present Screen...")
-//        return true
-//        //your code
-//      }else{
-//        return false
-//      }
-    }else{
-      return false
-    }
-     return false
   }
   
 }
@@ -857,3 +847,24 @@ struct Device {
     static let IS_IPHONE_6P        = IS_IPHONE && SCREEN_MAX_LENGTH == 736
     static let IS_IPHONE_X         = IS_IPHONE && SCREEN_MAX_LENGTH == 812
 }
+
+extension UIViewController {
+  
+    func topMostViewController() -> UIViewController {
+      if self.presentedViewController == nil {
+        return self
+      }
+      if let navigation = self.presentedViewController as? UINavigationController {
+        return navigation.visibleViewController!.topMostViewController()
+      }
+      if let tab = self.presentedViewController as? UITabBarController {
+        if let selectedTab = tab.selectedViewController {
+          return selectedTab.topMostViewController()
+        }
+        return tab.topMostViewController()
+      }
+      return self.presentedViewController!.topMostViewController()
+    }
+
+}
+

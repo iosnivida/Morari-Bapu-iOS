@@ -41,6 +41,7 @@
 		070D461221DD20430084C0DA /* AboutTheAppVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 070D461121DD20430084C0DA /* AboutTheAppVC.swift */; };
 		070D461621DD23E10084C0DA /* FeedbackVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 070D461521DD23E10084C0DA /* FeedbackVC.swift */; };
 		0715B16A22207B3900A6DC49 /* BapuDarshanUITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0715B16922207B3900A6DC49 /* BapuDarshanUITableViewCell.swift */; };
+		072027C42225921D00A55489 /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 072027C32225921D00A55489 /* EventKit.framework */; };
 		073C7F7F221E615500BDC6E3 /* WhatsNewTextDetailsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073C7F7E221E615500BDC6E3 /* WhatsNewTextDetailsVC.swift */; };
 		074029E221DE6A2900E4DE4B /* WhatsNewPhotosVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 074029E121DE6A2900E4DE4B /* WhatsNewPhotosVC.swift */; };
 		074029E421DE6A3D00E4DE4B /* WhatsNewVideoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 074029E321DE6A3D00E4DE4B /* WhatsNewVideoVC.swift */; };
@@ -54,6 +55,7 @@
 		07443DF62165223400F39CCD /* QuotesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07443DF52165223400F39CCD /* QuotesTableViewCell.swift */; };
 		07443DF82165228900F39CCD /* UpcomingKathaTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07443DF72165228900F39CCD /* UpcomingKathaTableViewCell.swift */; };
 		075675F221ED06F700915946 /* MusicPlayerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 075675F121ED06F700915946 /* MusicPlayerVC.swift */; };
+		07637E6A222F0A7500A657BB /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07637E69222F0A7500A657BB /* MediaPlayer.framework */; };
 		0766437C21E79F2700B15520 /* FavouriteVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0766437B21E79F2700B15520 /* FavouriteVC.swift */; };
 		0766437F21E7AC3B00B15520 /* ArticlesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0766437E21E7AC3B00B15520 /* ArticlesVC.swift */; };
 		0766438121E7AC7F00B15520 /* Articles1TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0766438021E7AC7F00B15520 /* Articles1TableViewCell.swift */; };
@@ -69,10 +71,12 @@
 		07A755252162869100793232 /* MontserratAlternates-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 07A755222162869100793232 /* MontserratAlternates-SemiBold.otf */; };
 		07A755262162869100793232 /* MontserratAlternates-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 07A755232162869100793232 /* MontserratAlternates-Light.otf */; };
 		07A755272162869100793232 /* MontserratAlternates-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 07A755242162869100793232 /* MontserratAlternates-Regular.otf */; };
-		07B19F5322115F6D00571CF1 /* PullUpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B19F5222115F6D00571CF1 /* PullUpController.swift */; };
 		07CD60BE22171FE4003C9333 /* KathaTimingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07CD60BD22171FE4003C9333 /* KathaTimingTableViewCell.swift */; };
 		07D9394921F62B7B003F847D /* UpComingKathasVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07D9394821F62B7B003F847D /* UpComingKathasVC.swift */; };
 		07D9394B21F62CE9003F847D /* UpComingKathaDetailsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07D9394A21F62CE9003F847D /* UpComingKathaDetailsVC.swift */; };
+		07FC21702230DBA8009871E8 /* LNPopupController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07FC216F2230DB89009871E8 /* LNPopupController.framework */; };
+		07FC21732230DF7D009871E8 /* LNPopupController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07FC216F2230DB89009871E8 /* LNPopupController.framework */; };
+		07FC21742230DF7D009871E8 /* LNPopupController.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 07FC216F2230DB89009871E8 /* LNPopupController.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B4EEC5909677DC647695E296 /* Pods_Morari_BapuTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC4BD43BCEDC5FD94AD884CF /* Pods_Morari_BapuTests.framework */; };
 		DA8CD2ED06F8BF46F430A842 /* Pods_Morari_Bapu.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF96C55420CE8AEB3492FBD9 /* Pods_Morari_Bapu.framework */; };
 		FCCB5EC9D7AF0C4135855622 /* Pods_Morari_BapuUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C7EC3ED81FE47D190032489 /* Pods_Morari_BapuUITests.framework */; };
@@ -93,6 +97,13 @@
 			remoteGlobalIDString = 07094A4C2161C32E00B5B08C;
 			remoteInfo = "Morari Bapu";
 		};
+		07FC216E2230DB89009871E8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 07FC216A2230DB89009871E8 /* LNPopupController.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 39DB52E51B5823330061C589;
+			remoteInfo = LNPopupController;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -102,6 +113,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				07FC21742230DF7D009871E8 /* LNPopupController.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -149,6 +161,7 @@
 		070D461121DD20430084C0DA /* AboutTheAppVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutTheAppVC.swift; sourceTree = "<group>"; };
 		070D461521DD23E10084C0DA /* FeedbackVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackVC.swift; sourceTree = "<group>"; };
 		0715B16922207B3900A6DC49 /* BapuDarshanUITableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BapuDarshanUITableViewCell.swift; sourceTree = "<group>"; };
+		072027C32225921D00A55489 /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = System/Library/Frameworks/EventKit.framework; sourceTree = SDKROOT; };
 		073C7F7E221E615500BDC6E3 /* WhatsNewTextDetailsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNewTextDetailsVC.swift; sourceTree = "<group>"; };
 		074029E121DE6A2900E4DE4B /* WhatsNewPhotosVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNewPhotosVC.swift; sourceTree = "<group>"; };
 		074029E321DE6A3D00E4DE4B /* WhatsNewVideoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNewVideoVC.swift; sourceTree = "<group>"; };
@@ -162,6 +175,7 @@
 		07443DF52165223400F39CCD /* QuotesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuotesTableViewCell.swift; sourceTree = "<group>"; };
 		07443DF72165228900F39CCD /* UpcomingKathaTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpcomingKathaTableViewCell.swift; sourceTree = "<group>"; };
 		075675F121ED06F700915946 /* MusicPlayerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicPlayerVC.swift; sourceTree = "<group>"; };
+		07637E69222F0A7500A657BB /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		0766437B21E79F2700B15520 /* FavouriteVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouriteVC.swift; sourceTree = "<group>"; };
 		0766437E21E7AC3B00B15520 /* ArticlesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticlesVC.swift; sourceTree = "<group>"; };
 		0766438021E7AC7F00B15520 /* Articles1TableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Articles1TableViewCell.swift; sourceTree = "<group>"; };
@@ -178,10 +192,10 @@
 		07A755232162869100793232 /* MontserratAlternates-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MontserratAlternates-Light.otf"; sourceTree = "<group>"; };
 		07A755242162869100793232 /* MontserratAlternates-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MontserratAlternates-Regular.otf"; sourceTree = "<group>"; };
 		07AE6019221C87DA000689F6 /* Morari Bapu.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Morari Bapu.entitlements"; sourceTree = "<group>"; };
-		07B19F5222115F6D00571CF1 /* PullUpController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PullUpController.swift; sourceTree = "<group>"; };
 		07CD60BD22171FE4003C9333 /* KathaTimingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KathaTimingTableViewCell.swift; sourceTree = "<group>"; };
 		07D9394821F62B7B003F847D /* UpComingKathasVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpComingKathasVC.swift; sourceTree = "<group>"; };
 		07D9394A21F62CE9003F847D /* UpComingKathaDetailsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpComingKathaDetailsVC.swift; sourceTree = "<group>"; };
+		07FC216A2230DB89009871E8 /* LNPopupController.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = LNPopupController.xcodeproj; path = LNPopupController/LNPopupController.xcodeproj; sourceTree = "<group>"; };
 		4C7EC3ED81FE47D190032489 /* Pods_Morari_BapuUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Morari_BapuUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A88026A43A3E43A2EF17F46 /* Pods-Morari Bapu.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Morari Bapu.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Morari Bapu/Pods-Morari Bapu.debug.xcconfig"; sourceTree = "<group>"; };
 		6903C3D27825025CE29FD0C2 /* Pods-Morari BapuUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Morari BapuUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Morari BapuUITests/Pods-Morari BapuUITests.release.xcconfig"; sourceTree = "<group>"; };
@@ -198,6 +212,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				07FC21702230DBA8009871E8 /* LNPopupController.framework in Frameworks */,
+				07FC21732230DF7D009871E8 /* LNPopupController.framework in Frameworks */,
+				07637E6A222F0A7500A657BB /* MediaPlayer.framework in Frameworks */,
+				072027C42225921D00A55489 /* EventKit.framework in Frameworks */,
 				DA8CD2ED06F8BF46F430A842 /* Pods_Morari_Bapu.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -372,7 +390,7 @@
 		07094A862161DAA000B5B08C /* ThirdParty Classes  */ = {
 			isa = PBXGroup;
 			children = (
-				07B19F5122115F6500571CF1 /* PullUpController */,
+				07FC216A2230DB89009871E8 /* LNPopupController.xcodeproj */,
 				07A755212162868500793232 /* Fonts */,
 				07094A8B2161DB5D00B5B08C /* Rechability */,
 				07094A872161DAB400B5B08C /* GlobalConstants.swift */,
@@ -644,14 +662,6 @@
 			path = Fonts;
 			sourceTree = "<group>";
 		};
-		07B19F5122115F6500571CF1 /* PullUpController */ = {
-			isa = PBXGroup;
-			children = (
-				07B19F5222115F6D00571CF1 /* PullUpController.swift */,
-			);
-			path = PullUpController;
-			sourceTree = "<group>";
-		};
 		07D9394721F62B33003F847D /* Up Coming Kathas */ = {
 			isa = PBXGroup;
 			children = (
@@ -670,9 +680,19 @@
 			path = "Up Coming Katha Details";
 			sourceTree = "<group>";
 		};
+		07FC216B2230DB89009871E8 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				07FC216F2230DB89009871E8 /* LNPopupController.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		8DF30DBF619FC95482207BBC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				07637E69222F0A7500A657BB /* MediaPlayer.framework */,
+				072027C32225921D00A55489 /* EventKit.framework */,
 				AF96C55420CE8AEB3492FBD9 /* Pods_Morari_Bapu.framework */,
 				FC4BD43BCEDC5FD94AD884CF /* Pods_Morari_BapuTests.framework */,
 				4C7EC3ED81FE47D190032489 /* Pods_Morari_BapuUITests.framework */,
@@ -793,6 +813,12 @@
 			mainGroup = 07094A442161C32E00B5B08C;
 			productRefGroup = 07094A4E2161C32E00B5B08C /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 07FC216B2230DB89009871E8 /* Products */;
+					ProjectRef = 07FC216A2230DB89009871E8 /* LNPopupController.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				07094A4C2161C32E00B5B08C /* Morari Bapu */,
@@ -801,6 +827,16 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		07FC216F2230DB89009871E8 /* LNPopupController.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = LNPopupController.framework;
+			remoteRef = 07FC216E2230DB89009871E8 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		07094A4B2161C32E00B5B08C /* Resources */ = {
@@ -890,17 +926,19 @@
 				"${SRCROOT}/Pods/Target Support Files/Pods-Morari Bapu/Pods-Morari Bapu-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/AEXML/AEXML.framework",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/AudioPlayerManager/AudioPlayerManager.framework",
 				"${BUILT_PRODUCTS_DIR}/ESTMusicIndicator/ESTMusicIndicator.framework",
 				"${BUILT_PRODUCTS_DIR}/FolioReaderKit/FolioReaderKit.framework",
 				"${BUILT_PRODUCTS_DIR}/FontBlaster/FontBlaster.framework",
 				"${BUILT_PRODUCTS_DIR}/IQKeyboardManagerSwift/IQKeyboardManagerSwift.framework",
-				"${BUILT_PRODUCTS_DIR}/Jukebox/Jukebox.framework",
 				"${BUILT_PRODUCTS_DIR}/Kingfisher/Kingfisher.framework",
+				"${BUILT_PRODUCTS_DIR}/MarqueeLabel/MarqueeLabel.framework",
 				"${BUILT_PRODUCTS_DIR}/MenuItemKit/MenuItemKit.framework",
 				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
 				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/SSZipArchive/SSZipArchive.framework",
 				"${BUILT_PRODUCTS_DIR}/SVProgressHUD/SVProgressHUD.framework",
+				"${BUILT_PRODUCTS_DIR}/SubtleVolume/SubtleVolume.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyUserDefaults/SwiftyUserDefaults.framework",
 				"${BUILT_PRODUCTS_DIR}/Toast-Swift/Toast_Swift.framework",
@@ -913,17 +951,19 @@
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AEXML.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AudioPlayerManager.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ESTMusicIndicator.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FolioReaderKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FontBlaster.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IQKeyboardManagerSwift.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Jukebox.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Kingfisher.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MarqueeLabel.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MenuItemKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SSZipArchive.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SVProgressHUD.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SubtleVolume.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyUserDefaults.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Toast_Swift.framework",
@@ -988,7 +1028,6 @@
 				0702111521DBA88C006B6472 /* FaqTableViewCell.swift in Sources */,
 				0709A8D1216A6EB500371E06 /* KathaEBookTableViewCell.swift in Sources */,
 				074029E621DE6A4B00E4DE4B /* WhatsNewAudioVC.swift in Sources */,
-				07B19F5322115F6D00571CF1 /* PullUpController.swift in Sources */,
 				07443DF82165228900F39CCD /* UpcomingKathaTableViewCell.swift in Sources */,
 				0715B16A22207B3900A6DC49 /* BapuDarshanUITableViewCell.swift in Sources */,
 				077B2ACE2209F815005DC7DF /* BackgroundView.swift in Sources */,

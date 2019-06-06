@@ -29,12 +29,18 @@ class BapuThoughtsVC: UIViewController {
     tblThought.tableFooterView =  UIView.init(frame: .zero)
     tblThought.layoutMargins = .zero
     
-    tblThought.rowHeight = 110
+    tblThought.rowHeight = 78
     tblThought.estimatedRowHeight = UITableView.automaticDimension
     
     DispatchQueue.main.async {
       self.arrThought.removeAll()
       self.getShayri(pageNo: self.currentPageNo)
+    }
+    
+    // Add reachability observer
+    if let reachability = AppDelegate.sharedAppDelegate()?.reachability
+    {
+      NotificationCenter.default.addObserver( self, selector: #selector( self.reachabilityChanged ),name: Notification.Name.reachabilityChanged, object: reachability )
     }
     
   }
@@ -64,11 +70,9 @@ class BapuThoughtsVC: UIViewController {
             self.arrThought.append(result)
           }
           
-          
           for result in jsonResponce!["MyFavourite"].arrayValue {
             self.arrFavourite.add(result.stringValue)
           }
-          
           
           if self.arrThought.count != 0{
             
@@ -105,7 +109,9 @@ class BapuThoughtsVC: UIViewController {
   }
   
   @IBAction func btnHanumanChalisha(_ sender: Any) {
-    Utility.hanuman_chalisha_Show(onViewController: self)
+    let storyboardCustom : UIStoryboard = UIStoryboard(name: Custome_Storyboard, bundle: nil)
+    let objVC = storyboardCustom.instantiateViewController(withIdentifier: "HanumanChalishaVC") as? HanumanChalishaVC
+    self.navigationController?.pushViewController(objVC!, animated: true)
   }
   
   @IBAction func btnBack(_ sender: Any) {
@@ -185,21 +191,25 @@ extension BapuThoughtsVC : UITableViewDelegate, UITableViewDataSource{
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     
-    var data = arrThought[indexPath.row]
-    
-    if data["is_read"].intValue == 0{
+    if arrThought.count != 0{
       
-      data["is_read"] = true;
+      var data = arrThought[indexPath.row]
       
-      arrThought[indexPath.row] = data
-      
-      let indexPath = NSIndexPath(row: indexPath.row, section: 0)
-      tblThought.reloadRows(at: [indexPath as IndexPath], with: UITableView.RowAnimation.none)
-      
-      let param = ["app_id":Utility.getDeviceID(),
-                   "bapu_thought_id":data["id"].stringValue] as NSDictionary
-      
-      Utility.readUnread(api_Url: WebService_Bapu_Thoughts_Read_Unread, parameters: param)
+      if data["is_read"].intValue == 0{
+        
+        data["is_read"] = true;
+        
+        arrThought[indexPath.row] = data
+        
+        let indexPath = NSIndexPath(row: indexPath.row, section: 0)
+        tblThought.reloadRows(at: [indexPath as IndexPath], with: UITableView.RowAnimation.none)
+        
+        let param = ["app_id":Utility.getDeviceID(),
+                     "bapu_thought_id":data["id"].stringValue] as NSDictionary
+        
+        Utility.readUnread(api_Url: WebService_Bapu_Thoughts_Read_Unread, parameters: param)
+        
+      }
       
     }
     
@@ -240,33 +250,37 @@ extension BapuThoughtsVC : UITableViewDelegate, UITableViewDataSource{
   
   @IBAction func btnFavourites(_ sender: UIButton) {
     
-    let data = arrThought[sender.tag]
-    
-    let paramater = ["app_id":Utility.getDeviceID(),
-                     "favourite_for":"18",
-                     "favourite_id":data["id"].stringValue]
-    
-    WebServices().CallGlobalAPI(url: WebService_Favourite,headers: [:], parameters: paramater as NSDictionary, HttpMethod: "POST", ProgressView: true) { ( _ jsonResponce:JSON? , _ strErrorMessage:String) in
+    if arrThought.count != 0{
       
-      if(jsonResponce?.error != nil) {
+      let data = arrThought[sender.tag]
+      
+      let paramater = ["app_id":Utility.getDeviceID(),
+                       "favourite_for":"18",
+                       "favourite_id":data["id"].stringValue]
+      
+      WebServices().CallGlobalAPI(url: WebService_Favourite,headers: [:], parameters: paramater as NSDictionary, HttpMethod: "POST", ProgressView: true) { ( _ jsonResponce:JSON? , _ strErrorMessage:String) in
         
-        var errorMess = jsonResponce?.error?.localizedDescription
-        errorMess = MESSAGE_Err_Service
-        Utility().showAlertMessage(vc: self, titleStr: "", messageStr: errorMess!)
-      }
-      else {
-        
-        if jsonResponce!["status"].stringValue == "true"{
-        
-          self.arrThought.removeAll()
-          self.arrFavourite.removeAllObjects()
-          self.getShayri(pageNo: 1)
+        if(jsonResponce?.error != nil) {
           
+          var errorMess = jsonResponce?.error?.localizedDescription
+          errorMess = MESSAGE_Err_Service
+          Utility().showAlertMessage(vc: self, titleStr: "", messageStr: errorMess!)
         }
         else {
-          Utility().showAlertMessage(vc: self, titleStr: "", messageStr: jsonResponce!["message"].stringValue)
+          
+          if jsonResponce!["status"].stringValue == "true"{
+            
+            self.arrThought.removeAll()
+            self.arrFavourite.removeAllObjects()
+            self.getShayri(pageNo: 1)
+            
+          }
+          else {
+            Utility().showAlertMessage(vc: self, titleStr: "", messageStr: jsonResponce!["message"].stringValue)
+          }
         }
       }
+      
     }
     
   }
@@ -413,3 +427,39 @@ extension BapuThoughtsVC: MenuNavigationDelegate{
 }
 
 
+extension BapuThoughtsVC : InternetConnectionDelegate{
+  
+  @objc private func reachabilityChanged( notification: NSNotification )
+  {
+    guard let reachability = notification.object as? Reachability else
+    {
+      return
+    }
+    
+    if reachability.connection == .wifi || reachability.connection == .cellular {
+      
+    }else{
+      
+      if let wd = UIApplication.shared.delegate?.window {
+        var vc = wd!.rootViewController
+        if(vc is UINavigationController){
+          vc = (vc as! UINavigationController).visibleViewController
+        }
+        
+        if(vc is BapuThoughtsVC){
+          Utility.internet_connection_Show(onViewController: self)
+        }
+      }
+      
+    }
+    
+  }
+  
+  func reloadPage() {
+    
+    self.arrThought.removeAll()
+    self.arrFavourite.removeAllObjects()
+    self.getShayri(pageNo: 1)
+    
+  }
+}

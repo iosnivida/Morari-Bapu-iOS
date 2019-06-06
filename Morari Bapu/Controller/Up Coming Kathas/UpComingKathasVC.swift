@@ -9,6 +9,7 @@
 import UIKit
 import SwiftyJSON
 import Alamofire
+import EventKit
 
 
 class UpComingKathasVC: UIViewController {
@@ -22,6 +23,8 @@ class UpComingKathasVC: UIViewController {
   var totalPageNo = Int()
   var is_Api_Being_Called : Bool = false
   
+  let store = EKEventStore()
+
   override func viewDidLoad() {
     super.viewDidLoad()
     
@@ -73,6 +76,12 @@ class UpComingKathasVC: UIViewController {
         if jsonResponce!["status"].stringValue == "true"{
           
           for result in jsonResponce!["data"].arrayValue {
+            
+            if result["from_date"].stringValue != ""{
+              
+              self.createEventinTheCalendar(with: (result["title"].stringValue), forDate: Utility.stringDateToDate(date: ((result["from_date"].stringValue))), toDate: Utility.stringDateToDate(date: ((result["to_date"].stringValue))))
+            }
+            
             self.arrUpComingKathas.append(result)
           }
           
@@ -118,7 +127,9 @@ class UpComingKathasVC: UIViewController {
   }
   
   @IBAction func btnHanumanChalisha(_ sender: Any) {
-    Utility.hanuman_chalisha_Show(onViewController: self)
+    let storyboardCustom : UIStoryboard = UIStoryboard(name: Custome_Storyboard, bundle: nil)
+    let objVC = storyboardCustom.instantiateViewController(withIdentifier: "HanumanChalishaVC") as? HanumanChalishaVC
+    self.navigationController?.pushViewController(objVC!, animated: true)
     
   }
   
@@ -130,29 +141,56 @@ class UpComingKathasVC: UIViewController {
     self.navigationController?.popToRootViewController(animated: true)
   }
 
-  //MARK:- Internet Checking
-  @objc private func reachabilityChanged( notification: NSNotification )
-  {
-    guard let reachability = notification.object as? Reachability else
-    {
-      return
-    }
+  //MARK:- Event Add
+  func createEventinTheCalendar(with title:String, forDate eventStartDate:Date, toDate eventEndDate:Date) {
     
-    if reachability.connection == .wifi || reachability.connection == .cellular {
-      
-      Utility.internet_connection_hide(onViewController: self)
-      arrUpComingKathas.removeAll()
-      getUpcomingKathas(pageNo: 1)
-      print("Reachable via WiFi & Cellular")
-      
+    store.requestAccess(to: .event) { (success, error) in
+      if  error == nil {
+        
+        let startDate = eventStartDate
+        let endDate = eventEndDate
+        let predicate = self.store.predicateForEvents(withStart: startDate, end: endDate, calendars: nil)
+        let existingEvents = self.store.events(matching: predicate)
+        
+        var isEvent : Bool = false
+        
+        for singleEvent in existingEvents {
+          if singleEvent.title == title{
+            isEvent = true
+            print("Event Exist...")
+            break
+          }else{
+            isEvent = false
+          }
+        }
+        
+        if isEvent == false{
+          
+          let event = EKEvent.init(eventStore: self.store)
+          event.title = title
+          event.calendar = self.store.defaultCalendarForNewEvents // this will return deafult calendar from device calendars
+          event.startDate = eventStartDate
+          event.endDate = eventEndDate
+          
+          //          let alarm = EKAlarm.init(absoluteDate: Date.init(timeInterval: -3600, since: event.startDate))
+          //          event.addAlarm(alarm)
+          
+          do {
+            try self.store.save(event, span: .thisEvent)
+            //event created successfullt to default calendar
+          } catch let error as NSError {
+            print("failed to save event with error : \(error)")
+          }
+          
+        }
+        
+      } else {
+        //we have error in getting access to device calnedar
+        print("error = \(String(describing: error?.localizedDescription))")
+      }
     }
-    else
-    {
-      Utility.internet_connection_Show(onViewController: self)
-      print("Network not reachable")
-    }
-    
   }
+
   
 }
 
@@ -386,3 +424,43 @@ extension UpComingKathasVC : MenuNavigationDelegate{
     }
   }
 }
+
+
+extension UpComingKathasVC : InternetConnectionDelegate{
+  
+  @objc private func reachabilityChanged( notification: NSNotification )
+  {
+    guard let reachability = notification.object as? Reachability else
+    {
+      return
+    }
+    
+    if reachability.connection == .wifi || reachability.connection == .cellular {
+      
+    }else{
+      
+      if let wd = UIApplication.shared.delegate?.window {
+        var vc = wd!.rootViewController
+        if(vc is UINavigationController){
+          vc = (vc as! UINavigationController).visibleViewController
+        }
+        
+        if(vc is UpComingKathasVC){
+          Utility.internet_connection_Show(onViewController: self)
+        }
+      }
+      
+    }
+    
+  }
+  
+  func reloadPage() {
+    
+    Utility.internet_connection_hide(onViewController: self)
+    arrUpComingKathas.removeAll()
+    getUpcomingKathas(pageNo: 1)
+    print("Reachable via WiFi & Cellular")
+    
+  }
+}
+

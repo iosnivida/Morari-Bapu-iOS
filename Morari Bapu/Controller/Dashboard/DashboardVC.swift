@@ -15,6 +15,8 @@ import iCarousel
 import MediaPlayer
 import AVKit
 import AVFoundation
+import LNPopupController
+import AudioPlayerManager
 
 class DashboardVC: UIViewController, UIScrollViewDelegate {
 
@@ -54,7 +56,7 @@ class DashboardVC: UIViewController, UIScrollViewDelegate {
         tblHome.tableFooterView =  UIView.init(frame: .zero)
         tblHome.layoutMargins = .zero
       
-        tblHome.rowHeight = 130
+        tblHome.rowHeight = 80
         tblHome.estimatedRowHeight = UITableView.automaticDimension
       
         btnDown.imageColorChange(imageColor: UIColor.black)
@@ -75,16 +77,22 @@ class DashboardVC: UIViewController, UIScrollViewDelegate {
         NotificationCenter.default.addObserver( self, selector: #selector( self.reachabilityChanged ),name: Notification.Name.reachabilityChanged, object: reachability )
       }
       
-      if Utility.topViewController(viewController: DashboardVC()) == true{
-        print("Present Screen...")
-      }
-      
-      
       NotificationCenter.default.addObserver(self, selector: #selector(self.notificationRedirect(_:)), name: NSNotification.Name(rawValue: "notifications"), object: nil)
-
-
+      
     }
 
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+    
+    
+    if AudioPlayerManager.shared.isPlaying() == true{
+     
+      carouselHeight.constant = self.view.frame.height - 180
+      self.view.layoutIfNeeded()
+      
+    }
+    
+  }
  
     //MARK:- Api Call
     func getSliderList(){
@@ -242,6 +250,15 @@ class DashboardVC: UIViewController, UIScrollViewDelegate {
 
     
     /*
+     
+     "aps" : {
+     "sound" : "default",
+     "alert" : "Live Katha",
+     "badge" : 1
+     },
+     "id" : "1",
+     "type" : "1"
+     
      {
      "type" : 1,
      "aps" : {
@@ -263,13 +280,23 @@ class DashboardVC: UIViewController, UIScrollViewDelegate {
      "alert" : "Bapu Photo"
      }
      }
+     
+     "id" : "47",
+     "aps" : {
+     "sound" : "default",
+     "badge" : 1,
+     "alert" : "New Photo"
+     },
+     "type" : 11
+     
+     
      */
+    
     
     if (notification.object as? JSON) != nil {
       
       let dictResult = notification.object as? JSON
-      
-      
+
       if dictResult!["type"].intValue == 1{
         //Quotes
         
@@ -279,17 +306,48 @@ class DashboardVC: UIViewController, UIScrollViewDelegate {
           vc.strTitle = "Quotes"
           vc.strId = dictResult!["id"].stringValue
           self.navigationController?.pushViewController(vc, animated:  true)
+          
+        }
+      }else if dictResult!["type"].intValue == 11{
+        //New Photo
+        
+        DispatchQueue.main.async {
+          let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+          let vc = storyboard.instantiateViewController(withIdentifier: "WhatsNewPhotosVC") as! WhatsNewPhotosVC
+          vc.screenDirection = .Whats_New_Photos
+          self.navigationController?.pushViewController(vc, animated:  true)
+          
         }
       }else if dictResult!["type"].intValue == 12{
         //Bapu Photo
         
         DispatchQueue.main.async {
-//          let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
-//          let vc = storyboard.instantiateViewController(withIdentifier: "KathaChopaiDetailsVC") as! KathaChopaiDetailsVC
-//          vc.strTitle = "Bapu Photo"
-//          vc.strId = dictResult!["id"].stringValue
-//          self.navigationController?.pushViewController(vc, animated:  true)
+          let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+          let vc = storyboard.instantiateViewController(withIdentifier: "WhatsNewPhotosVC") as! WhatsNewPhotosVC
+          vc.screenDirection = .Media_Photos
+          self.navigationController?.pushViewController(vc, animated:  true)
+          
         }
+      }else if dictResult!["type"].intValue == 14{
+        //UpComing Katha
+        
+        DispatchQueue.main.async {
+          
+          let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+          let vc = storyboard.instantiateViewController(withIdentifier: "UpComingKathaDetailsVC") as! UpComingKathaDetailsVC
+          vc.strId = dictResult!["id"].stringValue
+          self.navigationController?.pushViewController(vc, animated:  true)
+          
+        }
+      }
+      else{
+          //Live Katha
+          let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+          let vc = storyboard.instantiateViewController(withIdentifier: "WebViewVC") as! WebViewVC
+          vc.screenDirection = .Live_Katha_Streaming_Video
+          vc.strTitle = "Live Katha Video"
+          self.navigationController?.pushViewController(vc, animated:  true)
+        
       }
     }
   }
@@ -302,7 +360,9 @@ class DashboardVC: UIViewController, UIScrollViewDelegate {
     }
     
   @IBAction func btnHanumanChalisha(_ sender: Any) {
-    Utility.hanuman_chalisha_Show(onViewController: self)
+    let storyboardCustom : UIStoryboard = UIStoryboard(name: Custome_Storyboard, bundle: nil)
+    let objVC = storyboardCustom.instantiateViewController(withIdentifier: "HanumanChalishaVC") as? HanumanChalishaVC
+    self.navigationController?.pushViewController(objVC!, animated: true)
   }
   
   @IBAction func swipeUp(_ sender: Any) {
@@ -347,8 +407,10 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
     cell.btnTitle.tag = indexPath.row
     cell.btnTitle.addTarget(self, action: #selector(btnToSpecificScreen(_:)), for: UIControl.Event.touchUpInside)
 
-    self.constraintHeightTableView.constant = self.tblHome.contentSize.height
-    self.view.layoutIfNeeded()
+      DispatchQueue.main.async {
+        self.constraintHeightTableView.constant = self.tblHome.contentSize.height
+        self.view.layoutIfNeeded()
+      }
     
     print("TableView Height: \(constraintHeightTableView.constant)")
       
@@ -367,11 +429,11 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
       
       cell.lblTitle.text = data["title"].stringValue
       cell.lblDate.text = Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd MMM yyyy")
-      cell.lblDescription1.text = data["quotes_gujarati"].stringValue
+      cell.lblDescription1.text = data["quotes_english"].stringValue
       cell.btnTitle.setTitle(data["list_heading"].stringValue, for: .normal)
       
-      cell.btnFavourite.isHidden = true
-      cell.btnShare.isHidden = true
+//      cell.btnFavourite.isHidden = true
+//      cell.btnShare.isHidden = true
       
       //cell.btnFavourite.tag = indexPath.row
       //cell.btnShare.tag = indexPath.row
@@ -382,8 +444,10 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
       //cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
       //cell.btnFavourite.addTarget(self, action: #selector(btnFavourite(_:)), for: UIControl.Event.touchUpInside)
       cell.btnTitle.addTarget(self, action: #selector(btnToSpecificScreen(_:)), for: UIControl.Event.touchUpInside)
-      self.constraintHeightTableView.constant = self.tblHome.contentSize.height
-    self.view.layoutIfNeeded()
+      DispatchQueue.main.async {
+        self.constraintHeightTableView.constant = self.tblHome.contentSize.height
+        self.view.layoutIfNeeded()
+      }
     
     print("TableView Height: \(constraintHeightTableView.constant)")
       return cell
@@ -399,9 +463,9 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
         
       }
       
-      cell.lblTitle.text = "\(data["title"].stringValue)-\(data["title_no"].stringValue)"
+      cell.lblTitle.text = "\(data["title"].stringValue)"
       cell.lblDate.text = Utility.dateToString(dateStr: data["from_date"].stringValue, strDateFormat: "dd MMM yyyy")
-      cell.lblDescription1.text = data["quotes_hindi"].stringValue
+      cell.lblDescription1.text = data["description"].stringValue
       cell.btnTitle.setTitle(data["list_heading"].stringValue, for: .normal)
       //cell.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
       
@@ -412,14 +476,16 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
       //cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
       //cell.btnFavourite.addTarget(self, action: #selector(btnFavourite(_:)), for: UIControl.Event.touchUpInside)
       
-      cell.btnFavourite.isHidden = true
-      cell.btnShare.isHidden = true
+//      cell.btnFavourite.isHidden = true
+//      cell.btnShare.isHidden = true
 
       cell.btnTitle.addTarget(self, action: #selector(btnToSpecificScreen(_:)), for: UIControl.Event.touchUpInside)
       cell.btnTitle.addTarget(self, action: #selector(btnToSpecificScreen(_:)), for: UIControl.Event.touchUpInside)
       
-      self.constraintHeightTableView.constant = self.tblHome.contentSize.height
-    self.view.layoutIfNeeded()
+      DispatchQueue.main.async {
+        self.constraintHeightTableView.constant = self.tblHome.contentSize.height
+        self.view.layoutIfNeeded()
+      }
     
     print("TableView Height: \(constraintHeightTableView.constant)")
       return cell
@@ -436,7 +502,7 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
         
       }
       
-      cell.lblTitle.text = "\(data["title"].stringValue)-\(data["title_no"].stringValue)"
+      cell.lblTitle.text = "\(data["title"].stringValue)"
       cell.lblDate.text = Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd MMM yyyy")
       cell.lblDescription1.text = data["description"].stringValue
       cell.btnTitle.setTitle("Ram Charit Manas", for: .normal)
@@ -449,14 +515,16 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
       //cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
       //cell.btnFavourite.addTarget(self, action: #selector(btnFavourite(_:)), for: UIControl.Event.touchUpInside)
       
-      cell.btnFavourite.isHidden = true
-      cell.btnShare.isHidden = true
+//      cell.btnFavourite.isHidden = true
+//      cell.btnShare.isHidden = true
 
       cell.btnTitle.addTarget(self, action: #selector(btnToSpecificScreen(_:)), for: UIControl.Event.touchUpInside)
       cell.btnTitle.addTarget(self, action: #selector(btnToSpecificScreen(_:)), for: UIControl.Event.touchUpInside)
       
-      self.constraintHeightTableView.constant = self.tblHome.contentSize.height
-    self.view.layoutIfNeeded()
+      DispatchQueue.main.async {
+        self.constraintHeightTableView.constant = self.tblHome.contentSize.height
+        self.view.layoutIfNeeded()
+      }
     
     print("TableView Height: \(constraintHeightTableView.constant)")
       return cell
@@ -492,13 +560,15 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
       //cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
       cell.btnYoutube.addTarget(self, action: #selector(btnYoutube), for: UIControl.Event.touchUpInside)
       //cell.btnFavourite.addTarget(self, action: #selector(btnFavourite), for: UIControl.Event.touchUpInside)
-      
+//
       cell.btnFavourite.isHidden = true
       cell.btnShare.isHidden = true
 
       cell.btnTitle.addTarget(self, action: #selector(btnToSpecificScreen(_:)), for: UIControl.Event.touchUpInside)
-      self.constraintHeightTableView.constant = self.tblHome.contentSize.height
-    self.view.layoutIfNeeded()
+      DispatchQueue.main.async {
+        self.constraintHeightTableView.constant = self.tblHome.contentSize.height
+        self.view.layoutIfNeeded()
+      }
     
     print("TableView Height: \(constraintHeightTableView.constant)")
       return cell
@@ -533,8 +603,10 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
       cell.btnYoutube.addTarget(self, action: #selector(btnYoutube), for: UIControl.Event.touchUpInside)
       //cell.btnFavourite.addTarget(self, action: #selector(btnFavourite), for: UIControl.Event.touchUpInside)
       cell.btnTitle.addTarget(self, action: #selector(btnToSpecificScreen(_:)), for: UIControl.Event.touchUpInside)
-      self.constraintHeightTableView.constant = self.tblHome.contentSize.height
-    self.view.layoutIfNeeded()
+      DispatchQueue.main.async {
+        self.constraintHeightTableView.constant = self.tblHome.contentSize.height
+        self.view.layoutIfNeeded()
+      }
     
     print("TableView Height: \(constraintHeightTableView.constant)")
       return cell
@@ -563,13 +635,14 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
       
       //cell.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
       
-      cell.btnFavourite.isHidden = true
-      cell.btnShare.isHidden = true
+//      cell.btnFavourite.isHidden = true
+//      cell.btnShare.isHidden = true
 
       cell.btnTitle.addTarget(self, action: #selector(btnToSpecificScreen(_:)), for: UIControl.Event.touchUpInside)
-      self.constraintHeightTableView.constant = self.tblHome.contentSize.height
-    self.view.layoutIfNeeded()
-    
+      DispatchQueue.main.async {
+        self.constraintHeightTableView.constant = self.tblHome.contentSize.height
+        self.view.layoutIfNeeded()
+      }
     print("TableView Height: \(constraintHeightTableView.constant)")
       
       return cell
@@ -598,17 +671,18 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
       
       //cell.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
       
-      cell.btnFavourite.isHidden = true
-      cell.btnShare.isHidden = true
+//      cell.btnFavourite.isHidden = true
+//      cell.btnShare.isHidden = true
 
       cell.viewMusicIndicator.isHidden = true
       
       cell.btnTitle.tag = indexPath.row
       
       cell.btnTitle.addTarget(self, action: #selector(btnToSpecificScreen(_:)), for: UIControl.Event.touchUpInside)
-      self.constraintHeightTableView.constant = self.tblHome.contentSize.height
-      self.view.layoutIfNeeded()
-    
+      DispatchQueue.main.async {
+        self.constraintHeightTableView.constant = self.tblHome.contentSize.height
+        self.view.layoutIfNeeded()
+      }
     print("TableView Height: \(constraintHeightTableView.constant)")
       
       return cell
@@ -629,23 +703,27 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
       //cell.lblDescription1.text = data["quotes_gujarati"].stringValue
       //cell.btnTitle.setTitle(data["list_heading"].stringValue, for: .normal)
       
-      cell.btnFavourite.isHidden = true
-      cell.btnShare.isHidden = true
+//      cell.btnFavourite.isHidden = true
+//      cell.btnShare.isHidden = true
       
-      cell.btnFavourite.tag = indexPath.row
-      cell.btnShare.tag = indexPath.row
+//      cell.btnFavourite.tag = indexPath.row
+//      cell.btnShare.tag = indexPath.row
       
       cell.btnTitle.tag = indexPath.row
       cell.btnTitle.setTitle(data["list_heading"].stringValue, for: .normal)
       
       
-      cell.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
+      //cell.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
       
-      cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
-      cell.btnFavourite.addTarget(self, action: #selector(btnFavourite(_:)), for: UIControl.Event.touchUpInside)
+//      cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
+//      cell.btnFavourite.addTarget(self, action: #selector(btnFavourite(_:)), for: UIControl.Event.touchUpInside)
       cell.btnTitle.addTarget(self, action: #selector(btnToSpecificScreen(_:)), for: UIControl.Event.touchUpInside)
-      self.constraintHeightTableView.constant = self.tblHome.contentSize.height
-      self.view.layoutIfNeeded()
+  
+      DispatchQueue.main.async {
+        self.constraintHeightTableView.constant = self.tblHome.contentSize.height
+        self.view.layoutIfNeeded()
+      }
+      
       
       print("TableView Height: \(constraintHeightTableView.constant)")
       return cell
@@ -872,14 +950,14 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
     else if data["list_heading"].stringValue == "KathaChopai"{
       //Katha Chopai
       
-      share_Content = "\(data["title"].stringValue)-\(data["title_no"].stringValue) \n\nDate: \(Utility.dateToString(dateStr: data["from_date"].stringValue, strDateFormat: "dd MMM yyyy")) \n\n \(data["quotes_hindi"].stringValue) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
+      share_Content = "\(data["title"].stringValue) \n\nDate: \(Utility.dateToString(dateStr: data["from_date"].stringValue, strDateFormat: "dd MMM yyyy")) \n\n \(data["quotes_hindi"].stringValue) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
       
       
       
     }
     else if data["list_heading"].stringValue == "Ramcharit"{
       //Ram charit manas
-      share_Content = "\(data["title"].stringValue)-\(data["title_no"].stringValue) \n\nDate: \(Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd MMM yyyy")) \n\n \(data["description"].stringValue) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
+      share_Content = "\(data["title"].stringValue) \n\nDate: \(Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd MMM yyyy")) \n\n \(data["description"].stringValue) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
       
       
       
@@ -935,10 +1013,11 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
     
     let data = arrHome[indexPath!.row]
 
-    if data["youtube_link"].stringValue.contains("youtube") {
+    if data["youtube_link"].stringValue != ""{
       
       let videoURL = URL(string: "\(data["youtube_link"].stringValue)")
-      if Utility.canOpenURL(data["youtube_link"].stringValue){
+      
+      if Utility.verifyUrl(urlString: data["youtube_link"].stringValue) == true{
         DispatchQueue.main.async {
           UIApplication.shared.open(videoURL!, options: [:])
         }
@@ -1126,45 +1205,7 @@ extension DashboardVC : iCarouselDataSource, iCarouselDelegate{
     print(index)
   }
   
-  @objc private func reachabilityChanged( notification: NSNotification )
-  {
-    guard let reachability = notification.object as? Reachability else
-    {
-      return
-    }
-    
-    if reachability.connection == .wifi || reachability.connection == .cellular {
-     
-      
-      Utility.internet_connection_hide(onViewController: self)
-
-      if Utility.topViewController(viewController: DashboardVC()) == true{
-        
-        self.arrHome.removeAll()
-        self.getHome(pageNo: 0)
-        
-        if arrSlider.count == 0{
-          self.getSliderList()
-        }
-        
-        
-        print("Reachable via WiFi & Cellular")
-      }
-      
-    }
-    else
-    {
-      
-      Utility.internet_connection_Show(onViewController: self)
-
-      if Utility.topViewController(viewController: self) == true{
-
-      print("Network not reachable")
-        
-      }
-    }
   
-  }
   
 }
 
@@ -1305,5 +1346,45 @@ extension DashboardVC: MenuNavigationDelegate{
       navigationController?.pushViewController(vc, animated:  true)
       
     }
+  }
+}
+
+extension DashboardVC : InternetConnectionDelegate{
+  
+  @objc private func reachabilityChanged( notification: NSNotification )
+  {
+    guard let reachability = notification.object as? Reachability else
+    {
+      return
+    }
+    
+    if reachability.connection == .wifi || reachability.connection == .cellular {
+      
+    }else{
+      
+      if let wd = UIApplication.shared.delegate?.window {
+        var vc = wd!.rootViewController
+        if(vc is UINavigationController){
+          vc = (vc as! UINavigationController).visibleViewController
+        }
+        
+        if(vc is DashboardVC){
+          Utility.internet_connection_Show(onViewController: self)
+        }
+      }
+      
+    }
+    
+  }
+  
+  func reloadPage() {
+   
+      self.arrHome.removeAll()
+      self.getHome(pageNo: 0)
+      
+      if arrSlider.count == 0{
+        self.getSliderList()
+      }
+    
   }
 }

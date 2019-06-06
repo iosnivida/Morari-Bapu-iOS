@@ -97,7 +97,7 @@ class KathaChopaiDetailsVC: UIViewController {
             self.arrFavourite = jsonResponce!["MyFavourite"].arrayObject! as NSArray
             
             
-            self.lblSubTitle.text = "\(self.arrKathaDetails["title"]!.stringValue)-\(self.arrKathaDetails["title_no"]!.stringValue)"
+            self.lblSubTitle.text = "\(self.arrKathaDetails["title"]!.stringValue)"
             self.lblDate.text = Utility.dateToString(dateStr: self.arrKathaDetails["from_date"]?.stringValue ?? "", strDateFormat: "dd MMM yyyy")
             self.lblDescription1.text = self.arrKathaDetails["katha_hindi"]!.stringValue
             self.lblDescription2.text = self.arrKathaDetails["katha_gujarati"]!.stringValue
@@ -121,7 +121,7 @@ class KathaChopaiDetailsVC: UIViewController {
             self.arrFavourite = jsonResponce!["MyFavourite"].arrayObject! as NSArray
             
             
-            self.lblSubTitle.text = "\(self.arrKathaDetails["title"]!.stringValue)-\(self.arrKathaDetails["title_no"]!.stringValue)"
+            self.lblSubTitle.text = "\(self.arrKathaDetails["title"]!.stringValue)"
             self.lblDate.text = Utility.dateToString(dateStr: self.arrKathaDetails["date"]?.stringValue ?? "", strDateFormat: "dd MMM yyyy")
             self.lblDescription1.text = self.arrKathaDetails["katha_gujarati"]!.stringValue
             self.lblDescription2.text = self.arrKathaDetails["katha_hindi"]!.stringValue
@@ -197,7 +197,9 @@ class KathaChopaiDetailsVC: UIViewController {
   }
   
   @IBAction func btnHanumanChalisha(_ sender: Any) {
-    Utility.hanuman_chalisha_Show(onViewController: self)
+    let storyboardCustom : UIStoryboard = UIStoryboard(name: Custome_Storyboard, bundle: nil)
+    let objVC = storyboardCustom.instantiateViewController(withIdentifier: "HanumanChalishaVC") as? HanumanChalishaVC
+    self.navigationController?.pushViewController(objVC!, animated: true)
     
   }
   
@@ -207,12 +209,12 @@ class KathaChopaiDetailsVC: UIViewController {
     
     if lblTitle.text == "Katha Chopai"{
       
-      share_Content = "Katha Chopai \n\n\(arrKathaDetails["title"]!.stringValue)-\(arrKathaDetails["title_no"]!.stringValue) \n\nDate: \(Utility.dateToString(dateStr: arrKathaDetails["from_date"]?.stringValue ?? "", strDateFormat: "dd MMM yyyy")) \n\n \(arrKathaDetails["katha_gujarati"]!.stringValue) \n\n\(arrKathaDetails["katha_hindi"]!.stringValue) \n\n\(arrKathaDetails["katha_english"]!.stringValue) \n\n\(arrKathaDetails["description"]!.stringValue) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
+      share_Content = "Katha Chopai \n\n\(arrKathaDetails["title"]!.stringValue) \n\nDate: \(Utility.dateToString(dateStr: arrKathaDetails["from_date"]?.stringValue ?? "", strDateFormat: "dd MMM yyyy")) \n\n \(arrKathaDetails["katha_gujarati"]!.stringValue) \n\n\(arrKathaDetails["katha_hindi"]!.stringValue) \n\n\(arrKathaDetails["katha_english"]!.stringValue) \n\n\(arrKathaDetails["description"]!.stringValue) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
       
       
     }else if lblTitle.text == "Ram Charit Manas"{
       
-        share_Content = "Ram Charit Manas \n\n\(arrKathaDetails["title"]!.stringValue)-\(arrKathaDetails["title_no"]!.stringValue) \n\nDate: \(Utility.dateToString(dateStr: arrKathaDetails["date"]?.stringValue ?? "", strDateFormat: "dd MMM yyyy")) \n\n \(arrKathaDetails["katha_gujarati"]!.stringValue) \n\n\(arrKathaDetails["katha_hindi"]!.stringValue) \n\n\(arrKathaDetails["katha_english"]!.stringValue) \n\n\(arrKathaDetails["description"]!.stringValue) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
+        share_Content = "Ram Charit Manas \n\n\(arrKathaDetails["title"]!.stringValue) \n\nDate: \(Utility.dateToString(dateStr: arrKathaDetails["date"]?.stringValue ?? "", strDateFormat: "dd MMM yyyy")) \n\n \(arrKathaDetails["katha_gujarati"]!.stringValue) \n\n\(arrKathaDetails["katha_hindi"]!.stringValue) \n\n\(arrKathaDetails["katha_english"]!.stringValue) \n\n\(arrKathaDetails["description"]!.stringValue) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
     }
     else{
       
@@ -283,29 +285,6 @@ class KathaChopaiDetailsVC: UIViewController {
     }
   }
   
-  //MARK:- Internet Checking
-  @objc private func reachabilityChanged( notification: NSNotification )
-  {
-    guard let reachability = notification.object as? Reachability else
-    {
-      return
-    }
-    
-    if reachability.connection == .wifi || reachability.connection == .cellular {
-      
-      Utility.internet_connection_hide(onViewController: self)
-      self.viewDidLoad()
-      
-      print("Reachable via WiFi & Cellular")
-      
-    }
-    else
-    {
-      Utility.internet_connection_Show(onViewController: self)
-      print("Network not reachable")
-    }
-    
-  }
   
 }
 
@@ -453,5 +432,40 @@ extension KathaChopaiDetailsVC: MenuNavigationDelegate{
       navigationController?.pushViewController(vc, animated:  true)
       
     }
+  }
+}
+
+extension KathaChopaiDetailsVC : InternetConnectionDelegate{
+  
+  @objc private func reachabilityChanged( notification: NSNotification )
+  {
+    guard let reachability = notification.object as? Reachability else
+    {
+      return
+    }
+    
+    if reachability.connection == .wifi || reachability.connection == .cellular {
+      
+    }else{
+      
+      if let wd = UIApplication.shared.delegate?.window {
+        var vc = wd!.rootViewController
+        if(vc is UINavigationController){
+          vc = (vc as! UINavigationController).visibleViewController
+        }
+        
+        if(vc is KathaChopaiDetailsVC){
+          Utility.internet_connection_Show(onViewController: self)
+        }
+      }
+      
+    }
+    
+  }
+  
+  func reloadPage() {
+    
+    self.viewDidLoad()
+    
   }
 }

@@ -8,6 +8,8 @@
 
 import UIKit
 import SVProgressHUD
+import Alamofire
+import SwiftyJSON
 
 enum WebViewScreen {
   
@@ -55,16 +57,40 @@ class WebViewVC: UIViewController {
         }
       }
       else if screenDirection == .Live_Katha_Streaming_Video{
-        DispatchQueue.main.async {
-          let url = URL(string: "https://www.youtube.com/channel/UCnePvOdQ-uBSWSIgRoG55gA")
-          //self.webView.loadRequest(NSURLRequest(url: url!) as URLRequest)
+      
+        WebServices().CallGlobalAPI(url: WebService_Live_Katha_Video,headers: [:], parameters: [:], HttpMethod: "POST", ProgressView: true) { ( _ jsonResponce:JSON? , _ strErrorMessage:String) in
+        
+        if(jsonResponce?.error != nil) {
           
-          DispatchQueue.main.async {
-            UIApplication.shared.open(url!, options: [:])
+          var errorMess = jsonResponce?.error?.localizedDescription
+          errorMess = MESSAGE_Err_Service
+          Utility().showAlertMessage(vc: self, titleStr: "", messageStr: errorMess!)
+        }
+        else {
+          
+          if jsonResponce!["status"].stringValue == "true"{
+   
+              //self.webView.loadRequest(NSURLRequest(url: url!) as URLRequest)
+              if jsonResponce!["data"][0]["katha_link"].stringValue != ""{
+                DispatchQueue.main.async {
+                  UIApplication.shared.open(jsonResponce!["data"][0]["katha_link"].url!, options: [:])
+                }
+              
+            }
+            
+          }else if jsonResponce!["status"].stringValue == "false"{
+            
+            if jsonResponce!["message"].stringValue == "No Data Found"{
+            
+              
+            }
           }
-          
+          else {
+            Utility().showAlertMessage(vc: self, titleStr: "", messageStr: jsonResponce!["message"].stringValue)
+          }
         }
       }
+    }
   }
   
   //MARK : Button Event
@@ -84,7 +110,9 @@ class WebViewVC: UIViewController {
   }
   
   @IBAction func btnHanumanChalisha(_ sender: Any) {
-    Utility.hanuman_chalisha_Show(onViewController: self)
+    let storyboardCustom : UIStoryboard = UIStoryboard(name: Custome_Storyboard, bundle: nil)
+    let objVC = storyboardCustom.instantiateViewController(withIdentifier: "HanumanChalishaVC") as? HanumanChalishaVC
+    self.navigationController?.pushViewController(objVC!, animated: true)
   }
   
 

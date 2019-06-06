@@ -31,6 +31,7 @@ class UpComingKathaDetailsVC: UIViewController {
   @IBOutlet weak var tblKathaTiming: UITableView!
   @IBOutlet weak var constraintHeightTableview: NSLayoutConstraint!
   
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     
@@ -91,7 +92,7 @@ class UpComingKathaDetailsVC: UIViewController {
             self.lblKathaLoction.text = self.arrUpcomingKathaDetails["location"]?.stringValue
             self.lblKathaLanguages.text = self.arrUpcomingKathaDetails["language"]?.stringValue
             self.lblKathaDates.text = "\(Utility.dateToString(dateStr: (self.arrUpcomingKathaDetails["from_date"]?.stringValue)!, strDateFormat: "EEEE MMM dd'th', yyyy")) - \(Utility.dateToString(dateStr: (self.arrUpcomingKathaDetails["to_date"]?.stringValue)!, strDateFormat: "EEEE MMM dd'th', yyyy"))"
-      
+            
             
             for result in jsonResponce!["MyFavourite"].arrayValue {
               self.arrFavourite.add(result.stringValue)
@@ -137,7 +138,9 @@ class UpComingKathaDetailsVC: UIViewController {
   }
   
   @IBAction func btnHanumanChalisha(_ sender: Any) {
-    Utility.hanuman_chalisha_Show(onViewController: self)
+    let storyboardCustom : UIStoryboard = UIStoryboard(name: Custome_Storyboard, bundle: nil)
+    let objVC = storyboardCustom.instantiateViewController(withIdentifier: "HanumanChalishaVC") as? HanumanChalishaVC
+    self.navigationController?.pushViewController(objVC!, animated: true)
     
   }
   
@@ -197,28 +200,7 @@ class UpComingKathaDetailsVC: UIViewController {
 
   }
   
-  //MARK:- Internet Checking
-  @objc private func reachabilityChanged( notification: NSNotification )
-  {
-    guard let reachability = notification.object as? Reachability else
-    {
-      return
-    }
-    
-    if reachability.connection == .wifi || reachability.connection == .cellular {
-      
-      Utility.internet_connection_hide(onViewController: self)
-      self.viewDidLoad()
-      print("Reachable via WiFi & Cellular")
-      
-    }
-    else
-    {
-      Utility.internet_connection_Show(onViewController: self)
-      print("Network not reachable")
-    }
-    
-  }
+
   
 }
 
@@ -423,5 +405,40 @@ extension UpComingKathaDetailsVC: MenuNavigationDelegate{
       navigationController?.pushViewController(vc, animated:  true)
       
     }
+  }
+}
+
+extension UpComingKathaDetailsVC : InternetConnectionDelegate{
+  
+  @objc private func reachabilityChanged( notification: NSNotification )
+  {
+    guard let reachability = notification.object as? Reachability else
+    {
+      return
+    }
+    
+    if reachability.connection == .wifi || reachability.connection == .cellular {
+      
+    }else{
+      
+      if let wd = UIApplication.shared.delegate?.window {
+        var vc = wd!.rootViewController
+        if(vc is UINavigationController){
+          vc = (vc as! UINavigationController).visibleViewController
+        }
+        
+        if(vc is UpComingKathaDetailsVC){
+          Utility.internet_connection_Show(onViewController: self)
+        }
+      }
+      
+    }
+    
+  }
+  
+  func reloadPage() {
+    
+   self.viewDidLoad()
+    
   }
 }

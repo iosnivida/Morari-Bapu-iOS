@@ -8,12 +8,16 @@
 
 import UIKit
 import ESTMusicIndicator
+import SwiftyJSON
+import LNPopupController
+import AudioPlayerManager
 
 class HanumanChalishaVC: UIViewController {
 
   @IBOutlet weak var lblDescription: UILabel!
   
   @IBOutlet weak var viewMusicIndicator: ESTMusicIndicatorView!
+
   
   override func viewDidLoad() {
         super.viewDidLoad()
@@ -210,29 +214,104 @@ class HanumanChalishaVC: UIViewController {
     
     DispatchQueue.main.async {
       self.lblDescription.attributedText = NSAttributedString(html: strHanumanchalisha)
-      //Utility.music_Player_Show(onViewController: self, listOfAudio: <#[JSON]#>)
     }
     
+    self.setupMimiMusicPlayerView()
+    
+    
+    if AudioPlayerManager.shared.isPlaying() == false{
+      
+      let storyboard = UIStoryboard(name: Custome_Storyboard, bundle: nil)
+      let mPlayer = storyboard.instantiateViewController(withIdentifier: "MusicPlayerVC") as! MusicPlayerVC
+      mPlayer.screenType = "HanumanChalisha"
+      mPlayer.playPosition = 0
+      self.navigationController?.popupBar.marqueeScrollEnabled = true
+      self.navigationController?.presentPopupBar(withContentViewController: mPlayer, animated: true, completion: nil)
+      
     }
+    
+    if UserDefaults.standard.string(forKey: "screentype") != nil && UserDefaults.standard.string(forKey: "screentype") != "" && UserDefaults.standard.string(forKey: "screentype") == "HanumanChalisha"{
+      
+      viewMusicIndicator.state = .playing
+      viewMusicIndicator.tintColor = .red
+      viewMusicIndicator.isHidden = false
+      
+    }else{
+      viewMusicIndicator.isHidden = true
+    }
+    
+        NotificationCenter.default.addObserver(self, selector: #selector(self.musicIndicator(_:)), name: NSNotification.Name(rawValue: "playPosition"), object: nil)
+
+  }
+
+  //MARK:- Misic
+  @objc func musicIndicator(_ notification: NSNotification) {
+   
+    
+    if UserDefaults.standard.string(forKey: "screentype") != nil && UserDefaults.standard.string(forKey: "screentype") != "" && UserDefaults.standard.string(forKey: "screentype") == "HanumanChalisha"{
+      
+    viewMusicIndicator.state = .playing
+    viewMusicIndicator.tintColor = .red
+    viewMusicIndicator.isHidden = false
+    
+  }else{
+  viewMusicIndicator.isHidden = true
+  }
+  
+  }
+  
+  //LNPopupController
+  private func setupMimiMusicPlayerView() {
+    UIProgressView.appearance(whenContainedInInstancesOf: [LNPopupBar.self]).tintColor = UIColor.colorFromHex("#068201")
+    
+    self.navigationController?.popupBar.progressViewStyle = .top
+    self.navigationController?.popupBar.barStyle = .custom
+    self.navigationController?.popupInteractionStyle = .drag
+    self.navigationController!.popupContentView.popupCloseButtonStyle = .round
+    self.navigationController?.popupBar.imageView.layer.cornerRadius = 5
+    self.navigationController?.toolbar.barStyle = .blackOpaque
+    self.navigationController?.popupBar.tintColor = .white
+    let paragraphStyle = NSMutableParagraphStyle()
+    paragraphStyle.alignment = .left
+    self.navigationController?.popupBar.subtitleTextAttributes = [NSAttributedString.Key.paragraphStyle: paragraphStyle]
+    self.navigationController?.popupBar.titleTextAttributes = [NSAttributedString.Key.paragraphStyle: paragraphStyle]
+    self.navigationController?.updatePopupBarAppearance()
+  }
     
   //MARK : Button Event
   @IBAction func btnBack(_ sender: Any) {
-    self.dismiss(animated: true, completion: nil)
+    
+    self.navigationController?.popViewController(animated: true)
+    
   }
   
   @IBAction func backToHome(_ sender: Any) {
     
-    self.dismiss(animated: true, completion: nil)
-    Utility.backToHome()
+    //self.dismiss(animated: true, completion: nil)
+    //Utility.backToHome()
+    self.navigationController?.popToRootViewController(animated: true)
     
   }
   
   @IBAction func btnHanumanChalishaPlay(_ sender: Any){
     
+    
+    UserDefaults.standard.set("HanumanChalisha", forKey: "screentype")
+    
+    let playList = ["http://app.nivida.in/moraribapu/files/chalisa.mp3"]
+    
+    AudioPlayerManager.shared.play(urlStrings: playList, at: 0)
+    
     viewMusicIndicator.state = .playing
     viewMusicIndicator.tintColor = .red
+    viewMusicIndicator.isHidden = false
     
-    
+    let storyboard = UIStoryboard(name: Custome_Storyboard, bundle: nil)
+    let mPlayer = storyboard.instantiateViewController(withIdentifier: "MusicPlayerVC") as! MusicPlayerVC
+    mPlayer.screenType = "HanumanChalisha"
+    mPlayer.playPosition = 0
+    self.navigationController?.popupBar.marqueeScrollEnabled = true
+    self.navigationController?.presentPopupBar(withContentViewController: mPlayer, animated: true, completion: nil)
   }
   
 }

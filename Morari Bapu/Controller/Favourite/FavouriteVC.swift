@@ -39,6 +39,12 @@ class FavouriteVC: UIViewController {
     self.arrFavourites.removeAll()
     self.getFavouritesList(pageNo: 1)
 
+    // Add reachability observer
+    if let reachability = AppDelegate.sharedAppDelegate()?.reachability
+    {
+      NotificationCenter.default.addObserver( self, selector: #selector( self.reachabilityChanged ),name: Notification.Name.reachabilityChanged, object: reachability )
+    }
+    
     
   }
   
@@ -106,7 +112,9 @@ class FavouriteVC: UIViewController {
   }
   
   @IBAction func btnHanumanChalisha(_ sender: Any) {
-    Utility.hanuman_chalisha_Show(onViewController: self)
+    let storyboardCustom : UIStoryboard = UIStoryboard(name: Custome_Storyboard, bundle: nil)
+    let objVC = storyboardCustom.instantiateViewController(withIdentifier: "HanumanChalishaVC") as? HanumanChalishaVC
+    self.navigationController?.pushViewController(objVC!, animated: true)
     
   }
   
@@ -174,7 +182,7 @@ extension FavouriteVC : UITableViewDelegate, UITableViewDataSource{
         
       }
       
-      cell.lblTitle.text = "\(data["title"].stringValue)-\(data["title_no"].stringValue)"
+      cell.lblTitle.text = "\(data["title"].stringValue)"
       cell.lblDate.text = Utility.dateToString(dateStr: data["from_date"].stringValue, strDateFormat: "dd MMM yyyy")
       cell.lblDescription1.text = data["quotes_hindi"].stringValue
       cell.btnTitle.setTitle(data["list_heading"].stringValue, for: .normal)
@@ -204,7 +212,7 @@ extension FavouriteVC : UITableViewDelegate, UITableViewDataSource{
         
       }
       
-      cell.lblTitle.text = "\(data["title"].stringValue)-\(data["title_no"].stringValue)"
+      cell.lblTitle.text = "\(data["title"].stringValue)"
       cell.lblDate.text = Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd MMM yyyy")
       cell.lblDescription1.text = data["description"].stringValue
       cell.btnTitle.setTitle(data["list_heading"].stringValue, for: .normal)
@@ -697,14 +705,14 @@ extension FavouriteVC : UITableViewDelegate, UITableViewDataSource{
     else if data["list_heading"].stringValue == "Katha Chopai"{
       //Katha Chopai
       
-      share_Content = "Katha Chopai \n\n\(data["title"].stringValue)-\(data["title_no"].stringValue) \n\nDate: \(Utility.dateToString(dateStr: data["from_date"].stringValue, strDateFormat: "dd MMM yyyy")) \n\n \(data["quotes_hindi"].stringValue) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
+      share_Content = "Katha Chopai \n\n\(data["title"].stringValue) \n\nDate: \(Utility.dateToString(dateStr: data["from_date"].stringValue, strDateFormat: "dd MMM yyyy")) \n\n \(data["quotes_hindi"].stringValue) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
       
       
       
     }
     else if data["list_heading"].stringValue == "Ram Charit Manas"{
       //Ram charit manas
-      share_Content = "Ram Charit Manas \n\n\(data["title"].stringValue)-\(data["title_no"].stringValue) \n\nDate: \(Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd MMM yyyy")) \n\n \(data["description"].stringValue) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
+      share_Content = "Ram Charit Manas \n\n\(data["title"].stringValue) \n\nDate: \(Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd MMM yyyy")) \n\n \(data["description"].stringValue) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
       
       
       
@@ -1100,3 +1108,38 @@ extension FavouriteVC : MenuNavigationDelegate{
   }
 }
 
+extension FavouriteVC : InternetConnectionDelegate{
+  
+  @objc private func reachabilityChanged( notification: NSNotification )
+  {
+    guard let reachability = notification.object as? Reachability else
+    {
+      return
+    }
+    
+    if reachability.connection == .wifi || reachability.connection == .cellular {
+      
+    }else{
+      
+      if let wd = UIApplication.shared.delegate?.window {
+        var vc = wd!.rootViewController
+        if(vc is UINavigationController){
+          vc = (vc as! UINavigationController).visibleViewController
+        }
+        
+        if(vc is FavouriteVC){
+          Utility.internet_connection_Show(onViewController: self)
+        }
+      }
+      
+    }
+    
+  }
+  
+  func reloadPage() {
+    
+    self.arrFavourites.removeAll()
+    self.getFavouritesList(pageNo: 1)
+    
+  }
+}

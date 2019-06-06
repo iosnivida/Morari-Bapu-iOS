@@ -9,17 +9,22 @@
 import UIKit
 import SwiftyJSON
 import Kingfisher
+import MarqueeLabel
+import AudioPlayerManager
 import MediaPlayer
-import Jukebox
+import LNPopupController
+import  SwiftyUserDefaults
+import SubtleVolume
 
-class MusicPlayerVC: PullUpController {
+fileprivate struct Keys {
+  static let Status  = "status"
+}
 
+class MusicPlayerVC: UIViewController {
+  
   @IBOutlet weak var imgThumbnil: UIImageView!
   @IBOutlet weak var lblTitleHeader: UILabel!
-  @IBOutlet weak var lblSubTitleHeader: UILabel!
-  @IBOutlet weak var btnPreviousHeader: UIButton!
-  @IBOutlet weak var btnNextHeader: UIButton!
-  @IBOutlet weak var btnPlayPauseHeader: UIButton!
+  @IBOutlet weak var lblSubTitleHeader: MarqueeLabel!
   
   @IBOutlet weak var imgBigThumbnil: UIImageView!
   @IBOutlet weak var lblTitle: UILabel!
@@ -40,250 +45,290 @@ class MusicPlayerVC: PullUpController {
   
   @IBOutlet weak var constraintTopVolumeView: NSLayoutConstraint!
   
+  fileprivate var player                  : AVPlayer?
+
   var arrAudioList = [JSON]()
+  var playList : [String] = []
   
-  var playPosition = Int()
   
   var isUpDown = false
   var isSuffle = false
   var isRepeat = false
   
-  //Jukbok
-  var jukebox : Jukebox!
-  
+  var screenType = String()
+  var playPosition = Int()
+
+  var tempAudioSliderValue: Float = 0.0
+
   
   @IBOutlet private weak var viewMusicBar: UIView!
 
   
-  var initialPointOffset: CGFloat {
-    return pullUpControllerPreferredSize.height
-  }
-  
   public var portraitSize: CGSize = .zero
   public var landscapeFrame: CGRect = .zero
   
+  //MARK: - Variables
+  var playBarButton: UIBarButtonItem!
+  var puseBarButton: UIBarButtonItem!
+  var nextBarButton: UIBarButtonItem!
+
+  let volume = SubtleVolume(style: .rounded)
+
   
   override func viewDidLoad() {
         super.viewDidLoad()
+    
+    tempAudioSliderValue = sliderVolume.value
+    
+    volume.delegate = self
 
-      playPosition = 0
-      // begin receiving remote events
-      UIApplication.shared.beginReceivingRemoteControlEvents()
+    btnSuffle.isHidden = true
+    btnRepeat.isHidden = true
 
-      self.constraintTopVolumeView.constant = -70
-      self.view.layoutIfNeeded()
+    self.constraintTopVolumeView.constant = -70
+    self.view.layoutIfNeeded()
+    
+    
+    AudioPlayerManager.shared.setup()
+    AudioPlayerManager.shared.playingTimeRefreshRate = 0.1
     
 //      self.constraintTopView.constant = self.view.frame.height - 50
 //      self.constraintMainViewHeight.constant = self.view.frame.height - 20
       self.view.layoutIfNeeded()
 
-    
- 
+    lblSubTitleHeader.type = .rightLeft
+    lblSubTitleHeader.speed = .rate(60)
+    lblSubTitleHeader.fadeLength = 10.0
+    lblSubTitleHeader.leadingBuffer = 30.0
+    lblSubTitleHeader.trailingBuffer = 20.0
     
     portraitSize = CGSize(width: min(UIScreen.main.bounds.width, UIScreen.main.bounds.height),
                           height: viewMusicBar.frame.size.height + 20)
+ 
+    // Listen to the player state updates. This state is updated if the play, pause or queue state changed.
+    AudioPlayerManager.shared.addPlayStateChangeCallback(self, callback: { [weak self] (track: AudioTrack?) in
+      
+      let asset = AudioPlayerManager.shared.currentTrack?.playerItem?.asset
+      if asset != nil {
+        if let urlAsset = asset as? AVURLAsset {
+          print(urlAsset.url)
+          
+          for (index,urlPlay) in self!.playList.enumerated(){
+            
+            if urlPlay == "\(urlAsset.url)"{
+              self!.playPosition = index
+              
+              
+              if self!.screenType == "HanumanChalisha"{
+                
+                AudioPlayerManager.shared.currentTrack?.nowPlayingInfo?[MPMediaItemPropertyTitle] = "Hanuman Chalisha" as NSObject?
+                AudioPlayerManager.shared.currentTrack?.nowPlayingInfo?[MPMediaItemPropertyAlbumTitle] = "Hanuman Chalish By Morari Bapu" as NSObject?
+                
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "playPosition"), object: self!.playPosition)
+              }
+               else if self?.screenType == "whatsnewaudio"{
+                  
+                  if self!.arrAudioList.count != 0{
+                    
+                    AudioPlayerManager.shared.currentTrack?.nowPlayingInfo?[MPMediaItemPropertyTitle] = "\(self!.arrAudioList[self!.playPosition]["title"].stringValue)" as NSObject?
+                    AudioPlayerManager.shared.currentTrack?.nowPlayingInfo?[MPMediaItemPropertyAlbumTitle] = "Morari Bapu's Sankirtan" as NSObject?
+                  }
+                  
+                }else{
+                  
+                  if self!.arrAudioList.count != 0{
+                    
+                    AudioPlayerManager.shared.currentTrack?.nowPlayingInfo?[MPMediaItemPropertyTitle] = "\(self!.arrAudioList[self!.playPosition]["name"].stringValue)" as NSObject?
+                    AudioPlayerManager.shared.currentTrack?.nowPlayingInfo?[MPMediaItemPropertyAlbumTitle] = "Morari Bapu's Sankirtan" as NSObject?
+                    
+                }
+              }
+            }
+          }
+          
+          self!.updateAudioPlayer(positon: self!.playPosition)
+          
+        }
+      }else{
+        self!.updateAudioPlayer(positon: self!.playPosition)
+      }
+      
+      self?.updateButtonStates()
+      self?.updateSongInformation(with: track)
+      
+      
+    })
+    // Listen to the playback time changed. Thirs event occurs every `AudioPlayerManager.PlayingTimeRefreshRate` seconds.
+    AudioPlayerManager.shared.addPlaybackTimeChangeCallback(self, callback: { [weak self] (track: AudioTrack?) in
+          self?.updatePlaybackTime(track)
+    })
     
-    view.layer.cornerRadius = 12
     
-    NotificationCenter.default.addObserver(self, selector: #selector(self.audioPlayList), name: NSNotification.Name(rawValue: "audioPlayList"), object: nil)
     
+    self.updateButtonStates()
+    self.updateAudioPlayer(positon: self.playPosition)
+
+    //NotificationCenter.default.addObserver(value, selector: #selector(SubtleVolume.resume), name: UIApplication.didBecomeActiveNotification, object: nil)
+    
+  }
+  
+ 
+  required init?(coder aDecoder: NSCoder) {
+    super.init(coder: aDecoder)
+    
+    puseBarButton = UIBarButtonItem(image: UIImage.init(named: "pause-bar"), style: .plain, target: self, action: #selector(didPressPlayPauseButton(_:)))
+    playBarButton = UIBarButtonItem(image: UIImage.init(named: "play-bar"), style: .plain, target: self, action: #selector(didPressPlayPauseButton(_:)))
+    nextBarButton = UIBarButtonItem(image: UIImage.init(named: "forward-bar"), style: .plain, target: self, action: #selector(didPressForwardButton))
+
+    
+    if UserDefaults.standard.object(forKey: "PopupSettingsBarStyle") as? LNPopupBarStyle == LNPopupBarStyle.compact || ProcessInfo.processInfo.operatingSystemVersion.majorVersion < 10 {
+      popupItem.leftBarButtonItems = [ puseBarButton ]
+      popupItem.rightBarButtonItems = [ nextBarButton ]
+    }
+    else {
+      popupItem.rightBarButtonItems = [ puseBarButton, nextBarButton ]
+    }
+    
+  }
+  
+  deinit {
+    // Stop listening to the callbacks
+    AudioPlayerManager.shared.removePlayStateChangeCallback(self)
+    AudioPlayerManager.shared.removePlaybackTimeChangeCallback(self)
+  }
+  
+  //Audio Management
+  
+  func initPlaybackTimeViews() {
+    self.sliderAudio?.value = 0
+    self.sliderAudio?.maximumValue = 1.0
+    self.lblStartTimer?.text = "-:-"
+    self.lblEndTimer?.text = "-:-"
+    popupItem.progress = 0
   }
 
-  
-  @objc func audioPlayList(_ notification: Notification) {
-    print(notification)
+  func updateButtonStates() {
     
-    arrAudioList =  notification.object as! [JSON]
+    self.btnPrevious?.isEnabled = AudioPlayerManager.shared.canRewind()
     
-    for audio in arrAudioList{
-      
-      // configure jukebox
-      
-      if jukebox == nil{
-        
-        jukebox = Jukebox(delegate: self, items: [
-          JukeboxItem(URL: URL(string: "\(BASE_URL_IMAGE)\(audio["audio_file"].stringValue)")!)
-          ])!
-        
-      }else{
-        
-        /// Later add another item
-        let delay = DispatchTime.now() + Double(Int64(3 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
-        DispatchQueue.main.asyncAfter(deadline: delay) {
-          self.jukebox.append(item: JukeboxItem (URL: URL(string: "\(BASE_URL_IMAGE)\(audio["audio_file"].stringValue)")!), loadingAssets: true)
-        }
-      }
+    let imageName = (AudioPlayerManager.shared.isPlaying() == true ? "pause" : "play")
+    
+    self.btnPlayPause?.setImage(UIImage(named: imageName), for: UIControl.State())
+    
+    if AudioPlayerManager.shared.isPlaying() == true{
+      popupItem.rightBarButtonItems = [ puseBarButton, nextBarButton ]
+    }else{
+      popupItem.rightBarButtonItems = [ playBarButton, nextBarButton ]
     }
     
-      DispatchQueue.main.async {
-     self.jukebox.play(atIndex: self.playPosition)
-     self.updateAudioPlayer(positon: self.playPosition)
-     }
+    //self.btnPlayPause?.isEnabled = AudioPlayerManager.shared.canPlay()
+    
+    
+    self.btnNext?.isEnabled = AudioPlayerManager.shared.canForward()
+    
     
   }
   
-    override func pullUpControllerWillMove(to stickyPoint: CGFloat) {
-      //        print("will move to \(stickyPoint)")
-    }
-  
-    override func pullUpControllerDidMove(to stickyPoint: CGFloat) {
-      //        print("did move to \(stickyPoint)")
-    }
-  
-    override func pullUpControllerDidDrag(to point: CGFloat) {
-      //        print("did drag to \(point)")
-    }
-  
-  // MARK: - PullUpController
-  
-  override var pullUpControllerPreferredSize: CGSize {
-    return portraitSize
-  }
-  
-  override var pullUpControllerPreferredLandscapeFrame: CGRect {
-    return landscapeFrame
-  }
-  
-  override var pullUpControllerMiddleStickyPoints: [CGFloat] {
-    return [viewMusicBar.frame.maxY, self.view.frame.maxY]
+  func updateSongInformation(with track: AudioTrack?) {
+    //self.songLabel?.text = "\((track?.nowPlayingInfo?[MPMediaItemPropertyTitle] as? String) ?? "-")"
+    //self.albumLabel?.text = "\((track?.nowPlayingInfo?[MPMediaItemPropertyAlbumTitle] as? String) ?? "-")"
+    //self.artistLabel?.text = "\((track?.nowPlayingInfo?[MPMediaItemPropertyArtist] as? String) ?? "-")"
     
   }
   
-  override var pullUpControllerBounceOffset: CGFloat {
-    return 20
+  func updatePlaybackTime(_ track: AudioTrack?) {
+
+    self.lblStartTimer?.text = track?.displayablePlaybackTimeString() ?? "-:-"
+    self.lblEndTimer?.text = track?.displayableDurationString() ?? "-:-"
+    self.sliderAudio?.value = track?.currentProgress() ?? 0
+    popupItem.progress = track?.currentProgress() ?? 0
   }
   
-  override func pullUpControllerAnimate(action: PullUpController.Action,
-                                        withDuration duration: TimeInterval,
-                                        animations: @escaping () -> Void,
-                                        completion: ((Bool) -> Void)?) {
-    switch action {
-    case .move:
-      UIView.animate(withDuration: 0.3,
-                     delay: 0,
-                     usingSpringWithDamping: 1.0,
-                     initialSpringVelocity: 0,
-                     options: .curveEaseInOut,
-                     animations: animations,
-                     completion: completion)
-    default:
-      UIView.animate(withDuration: 0.3,
-                     animations: animations,
-                     completion: completion)
-    }
-  }
-  
-  
+  //***************************** End Audio Player Management ******************************
+ 
   func updateAudioPlayer(positon:Int){
     
-    let dict = arrAudioList[positon]
-    
-    DispatchQueue.main.async {
+    if screenType == "HanumanChalisha"{
       
-      self.lblTitleHeader.text = dict["name"].stringValue
-      self.lblSubTitleHeader.text = "(Duration: \(dict["duration"].stringValue))"
-      self.lblTitle.text = dict["name"].stringValue
-      self.lblSubTitle.text = dict["description"].stringValue
-      
-      let placeHolder = UIImage(named: "youtube_placeholder")
-      self.imgThumbnil.kf.indicatorType = .activity
-      self.imgThumbnil.kf.setImage(with: URL(string: "\(BASE_URL_IMAGE)\(dict["image_file"].stringValue)"), placeholder: placeHolder, options: [.transition(ImageTransition.fade(1))])
-      
-      let placeHolder1 = UIImage(named: "youtube_placeholder")
-      self.imgBigThumbnil.kf.indicatorType = .activity
-      self.imgBigThumbnil.kf.setImage(with: URL(string: "\(BASE_URL_IMAGE)\(dict["image_file"].stringValue)"), placeholder: placeHolder1, options: [.transition(ImageTransition.fade(1))])
-
-      if self.arrAudioList.count == positon{
-          self.lblOutOfAudio.text = "\(positon+1)/\(self.arrAudioList.count)"
-      }else{
-        self.lblOutOfAudio.text = "\(positon+1)/\(self.arrAudioList.count)"
+      DispatchQueue.main.async {
+        
+        UserDefaults.standard.set(self.playPosition, forKey: "playposition")
+        UserDefaults.standard.set(self.screenType, forKey: "screentype")
+        
+        self.lblTitleHeader.text = "Hanuman Chalisa"
+        self.lblSubTitleHeader.text = "Hanuman Chalish By Morari Bapu"
+        self.lblTitle.text = "Hanuman Chalisa"
+        self.lblSubTitle.text = "Hanuman Chalish By Morari Bapu"
+        
+        let placeHolder = UIImage(named: "youtube_placeholder")
+        
+        self.popupItem.title = "Hanuman Chalisa"
+        self.popupItem.subtitle = "Hanuman Chalish By Morari Bapu"
+        self.popupItem.image = placeHolder
+        
+        self.imgThumbnil.kf.indicatorType = .activity
+        self.imgThumbnil.kf.setImage(with: URL(string: ""), placeholder: placeHolder, options: [.transition(ImageTransition.fade(1))])
+        
+        self.imgBigThumbnil.kf.indicatorType = .activity
+        self.imgBigThumbnil.kf.setImage(with: URL(string: ""), placeholder: placeHolder, options: [.transition(ImageTransition.fade(1))])
+        self.lblOutOfAudio.text = "1/1"
+        
+        self.lblStartTimer.text = "00:00"
+        self.lblEndTimer.text = "06:35"
+        
       }
-      self.lblStartTimer.text = "00:00"
-      self.lblEndTimer.text = dict["duration"].stringValue
-
-      
-      
-    }
-    
-   /* "description" : "It often happens that we overestimate our strengths. Something drastic has to happen before we realise our limitations and Brahma was no exception to this. Not aware that beside Lord Narayana’s powers his own powers were insignificant, Brahma steals the cows that Krishna and His friends are looking after in Gokula.",
-    "is_read" : 0,
-    "name" : "Brahma Stuti",
-    "html_file" : "",
-    "status" : "1",
-    "id" : "5",
-    "audio_file" : "stuti\/audio\/audio1528695221.mp3",
-    "stuti_type_id" : "1",
-    "pdf_file" : "stuti\/pdf\/pdf1528695221.pdf",
-    "created" : "2018-06-11 11:03:41",
-    "duration" : "7:43",
-    "modified" : "2018-07-03 14:06:51"*/
-    
-  }
-  
-  
-  //MARK:- Button Event
-  @IBAction func btnUpAndDown(_ sender: Any) {
-    
-    if isUpDown == false{
-      
-      pullUpControllerMoveToVisiblePoint(pullUpControllerMiddleStickyPoints[0], animated: true, completion: nil)
-
-      UIView.animate(withDuration: 0.3, animations: {
-        self.isUpDown = true
-        self.btnPlayPauseHeader.alpha = 0.0
-        self.btnNextHeader.alpha = 0.0
-        self.btnPreviousHeader.alpha = 0.0
-        self.view.layoutIfNeeded()
-      })
       
     }else{
       
+      let dict = arrAudioList[positon]
+      
+      DispatchQueue.main.async {
+        
+        UserDefaults.standard.set(self.playPosition, forKey: "playposition")
+        UserDefaults.standard.set(self.screenType, forKey: "screentype")
+        
+        let placeHolder = UIImage(named: "youtube_placeholder")
+        
+        self.lblTitleHeader.text = dict["name"].stringValue
+        self.lblSubTitleHeader.text = "(Duration: \(dict["duration"].stringValue))"
+        self.lblTitle.text = dict["name"].stringValue 
+        self.lblSubTitle.text = dict["description"].stringValue
+        
+        self.popupItem.title = dict["name"].stringValue
+        self.popupItem.subtitle = "(Duration: \(dict["duration"].stringValue))"
+        self.popupItem.image = placeHolder
+      
+        
+        self.imgThumbnil.kf.indicatorType = .activity
+        self.imgThumbnil.kf.setImage(with: URL(string: "\(BASE_URL_IMAGE)\(dict["image_file"].stringValue)"), placeholder: placeHolder, options: [.transition(ImageTransition.fade(1))])
+        
+        self.imgBigThumbnil.kf.indicatorType = .activity
+        self.imgBigThumbnil.kf.setImage(with: URL(string: "\(BASE_URL_IMAGE)\(dict["image_file"].stringValue)"), placeholder: placeHolder, options: [.transition(ImageTransition.fade(1))])
+        
+        if self.arrAudioList.count == positon{
+          self.lblOutOfAudio.text = "\(positon+1)/\(self.arrAudioList.count)"
+        }else{
+          self.lblOutOfAudio.text = "\(positon+1)/\(self.arrAudioList.count)"
+        }
+        self.lblStartTimer.text = "00:00"
+        self.lblEndTimer.text = dict["duration"].stringValue
 
-      UIView.animate(withDuration: 0.3, animations: {
-        self.btnPlayPauseHeader.alpha = 1.0
-        self.btnNextHeader.alpha = 1.0
-        self.btnPreviousHeader.alpha = 1.0
-        self.isUpDown = false
-        self.view.layoutIfNeeded()
-      })
+      }
     }
   }
-  
-  @IBAction func swipeUp(_ sender: Any) {
-    UIView.animate(withDuration: 0.3, animations: {
-      self.isUpDown = true
-      self.btnPlayPauseHeader.alpha = 0.0
-      self.btnNextHeader.alpha = 0.0
-      self.btnPreviousHeader.alpha = 0.0
-      self.view.layoutIfNeeded()
-    })
-  }
-  
-  @IBAction func swipeDown(_ sender: Any) {
-    UIView.animate(withDuration: 0.3, animations: {
-      self.btnPlayPauseHeader.alpha = 1.0
-      self.btnNextHeader.alpha = 1.0
-      self.btnPreviousHeader.alpha = 1.0
-      self.isUpDown = false
-      self.view.layoutIfNeeded()
-    })
-  }
-  
   
   @IBAction func btnPlayPause(_ sender: Any) {
     
     if btnPlayPause.isSelected == false{
       btnPlayPause.isSelected = true
       btnPlayPause.setImage(UIImage(named: "pause"), for: .normal)
-      btnPlayPauseHeader.isSelected = true
-      btnPlayPauseHeader.setImage(UIImage(named: "pause"), for: .normal)
+      
       
     }else{
       
       btnPlayPause.isSelected = false
       btnPlayPause.setImage(UIImage(named: "play"), for: .normal)
-      btnPlayPauseHeader.isSelected = false
-      btnPlayPauseHeader.setImage(UIImage(named: "play"), for: .normal)
+      
     }
   }
   
@@ -306,6 +351,16 @@ class MusicPlayerVC: PullUpController {
       }
       
     }
+  }
+  
+  @IBAction func btnVolumeUpDown(_ sender: UISlider) {
+    
+    do {
+      try volume.setVolumeLevel(Double(sender.value), animated: true)
+    } catch {
+      print("The demo must run on a real device, not the simulator")
+    }
+ 
   }
   
   @IBAction func btnSuffle(_ sender: Any) {
@@ -338,212 +393,83 @@ class MusicPlayerVC: PullUpController {
     }
   }
   
+  @IBAction func btnShare(_ sender: Any) {
+    
+    let share_Content = "Audio \n\nI am listening - \(self.lblTitleHeader.text ?? "") \n\nvia MorariBapu - \(BASE_URL_IMAGE)\(playList[playPosition])\n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
+    
+    let textToShare = [share_Content]
+    let activityViewController = UIActivityViewController(activityItems: textToShare, applicationActivities: nil)
+    activityViewController.popoverPresentationController?.sourceView = self.view // so that iPads won't crash
+    
+    // exclude some activity types from the list (optional)
+    activityViewController.excludedActivityTypes = [ UIActivity.ActivityType.airDrop, UIActivity.ActivityType.postToFacebook ]
+    
+    DispatchQueue.main.async {
+      self.present(activityViewController, animated: true, completion: nil)
+    }
+  }
 }
 
-// MARK:- JukeboxDelegate -
-extension MusicPlayerVC: JukeboxDelegate{
 
-  func jukeboxStateDidChange(_ jukebox: Jukebox) {
-    
-    UIView.animate(withDuration: 0.3, animations: { () -> Void in
-      self.indicator.alpha = jukebox.state == .loading ? 1 : 0
-      self.btnPlayPause.alpha = jukebox.state == .loading ? 0 : 1
-      self.btnPlayPause.isEnabled = jukebox.state == .loading ? false : true
-      
-      if self.isUpDown == false{
-        self.btnPlayPauseHeader.alpha = jukebox.state == .loading ? 0 : 1
-        self.btnPlayPauseHeader.isEnabled = jukebox.state == .loading ? false : true
-      }
+// MARK: - IBActions
 
-    })
-    
-    if jukebox.state == .ready {
-      btnPlayPause.setImage(UIImage(named: "play"), for: .normal)
-      
-      if self.isUpDown == false{
-        btnPlayPauseHeader.setImage(UIImage(named: "play"), for: .normal)
-      }
-
-    } else if jukebox.state == .loading  {
-      btnPlayPause.setImage(UIImage(named: "pause"), for: .normal)
-      
-      if self.isUpDown == false{
-        btnPlayPauseHeader.setImage(UIImage(named: "play"), for: .normal)
-      }
-
-    } else {
-      sliderVolume.value = jukebox.volume
-      let imageName: String
-      switch jukebox.state {
-      case .playing, .loading:
-        imageName = "pause"
-      case .paused, .failed, .ready:
-        imageName = "play"
-      }
-      btnPlayPause.setImage(UIImage(named: imageName), for: .normal)
-      
-      if self.isUpDown == false{
-        btnPlayPauseHeader.setImage(UIImage(named: imageName), for: .normal)
-      }
-
-    }
-    
-    print("Jukebox state changed to \(jukebox.state)")
+extension MusicPlayerVC {
+  
+  @IBAction func didPressRewindButton(_ sender: AnyObject) {
+    AudioPlayerManager.shared.rewind()
   }
   
+  @IBAction func didPressStopButton(_ sender: AnyObject) {
+    AudioPlayerManager.shared.stop()
+  }
   
-  func jukeboxPlaybackProgressDidChange(_ jukebox: Jukebox) {
+  @IBAction func didPressPlayPauseButton(_ sender: AnyObject) {
     
-    if let currentTime = jukebox.currentItem?.currentTime, let duration = jukebox.currentItem?.meta.duration {
-      let value = Float(currentTime / duration)
+    if self.screenType == "HanumanChalisha"{
       
-      DispatchQueue.main.async {
-        self.populateLabelWithTime(self.lblStartTimer, time: currentTime)
-        self.populateLabelWithTime(self.lblEndTimer, time: duration)
-        self.sliderAudio.setValue(value, animated: true)
+      if AudioPlayerManager.shared.isPlaying() != true{
         
+        AudioPlayerManager.shared.currentTrack?.nowPlayingInfo?[MPMediaItemPropertyTitle] = "Hanuman Chalisha" as NSObject?
+        AudioPlayerManager.shared.currentTrack?.nowPlayingInfo?[MPMediaItemPropertyAlbumTitle] = "Hanuman Chalish By Morari Bapu" as NSObject?
+        
+        UserDefaults.standard.set(self.playPosition, forKey: "playposition")
+        UserDefaults.standard.set(self.screenType, forKey: "screentype")
+        
+        self.playList = ["http://app.nivida.in/moraribapu/files/chalisa.mp3"]
+        AudioPlayerManager.shared.play(urlStrings: self.playList, at: 0)
       }
-    } else {
-      resetUI()
+      
+      AudioPlayerManager.shared.togglePlayPause()
+    }else{
+        AudioPlayerManager.shared.togglePlayPause()
     }
+    
   }
+  
+  @IBAction func didPressForwardButton(_ sender: AnyObject) {
+    AudioPlayerManager.shared.forward()
+  }
+  
+  @IBAction func didChangeTimeSliderValue(_ sender: Any) {
+    guard let newProgress = self.sliderAudio?.value else {
+      return
+    }
+    
+    popupItem.progress = newProgress
+    AudioPlayerManager.shared.seek(toProgress: newProgress)
+  }
+}
 
+
+extension MusicPlayerVC: SubtleVolumeDelegate {
+  func subtleVolume(_ subtleVolume: SubtleVolume, accessoryFor value: Double) -> UIImage? {
+    return value > 0 ? #imageLiteral(resourceName: "volume-on.pdf") : #imageLiteral(resourceName: "volume-off.pdf")
+  }
   
-  func jukeboxDidLoadItem(_ jukebox: Jukebox, item: JukeboxItem) {
-    
-    print(self.playPosition)
-    
-    print("State: \(jukebox.state.description)")
-    if isRepeat == true{
-      jukebox.seek(toSecond: 0, shouldPlay: true)
-    }else if isSuffle == true{
-      updateAudioPlayer(positon: jukebox.playIndex)
-    }
-    else{
-      updateAudioPlayer(positon: jukebox.playIndex)
-    }
-    
-    print("Jukebox did load: \(item.URL.lastPathComponent)")
+  func subtleVolume(_ subtleVolume: SubtleVolume, didChange value: Double) {
+  }
+  
+  func subtleVolume(_ subtleVolume: SubtleVolume, willChange value: Double) {
     
   }
-  
-  func jukeboxDidUpdateMetadata(_ jukebox: Jukebox, forItem: JukeboxItem) {
-    print("Item updated:\n\(forItem)")
-    
-  }
-  
-  
-  
-  override func remoteControlReceived(with event: UIEvent?) {
-    if event?.type == .remoteControl {
-      switch event!.subtype {
-      case .remoteControlPlay :
-        jukebox.play()
-      case .remoteControlPause :
-        jukebox.pause()
-      case .remoteControlNextTrack :
-        jukebox.playNext()
-      case .remoteControlPreviousTrack:
-        jukebox.playPrevious()
-      case .remoteControlTogglePlayPause:
-        if jukebox.state == .playing {
-          jukebox.pause()
-        } else {
-          jukebox.play()
-        }
-      default:
-        break
-      }
-    }
-  }
-  
-  
-  // MARK:- Callbacks -
-  
-  @IBAction func volumeSliderValueChanged() {
-    if let jk = jukebox {
-      jk.volume = sliderVolume.value
-    }
-  }
-  
-  @IBAction func progressSliderValueChanged() {
-    if let duration = jukebox.currentItem?.meta.duration {
-      jukebox.seek(toSecond: Int(Double(sliderAudio.value) * duration))
-    }
-  }
-  
-  @IBAction func prevAction() {
-    
-    if isRepeat == true{
-      jukebox.seek(toSecond: 0, shouldPlay: true)
-    }
-    else if isSuffle == true{
-      let randomIndex = Int(arc4random_uniform(UInt32(arrAudioList.count)))
-      jukebox.play(atIndex: randomIndex)
-      updateAudioPlayer(positon: randomIndex)
-    }
-    else{
-      if let time = jukebox.currentItem?.currentTime, time > 5.0 || jukebox.playIndex == 0 {
-        jukebox.replayCurrentItem()
-      } else {
-        jukebox.playPrevious()
-      }
-    }
-    
-  }
-  
-  @IBAction func nextAction()
-  {
-    if isRepeat == true{
-      jukebox.seek(toSecond: 0, shouldPlay: true)
-    }else if isSuffle == true{
-      let randomIndex = Int(arc4random_uniform(UInt32(arrAudioList.count)))
-      jukebox.play(atIndex: randomIndex)
-      updateAudioPlayer(positon: randomIndex)
-    }
-    else{
-      jukebox.playNext()
-    }
-  }
-  
-  @IBAction func playPauseAction() {
-    switch jukebox.state {
-    case .ready :
-      jukebox.play(atIndex: 0)
-    case .playing :
-      jukebox.pause()
-    case .paused :
-      jukebox.play()
-    default:
-      jukebox.stop()
-    }
-  }
-  
-  @IBAction func replayAction() {
-    /*resetUI()
-    jukebox.replay()
-    */
-  }
-  
-  @IBAction func stopAction() {
-    resetUI()
-    jukebox.stop()
-  }
-  
-  
-  //MARK:- Helpers
-  func populateLabelWithTime(_ label : UILabel, time: Double) {
-    let minutes = Int(time / 60)
-    let seconds = Int(time) - minutes * 60
-    
-    label.text = String(format: "%02d", minutes) + ":" + String(format: "%02d", seconds)
-  }
-  
-  func resetUI()
-  {
-    lblStartTimer.text = "00:00"
-    lblEndTimer.text = "00:00"
-    sliderAudio.value = 0
-  }
-  
 }
