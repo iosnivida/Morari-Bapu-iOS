@@ -17,7 +17,6 @@ import LNPopupController
 
 enum SettingScreenIdentify {
   case Settings
-  case About_Us
   case About
   case Media
   case Audios
@@ -50,8 +49,6 @@ class SettingsVC: UIViewController {
     
     if screenDirection == .Settings{
       lblTitle.text = "Settings"
-    }else if screenDirection == .About_Us{
-      lblTitle.text = "About Us"
     }else if screenDirection == .About{
       lblTitle.text = "About"
     }
@@ -200,9 +197,7 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     
     if screenDirection == .Settings{
-      return 6
-    }else  if screenDirection == .About_Us{
-      return 1
+      return 5
     }else  if screenDirection == .About{
       return 6
     }else if screenDirection == .Media{
@@ -238,27 +233,20 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
         cell.lblTitle.text = "About"
         
       }else if indexPath.row == 1{
-        cell.lblTitle.text = "About Us"
-      
-      }else if indexPath.row == 2{
         cell.lblTitle.text = "User Guide"
       }
-      else if indexPath.row == 3{
+      else if indexPath.row == 2{
         cell.lblTitle.text = "Feedback"
         
-      }else if indexPath.row == 4{
+      }else if indexPath.row == 3{
         cell.lblTitle.text = "Share The App"
         
       }
-      else if indexPath.row == 5{
+      else if indexPath.row == 4{
         cell.lblTitle.text = "FAQ"
         
       }
       
-    }else if screenDirection == .About_Us{
-      if indexPath.row == 0{
-        cell.lblTitle.text = "About Bapu"
-      }
     }else if screenDirection == .About{
       if indexPath.row == 0{
         cell.lblTitle.text = "About Talgajarda"
@@ -488,26 +476,18 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
         //About The App
         
         let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
-        let vc = storyboard.instantiateViewController(withIdentifier: "SettingsVC") as! SettingsVC
-        vc.screenDirection = .About_Us
-        navigationController?.pushViewController(vc, animated:  true)
-        
-      }else if indexPath.row == 2{
-        //About The App
-        
-        let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "AboutTheAppVC") as! AboutTheAppVC
         vc.strTitle = "User Guide"
         navigationController?.pushViewController(vc, animated:  true)
         
-      }else if indexPath.row == 3{
+      }else if indexPath.row == 2{
         //Feedback
         
         let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "FeedbackVC") as! FeedbackVC
         navigationController?.pushViewController(vc, animated:  true)
         
-      }else if indexPath.row == 4{
+      }else if indexPath.row == 3{
         
         DispatchQueue.main.async {
           // text to share
@@ -526,18 +506,11 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
         }
         
       }
-      else if indexPath.row == 5{
+      else if indexPath.row == 4{
         let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "FaqVC") as! FaqVC
         navigationController?.pushViewController(vc, animated:  true)
       }
-      
-    }else if screenDirection == .About_Us{
-      //About Us
-      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
-      let vc = storyboard.instantiateViewController(withIdentifier: "AboutTheAppVC") as! AboutTheAppVC
-      vc.strTitle = "About Bapu"
-      navigationController?.pushViewController(vc, animated:  true)
       
     }else if screenDirection == .About{
       //About Us

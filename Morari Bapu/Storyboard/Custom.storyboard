@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -255,7 +255,7 @@
                                 <rect key="frame" x="0.0" y="64" width="375" height="50"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hanuman Chalisa" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NjE-29-s0d">
-                                        <rect key="frame" x="102" y="15" width="171" height="20"/>
+                                        <rect key="frame" x="116.5" y="15" width="142.5" height="20"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="tya-ya-iFJ"/>
                                         </constraints>
@@ -275,7 +275,7 @@
                                 <rect key="frame" x="0.0" y="114" width="375" height="553"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gjR-3k-rPN">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="566"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="565"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="hanuman" translatesAutoresizingMaskIntoConstraints="NO" id="GDr-zJ-wZ3">
                                                 <rect key="frame" x="0.0" y="10" width="375" height="450"/>
@@ -287,25 +287,32 @@
                                                 <rect key="frame" x="16" y="468" width="343" height="60"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hanuman Chalisha" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ARg-m6-KcN">
-                                                        <rect key="frame" x="8" y="8" width="278" height="20"/>
+                                                        <rect key="frame" x="8" y="8" width="223" height="19"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <fontDescription key="fontDescription" name="MontserratAlternates-SemiBold" family="Montserrat Alternates" pointSize="16"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="249" text="(Duration: 6:35)" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZV5-Aj-rnK">
-                                                        <rect key="frame" x="8" y="32" width="278" height="20"/>
+                                                        <rect key="frame" x="8" y="31" width="223" height="19"/>
                                                         <fontDescription key="fontDescription" name="MontserratAlternates-Regular" family="Montserrat Alternates" pointSize="16"/>
                                                         <color key="textColor" red="0.44947445390000001" green="0.19829207660000001" blue="0.22867149110000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZE4-hi-6T0" customClass="ESTMusicIndicatorView" customModule="ESTMusicIndicator">
-                                                        <rect key="frame" x="294" y="8" width="44" height="44"/>
+                                                        <rect key="frame" x="239" y="8" width="44" height="44"/>
                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="44" id="YMB-nu-s2S"/>
                                                             <constraint firstAttribute="height" constant="44" id="c3j-QJ-DPY"/>
                                                         </constraints>
                                                     </view>
+                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="play" translatesAutoresizingMaskIntoConstraints="NO" id="TAs-qW-jlf">
+                                                        <rect key="frame" x="290" y="8" width="45" height="44"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="45" id="1ev-w8-R9z"/>
+                                                            <constraint firstAttribute="height" constant="44" id="FBh-I6-pff"/>
+                                                        </constraints>
+                                                    </imageView>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YRS-Zj-PA4">
                                                         <rect key="frame" x="0.0" y="0.0" width="343" height="60"/>
                                                         <connections>
@@ -316,16 +323,19 @@
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstItem="ZV5-Aj-rnK" firstAttribute="top" secondItem="ARg-m6-KcN" secondAttribute="bottom" constant="4" id="7Fm-2I-Pio"/>
+                                                    <constraint firstAttribute="trailing" secondItem="TAs-qW-jlf" secondAttribute="trailing" constant="8" id="C6U-pb-bT6"/>
+                                                    <constraint firstItem="TAs-qW-jlf" firstAttribute="leading" secondItem="ZE4-hi-6T0" secondAttribute="trailing" constant="7" id="EpB-K5-hxM"/>
                                                     <constraint firstItem="ARg-m6-KcN" firstAttribute="leading" secondItem="aYJ-o1-Scj" secondAttribute="leading" constant="8" id="Jr3-d5-K5F"/>
                                                     <constraint firstAttribute="trailing" secondItem="YRS-Zj-PA4" secondAttribute="trailing" id="L4I-He-Wmw"/>
-                                                    <constraint firstAttribute="trailing" secondItem="ZE4-hi-6T0" secondAttribute="trailing" constant="5" id="Qa5-t3-d0E"/>
                                                     <constraint firstItem="YRS-Zj-PA4" firstAttribute="top" secondItem="aYJ-o1-Scj" secondAttribute="top" id="Qnn-ym-3a6"/>
                                                     <constraint firstItem="YRS-Zj-PA4" firstAttribute="leading" secondItem="aYJ-o1-Scj" secondAttribute="leading" id="Tdu-ci-d7Q"/>
                                                     <constraint firstItem="ZE4-hi-6T0" firstAttribute="leading" secondItem="ZV5-Aj-rnK" secondAttribute="trailing" constant="8" id="XeG-lp-MUe"/>
                                                     <constraint firstAttribute="height" constant="60" id="XsR-S5-MWP"/>
                                                     <constraint firstAttribute="bottom" secondItem="YRS-Zj-PA4" secondAttribute="bottom" id="a3N-hp-rVq"/>
                                                     <constraint firstItem="ZV5-Aj-rnK" firstAttribute="leading" secondItem="aYJ-o1-Scj" secondAttribute="leading" constant="8" id="c7M-nU-Dqy"/>
+                                                    <constraint firstItem="TAs-qW-jlf" firstAttribute="top" secondItem="aYJ-o1-Scj" secondAttribute="top" constant="8" id="d88-jz-dl7"/>
                                                     <constraint firstItem="ZE4-hi-6T0" firstAttribute="leading" secondItem="ARg-m6-KcN" secondAttribute="trailing" constant="8" id="eMn-rc-VWg"/>
+                                                    <constraint firstAttribute="bottom" secondItem="TAs-qW-jlf" secondAttribute="bottom" constant="8" id="i5T-6c-Unc"/>
                                                     <constraint firstAttribute="bottom" secondItem="ZE4-hi-6T0" secondAttribute="bottom" constant="8" id="oHv-KH-le9"/>
                                                     <constraint firstItem="ZE4-hi-6T0" firstAttribute="top" secondItem="aYJ-o1-Scj" secondAttribute="top" constant="8" id="sAX-0Q-gN6"/>
                                                     <constraint firstItem="ARg-m6-KcN" firstAttribute="top" secondItem="aYJ-o1-Scj" secondAttribute="top" constant="8" id="yaN-Tl-MCQ"/>
@@ -337,7 +347,7 @@
                                                 </userDefinedRuntimeAttributes>
                                             </view>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="juS-hF-wvY">
-                                                <rect key="frame" x="16" y="538" width="343" height="20"/>
+                                                <rect key="frame" x="16" y="538" width="343" height="19"/>
                                                 <fontDescription key="fontDescription" name="MontserratAlternates-SemiBold" family="Montserrat Alternates" pointSize="16"/>
                                                 <color key="textColor" red="0.35294117650000001" green="0.35294117650000001" blue="0.35294117650000001" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -506,7 +516,7 @@
                                 </connections>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" white="0.0" alpha="0.64056998243521135" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="lun-au-5Mz" firstAttribute="trailing" secondItem="D6X-5N-SeN" secondAttribute="trailing" id="6H2-6h-IOq"/>
                             <constraint firstItem="lun-au-5Mz" firstAttribute="top" secondItem="D6X-5N-SeN" secondAttribute="top" constant="44" id="GdR-jB-Aoa"/>
@@ -949,22 +959,22 @@
     </scenes>
     <resources>
         <image name="back" width="9" height="14"/>
-        <image name="close" width="96" height="96"/>
-        <image name="download" width="96" height="96"/>
-        <image name="favorite" width="1200" height="1200"/>
+        <image name="close" width="120" height="120"/>
+        <image name="download" width="128" height="128"/>
+        <image name="favorite" width="1600" height="1600"/>
         <image name="hanuman" width="927" height="1188"/>
         <image name="header_title" width="200" height="50"/>
         <image name="home" width="150" height="150"/>
         <image name="menu_1" width="435" height="434"/>
         <image name="next" width="90" height="90"/>
-        <image name="no_internet" width="192" height="192"/>
+        <image name="no_internet" width="240" height="240"/>
         <image name="play" width="96" height="96"/>
         <image name="previous" width="90" height="90"/>
         <image name="repeat" width="48" height="48"/>
         <image name="share_black" width="48" height="48"/>
-        <image name="share_white" width="96" height="96"/>
+        <image name="share_white" width="120" height="120"/>
         <image name="shuffle" width="48" height="48"/>
-        <image name="unfavorite" width="99" height="99"/>
+        <image name="unfavorite" width="132" height="132"/>
         <image name="volume" width="48" height="48"/>
     </resources>
 </document>
