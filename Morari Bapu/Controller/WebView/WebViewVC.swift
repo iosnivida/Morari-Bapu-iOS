@@ -58,7 +58,12 @@ class WebViewVC: UIViewController {
       }
       else if screenDirection == .Live_Katha_Streaming_Video{
       
-        WebServices().CallGlobalAPI(url: WebService_Live_Katha_Video,headers: [:], parameters: [:], HttpMethod: "POST", ProgressView: true) { ( _ jsonResponce:JSON? , _ strErrorMessage:String) in
+        DispatchQueue.main.async {
+            let url = URL(string: "http://chitrakutdhamtalgajarda.org/live_katha_youtube.php")
+            self.webView.loadRequest(NSURLRequest(url: url!) as URLRequest)
+        }
+        
+       /* WebServices().CallGlobalAPI(url: WebService_Live_Katha_Video,headers: [:], parameters: [:], HttpMethod: "POST", ProgressView: true) { ( _ jsonResponce:JSON? , _ strErrorMessage:String) in
         
         if(jsonResponce?.error != nil) {
           
@@ -89,7 +94,7 @@ class WebViewVC: UIViewController {
             Utility().showAlertMessage(vc: self, titleStr: "", messageStr: jsonResponce!["message"].stringValue)
           }
         }
-      }
+      }*/
     }
   }
   
