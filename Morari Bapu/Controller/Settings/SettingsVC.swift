@@ -467,7 +467,7 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
       if indexPath.row == 0{
         //About Us
         
-        let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+        let storyboard = UIStoryboard(name: Menu_Storyboard, bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "SettingsVC") as! SettingsVC
         vc.screenDirection = .About
         navigationController?.pushViewController(vc, animated:  true)
@@ -475,7 +475,7 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
       }else if indexPath.row == 1{
         //About The App
         
-        let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+        let storyboard = UIStoryboard(name: Menu_Storyboard, bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "AboutTheAppVC") as! AboutTheAppVC
         vc.strTitle = "User Guide"
         navigationController?.pushViewController(vc, animated:  true)
@@ -483,7 +483,7 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
       }else if indexPath.row == 2{
         //Feedback
         
-        let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+        let storyboard = UIStoryboard(name: Menu_Storyboard, bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "FeedbackVC") as! FeedbackVC
         navigationController?.pushViewController(vc, animated:  true)
         
@@ -507,7 +507,7 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
         
       }
       else if indexPath.row == 4{
-        let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+        let storyboard = UIStoryboard(name: Menu_Storyboard, bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "FaqVC") as! FaqVC
         navigationController?.pushViewController(vc, animated:  true)
       }
@@ -517,42 +517,42 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
       
       if indexPath.row == 0{
         
-        let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+        let storyboard = UIStoryboard(name: Menu_Storyboard, bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "AboutTheAppVC") as! AboutTheAppVC
         vc.strTitle = "About Talgajarda"
         navigationController?.pushViewController(vc, animated:  true)
         
       }else if indexPath.row == 1{
         
-        let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+        let storyboard = UIStoryboard(name: Menu_Storyboard, bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "AboutTheAppVC") as! AboutTheAppVC
         vc.strTitle = "About Shenjal"
         navigationController?.pushViewController(vc, animated:  true)
         
       }else if indexPath.row == 2{
         
-        let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+        let storyboard = UIStoryboard(name: Menu_Storyboard, bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "AboutTheAppVC") as! AboutTheAppVC
         vc.strTitle = "About Gurukul"
         navigationController?.pushViewController(vc, animated:  true)
         
       }else if indexPath.row == 3{
         
-        let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+        let storyboard = UIStoryboard(name: Menu_Storyboard, bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "AboutTheAppVC") as! AboutTheAppVC
         vc.strTitle = "About Chitrakutdham"
         navigationController?.pushViewController(vc, animated:  true)
         
       }else if indexPath.row == 4{
         
-        let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+        let storyboard = UIStoryboard(name: Menu_Storyboard, bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "AboutTheAppVC") as! AboutTheAppVC
         vc.strTitle = "About Tulsidas Ji"
         navigationController?.pushViewController(vc, animated:  true)
         
       }else if indexPath.row == 5{
         
-        let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+        let storyboard = UIStoryboard(name: Menu_Storyboard, bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "AboutTheAppVC") as! AboutTheAppVC
         vc.strTitle = "About Bapu's Guru"
         navigationController?.pushViewController(vc, animated:  true)
@@ -565,7 +565,7 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
         
         //Photos
         
-        let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+        let storyboard = UIStoryboard(name: Media_Storyboard, bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "WhatsNewPhotosVC") as! WhatsNewPhotosVC
         vc.screenDirection = .Media_Photos
         navigationController?.pushViewController(vc, animated:  true)
@@ -574,7 +574,7 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
         
         //Sher O Shayri
         
-        let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+        let storyboard = UIStoryboard(name: Dashboard_Storyboard, bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "ShayriVC") as! ShayriVC
         navigationController?.pushViewController(vc, animated:  true)
         
@@ -582,7 +582,7 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
       }else if indexPath.row == 2{
         
         //Bapu's Thoughts
-        let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+        let storyboard = UIStoryboard(name: Dashboard_Storyboard, bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "BapuThoughtsVC") as! BapuThoughtsVC
         navigationController?.pushViewController(vc, animated:  true)
         
@@ -590,7 +590,7 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
         
         //Other Videos
         
-        let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+        let storyboard = UIStoryboard(name: Menu_Storyboard, bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "SettingsVC") as! SettingsVC
         vc.screenDirection = .Other_Videos
         navigationController?.pushViewController(vc, animated:  true)
@@ -598,7 +598,7 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
       }else if indexPath.row == 4{
         
         //Audios
-        let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+        let storyboard = UIStoryboard(name: Menu_Storyboard, bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "SettingsVC") as! SettingsVC
         vc.screenDirection = .Audios
         navigationController?.pushViewController(vc, animated:  true)
@@ -606,7 +606,7 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
       }else if indexPath.row == 5{
         
         //Press Article
-        let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+        let storyboard = UIStoryboard(name: Media_Storyboard, bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "ArticlesVC") as! ArticlesVC
         navigationController?.pushViewController(vc, animated:  true)
         
@@ -617,7 +617,7 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
       if indexPath.row == 0{
         
         //Stuti
-        let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+        let storyboard = UIStoryboard(name: Media_Storyboard, bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "AudioVC") as! AudioVC
         vc.screenDirection = .Stuti
         navigationController?.pushViewController(vc, animated:  true)
@@ -625,7 +625,7 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
       }else if indexPath.row == 1{
         
         //Sankirtan
-        let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+        let storyboard = UIStoryboard(name: Media_Storyboard, bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "AudioVC") as! AudioVC
         vc.screenDirection = .Sankirtan
         navigationController?.pushViewController(vc, animated:  true)
@@ -634,7 +634,7 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
       else {
         
         //Other Audio
-        let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+        let storyboard = UIStoryboard(name: Media_Storyboard, bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "AudioVC") as! AudioVC
         vc.screenDirection = .Others
         navigationController?.pushViewController(vc, animated:  true)
@@ -646,7 +646,7 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
       
       var dict = arrOtherVideo[indexPath.row]
       
-      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let storyboard = UIStoryboard(name: Media_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "WhatsNewVideoVC") as! WhatsNewVideoVC
       vc.idVideoCategory = dict["id"].stringValue
       vc.strTitle = dict["name"].stringValue
@@ -659,14 +659,14 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
       if indexPath.row == 0{
         //Text
         
-        let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+        let storyboard = UIStoryboard(name: Media_Storyboard, bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "WhatsNewTextVC") as! WhatsNewTextVC
         navigationController?.pushViewController(vc, animated:  true)
         
       }else if indexPath.row == 1{
         //Photo
         
-        let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+        let storyboard = UIStoryboard(name: Media_Storyboard, bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "WhatsNewPhotosVC") as! WhatsNewPhotosVC
         vc.screenDirection = .Whats_New_Photos
         navigationController?.pushViewController(vc, animated:  true)
@@ -674,7 +674,7 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
       else if indexPath.row == 2{
         //Video
         
-        let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+        let storyboard = UIStoryboard(name: Media_Storyboard, bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "WhatsNewVideoVC") as! WhatsNewVideoVC
         vc.screenDirection = .WhatsNew_Video
         navigationController?.pushViewController(vc, animated:  true)
@@ -683,7 +683,7 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
       else {
         //Audio
         
-        let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+        let storyboard = UIStoryboard(name: Media_Storyboard, bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "AudioVC") as! AudioVC
         vc.screenDirection = .WhatsNewAudio
         navigationController?.pushViewController(vc, animated:  true)
@@ -708,14 +708,14 @@ extension SettingsVC: MenuNavigationDelegate{
     }else if ScreenName == "Katha Chopai"{
       //Katha Chopai
       
-      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let storyboard = UIStoryboard(name: Dashboard_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "KathaChopaiVC") as! KathaChopaiVC
       vc.screenDirection = .Katha_Chopai
       navigationController?.pushViewController(vc, animated:  true)
       
     }else if ScreenName == "Ram Charitra Manas"{
       //Ram Charitra Manas
-      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let storyboard = UIStoryboard(name: Dashboard_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "KathaChopaiVC") as! KathaChopaiVC
       vc.screenDirection = .Ram_Charit_Manas
       navigationController?.pushViewController(vc, animated:  true)
@@ -723,27 +723,27 @@ extension SettingsVC: MenuNavigationDelegate{
      }else if ScreenName == "Upcoing Katha"{
       //Upcoing Katha
       
-      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let storyboard = UIStoryboard(name: Dashboard_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "UpComingKathasVC") as! UpComingKathasVC
       navigationController?.pushViewController(vc, animated:  true)
       
     }else if ScreenName == "Quotes"{
       //Quotes
-      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let storyboard = UIStoryboard(name: Dashboard_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "KathaChopaiVC") as! KathaChopaiVC
       vc.screenDirection = .Quotes
       navigationController?.pushViewController(vc, animated:  true)
       
     }else if ScreenName == "Daily Katha Clip"{
       //Daily Katha Clip
-      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let storyboard = UIStoryboard(name: Media_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "WhatsNewVideoVC") as! WhatsNewVideoVC
       vc.screenDirection = .Daily_Katha_Clip
       navigationController?.pushViewController(vc, animated:  true)
       
     }else if ScreenName == "Live Katha Audio"{
       //Live Katha Audio
-      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let storyboard = UIStoryboard(name: Menu_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "WebViewVC") as! WebViewVC
       vc.screenDirection = .Live_Katha_Streaming_Audio
       vc.strTitle = "Live Katha Audio"
@@ -751,7 +751,7 @@ extension SettingsVC: MenuNavigationDelegate{
       
     }else if ScreenName == "You Tube Channel"{
       //You Tube Channel
-      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let storyboard = UIStoryboard(name: Menu_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "WebViewVC") as! WebViewVC
       vc.screenDirection = .Moraribapu_Youtube_Channel
       vc.strTitle = "Morari Bapu Youtube Channel"
@@ -759,7 +759,7 @@ extension SettingsVC: MenuNavigationDelegate{
       
     }else if ScreenName == "Live Katha Video"{
       //Live Katha Video
-      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let storyboard = UIStoryboard(name: Menu_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "WebViewVC") as! WebViewVC
       vc.screenDirection = .Live_Katha_Streaming_Video
       vc.strTitle = "Live Katha Video"
@@ -769,22 +769,24 @@ extension SettingsVC: MenuNavigationDelegate{
     else if ScreenName == "Media"{
       //Media
       
-      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let storyboard = UIStoryboard(name: Menu_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "SettingsVC") as! SettingsVC
       vc.screenDirection = .Media
-      navigationController?.pushViewController(vc, animated:  true)
+        DispatchQueue.main.async {
+            self.navigationController?.pushViewController(vc, animated:  true)
+        }
       
       
     }else if ScreenName == "What's New"{
       //What's New
-      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let storyboard = UIStoryboard(name: Menu_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "SettingsVC") as! SettingsVC
       vc.screenDirection = .Whats_New
       navigationController?.pushViewController(vc, animated:  true)
       
     }else if ScreenName == "Sangeet Ni Duniya"{
       //Sangeet Ni Duniya
-      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let storyboard = UIStoryboard(name: Menu_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "WebViewVC") as! WebViewVC
       vc.screenDirection = .Sangeet_Ni_Duniya_Online_Shop
       vc.strTitle = "Sangeet Ni Duniya Online Shop"
@@ -793,7 +795,7 @@ extension SettingsVC: MenuNavigationDelegate{
     }else if ScreenName == "Setting"{
       //Setting
       
-      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let storyboard = UIStoryboard(name: Menu_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "SettingsVC") as! SettingsVC
       vc.screenDirection = .Settings
       navigationController?.pushViewController(vc, animated:  true)
@@ -801,35 +803,41 @@ extension SettingsVC: MenuNavigationDelegate{
      }else if ScreenName == "Search"{
       //Search
       
-      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+   let storyboard = UIStoryboard(name: Menu_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "SearchVC") as! SearchVC
-      navigationController?.pushViewController(vc, animated:  true)
+        DispatchQueue.main.async {
+            self.navigationController?.pushViewController(vc, animated:  true)
+        }
        }else if ScreenName == "Favourites"{
       //Favourites
       
-      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let storyboard = UIStoryboard(name: Media_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "FavouriteVC") as! FavouriteVC
       navigationController?.pushViewController(vc, animated:  true)
     }else if ScreenName == "Events"{
       //Events
-      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let storyboard = UIStoryboard(name: Dashboard_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "EventsVC") as! EventsVC
       navigationController?.pushViewController(vc, animated:  true)
       
     }else if ScreenName == "Katha Ebook"{
       //Katha Ebook
       
-      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let storyboard = UIStoryboard(name: Menu_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "KathaEBookVC") as! KathaEBookVC
-      navigationController?.pushViewController(vc, animated:  true)
+        DispatchQueue.main.async {
+            self.navigationController?.pushViewController(vc, animated:  true)
+        }
       
     }else if ScreenName == "Privacy Notice"{
       //Privacy Notice
 
-      let storyboard = UIStoryboard(name: Main_Storyboard, bundle: nil)
+      let storyboard = UIStoryboard(name: Menu_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "AboutTheAppVC") as! AboutTheAppVC
       vc.strTitle = "Privacy Notice"
-      navigationController?.pushViewController(vc, animated:  true)
+      DispatchQueue.main.async {
+            self.navigationController?.pushViewController(vc, animated:  true)
+      }
       
     }
   }

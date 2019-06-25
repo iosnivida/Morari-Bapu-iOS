@@ -17,7 +17,7 @@
 		0708F70A216D132A00A4B079 /* HanumanChalishaVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0708F709216D132A00A4B079 /* HanumanChalishaVC.swift */; };
 		07094A512161C32E00B5B08C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07094A502161C32E00B5B08C /* AppDelegate.swift */; };
 		07094A532161C32E00B5B08C /* DashboardVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07094A522161C32E00B5B08C /* DashboardVC.swift */; };
-		07094A562161C32E00B5B08C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 07094A542161C32E00B5B08C /* Main.storyboard */; };
+		07094A562161C32E00B5B08C /* Dashboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 07094A542161C32E00B5B08C /* Dashboard.storyboard */; };
 		07094A592161C32E00B5B08C /* Morari_Bapu.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 07094A572161C32E00B5B08C /* Morari_Bapu.xcdatamodeld */; };
 		07094A5B2161C33000B5B08C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07094A5A2161C33000B5B08C /* Assets.xcassets */; };
 		07094A5E2161C33000B5B08C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 07094A5C2161C33000B5B08C /* LaunchScreen.storyboard */; };
@@ -74,6 +74,8 @@
 		07CD60BE22171FE4003C9333 /* KathaTimingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07CD60BD22171FE4003C9333 /* KathaTimingTableViewCell.swift */; };
 		07D9394921F62B7B003F847D /* UpComingKathasVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07D9394821F62B7B003F847D /* UpComingKathasVC.swift */; };
 		07D9394B21F62CE9003F847D /* UpComingKathaDetailsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07D9394A21F62CE9003F847D /* UpComingKathaDetailsVC.swift */; };
+		07D9A46822C28EBC00737489 /* Media.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 07D9A46722C28EBC00737489 /* Media.storyboard */; };
+		07D9A46B22C28FA100737489 /* Menu.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 07D9A46A22C28FA100737489 /* Menu.storyboard */; };
 		07FC21702230DBA8009871E8 /* LNPopupController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07FC216F2230DB89009871E8 /* LNPopupController.framework */; };
 		07FC21732230DF7D009871E8 /* LNPopupController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07FC216F2230DB89009871E8 /* LNPopupController.framework */; };
 		07FC21742230DF7D009871E8 /* LNPopupController.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 07FC216F2230DB89009871E8 /* LNPopupController.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -132,7 +134,7 @@
 		07094A4D2161C32E00B5B08C /* Morari Bapu.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Morari Bapu.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		07094A502161C32E00B5B08C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		07094A522161C32E00B5B08C /* DashboardVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardVC.swift; sourceTree = "<group>"; };
-		07094A552161C32E00B5B08C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		07094A552161C32E00B5B08C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Dashboard.storyboard; sourceTree = "<group>"; };
 		07094A582161C32E00B5B08C /* Morari_Bapu.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Morari_Bapu.xcdatamodel; sourceTree = "<group>"; };
 		07094A5A2161C33000B5B08C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		07094A5D2161C33000B5B08C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -195,6 +197,8 @@
 		07CD60BD22171FE4003C9333 /* KathaTimingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KathaTimingTableViewCell.swift; sourceTree = "<group>"; };
 		07D9394821F62B7B003F847D /* UpComingKathasVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpComingKathasVC.swift; sourceTree = "<group>"; };
 		07D9394A21F62CE9003F847D /* UpComingKathaDetailsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpComingKathaDetailsVC.swift; sourceTree = "<group>"; };
+		07D9A46722C28EBC00737489 /* Media.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Media.storyboard; sourceTree = "<group>"; };
+		07D9A46A22C28FA100737489 /* Menu.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Menu.storyboard; sourceTree = "<group>"; };
 		07FC216A2230DB89009871E8 /* LNPopupController.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = LNPopupController.xcodeproj; path = LNPopupController/LNPopupController.xcodeproj; sourceTree = "<group>"; };
 		4C7EC3ED81FE47D190032489 /* Pods_Morari_BapuUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Morari_BapuUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A88026A43A3E43A2EF17F46 /* Pods-Morari Bapu.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Morari Bapu.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Morari Bapu/Pods-Morari Bapu.debug.xcconfig"; sourceTree = "<group>"; };
@@ -413,7 +417,9 @@
 			children = (
 				07094A5C2161C33000B5B08C /* LaunchScreen.storyboard */,
 				07A755182162592000793232 /* Custom.storyboard */,
-				07094A542161C32E00B5B08C /* Main.storyboard */,
+				07094A542161C32E00B5B08C /* Dashboard.storyboard */,
+				07D9A46722C28EBC00737489 /* Media.storyboard */,
+				07D9A46A22C28FA100737489 /* Menu.storyboard */,
 			);
 			path = Storyboard;
 			sourceTree = "<group>";
@@ -848,8 +854,10 @@
 				07A755262162869100793232 /* MontserratAlternates-Light.otf in Resources */,
 				07094A5E2161C33000B5B08C /* LaunchScreen.storyboard in Resources */,
 				07A7551721624BC400793232 /* Default-568h@2x.png in Resources */,
+				07D9A46B22C28FA100737489 /* Menu.storyboard in Resources */,
 				07094A5B2161C33000B5B08C /* Assets.xcassets in Resources */,
-				07094A562161C32E00B5B08C /* Main.storyboard in Resources */,
+				07D9A46822C28EBC00737489 /* Media.storyboard in Resources */,
+				07094A562161C32E00B5B08C /* Dashboard.storyboard in Resources */,
 				07A755192162592100793232 /* Custom.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1094,12 +1102,12 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		07094A542161C32E00B5B08C /* Main.storyboard */ = {
+		07094A542161C32E00B5B08C /* Dashboard.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				07094A552161C32E00B5B08C /* Base */,
 			);
-			name = Main.storyboard;
+			name = Dashboard.storyboard;
 			sourceTree = "<group>";
 		};
 		07094A5C2161C33000B5B08C /* LaunchScreen.storyboard */ = {
@@ -1238,7 +1246,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Morari Bapu/Morari Bapu.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = F2J643LE3L;
+				DEVELOPMENT_TEAM = RMQN2WYMSF;
 				INFOPLIST_FILE = "Morari Bapu/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1262,7 +1270,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Morari Bapu/Morari Bapu.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = F2J643LE3L;
+				DEVELOPMENT_TEAM = RMQN2WYMSF;
 				INFOPLIST_FILE = "Morari Bapu/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (

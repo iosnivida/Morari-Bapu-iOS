@@ -11,7 +11,9 @@ let MontserratSemiBold                    = "MontserratAlternates-SemiBold"
 
 //MARK:- storyboards
 let Custome_Storyboard                     = "Custom"
-let Main_Storyboard                        = "Main"
+let Dashboard_Storyboard                   = "Dashboard"
+let Media_Storyboard                       = "Media"
+let Menu_Storyboard                        = "Menu"
 
 
 //var BASE_URL                                       = "http://vetolution.com:3004/api/v1/" //Live

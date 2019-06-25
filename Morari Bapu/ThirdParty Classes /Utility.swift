@@ -592,7 +592,7 @@ class Utility: NSObject
   
   static func backToHome(){
     
-    let storyBoardMain = UIStoryboard(name: Main_Storyboard, bundle: nil)
+    let storyBoardMain = UIStoryboard(name: Dashboard_Storyboard, bundle: nil)
     
     let objVC = storyBoardMain.instantiateViewController(withIdentifier: "DashboardVC") as! DashboardVC
     let appNavigation: UINavigationController = UINavigationController(rootViewController: objVC)
