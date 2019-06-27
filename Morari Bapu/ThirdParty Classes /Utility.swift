@@ -208,6 +208,29 @@ class Utility: NSObject
         return strConverted
     }
     
+    //Date convert string to Date & Date to string in swift
+    static func dateToStringLocal(dateStr:String, strDateFormat:String) -> String {
+        
+        var strConverted = String()
+        
+        if dateStr != ""{
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = strDateFormat
+            dateFormatter.timeZone = TimeZone.current
+            
+            let date = dateFormatter.date(from:dateStr)!
+            //dateFormatter.dateFormat = "dd-MM-yyyy hh:mm:a"
+            dateFormatter.dateFormat = strDateFormat
+            dateFormatter.timeZone = TimeZone.current
+            
+            strConverted = dateFormatter.string(from:date)
+        }else{
+            strConverted = ""
+        }
+        
+        return strConverted
+    }
+    
     static func monthCalculate(date: Date) -> Int {
         
         let now = Date()

@@ -10,7 +10,8 @@ import UIKit
 
 class UpcomingKathaTableViewCell: UITableViewCell {
 
-  @IBOutlet weak var btnCategoryName: UIButton!
+    @IBOutlet weak var lblDateAndTime: UILabel!
+    @IBOutlet weak var btnCategoryName: UIButton!
   @IBOutlet weak var lblTitle: UILabel!
   @IBOutlet weak var lblDate: UILabel!
   @IBOutlet weak var lblScheduleDate: UILabel!

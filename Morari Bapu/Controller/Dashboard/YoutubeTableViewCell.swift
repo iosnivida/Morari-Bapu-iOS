@@ -11,7 +11,8 @@ import UIKit
 class YoutubeTableViewCell: UITableViewCell {
 
   
-  @IBOutlet weak var btnMoveToCatrgoryLink: UIButton!
+    @IBOutlet weak var lblDateAndTime: UILabel!
+    @IBOutlet weak var btnMoveToCatrgoryLink: UIButton!
   @IBOutlet weak var lblTitle: UILabel!
   @IBOutlet weak var lblDuration: UILabel!
   @IBOutlet weak var lblDate: UILabel!

@@ -45,12 +45,16 @@ class DashboardVC: UIViewController, UIScrollViewDelegate {
 
       self.scrollView.delegate = self
       
-      lblSliderTitle.isHidden = true
+      //lblSliderTitle.isHidden = true
+        
+        lblSliderTitle.layer.masksToBounds = true
+        lblSliderTitle.layer.cornerRadius = lblSliderTitle.frame.size.height / 2
+        
       currentPageNo = 1
       
       let screenHeight = screenSize.height
 
-      carouselHeight.constant = screenHeight - 130
+      carouselHeight.constant = screenHeight - 163
       self.view.layoutIfNeeded()
       
         tblHome.tableFooterView =  UIView.init(frame: .zero)
@@ -87,7 +91,7 @@ class DashboardVC: UIViewController, UIScrollViewDelegate {
     
     if AudioPlayerManager.shared.isPlaying() == true{
      
-      carouselHeight.constant = self.view.frame.height - 180
+      carouselHeight.constant = self.view.frame.height - 213
       self.view.layoutIfNeeded()
       
     }
@@ -404,6 +408,8 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
     cell.lblDate.text = Utility.dateToString(dateStr: data["from_date"].stringValue, strDateFormat: "MM, yyyy")
     cell.lblScheduleDate.text = "\(Utility.dateToString(dateStr: data["from_date"].stringValue, strDateFormat: "dd-MM-yyyy"))"
     
+        cell.lblDateAndTime.text = "\(data["created"].stringValue)"
+        
     cell.btnTitle.tag = indexPath.row
     cell.btnTitle.addTarget(self, action: #selector(btnToSpecificScreen(_:)), for: UIControl.Event.touchUpInside)
 
@@ -431,7 +437,8 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
       cell.lblDate.text = Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd MMM yyyy")
       cell.lblDescription1.text = data["quotes_english"].stringValue
       cell.btnTitle.setTitle(data["list_heading"].stringValue, for: .normal)
-      
+        cell.lblDateAndTime.text = "\(data["created"].stringValue)"
+
 //      cell.btnFavourite.isHidden = true
 //      cell.btnShare.isHidden = true
       
@@ -467,6 +474,8 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
       cell.lblDate.text = Utility.dateToString(dateStr: data["from_date"].stringValue, strDateFormat: "dd MMM yyyy")
       cell.lblDescription1.text = data["description"].stringValue
       cell.btnTitle.setTitle(data["list_heading"].stringValue, for: .normal)
+        cell.lblDateAndTime.text = "\(data["created"].stringValue)"
+
       //cell.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
       
       //cell.btnFavourite.tag = indexPath.row
@@ -506,6 +515,8 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
       cell.lblDate.text = Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd MMM yyyy")
       cell.lblDescription1.text = data["description"].stringValue
       cell.btnTitle.setTitle("Ram Charit Manas", for: .normal)
+        cell.lblDateAndTime.text = "\(data["created"].stringValue)"
+
       //cell.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
       
       //cell.btnFavourite.tag = indexPath.row
@@ -541,11 +552,13 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
       
       cell.lblTitle.text = data["title"].stringValue
       cell.lblDuration.text = "(Duration: \(data["video_duration"].stringValue))"
-      cell.lblDate.text = Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd-MM-yyyy")
+      cell.lblDate.text = Utility.dateToString(dateStr: data["from_date"].stringValue, strDateFormat: "dd-MM-yyyy")
       cell.btnTitle.setTitle(data["list_heading"].stringValue, for: .normal)
       
       let placeHolder = UIImage(named: "youtube_placeholder")
       
+      cell.lblDateAndTime.text = "\(data["created"].stringValue)"
+        
       cell.imgVideo.kf.indicatorType = .activity
       cell.imgVideo.kf.setImage(with: URL(string: "\(BASE_URL_IMAGE)\(data["video_image"].stringValue)"), placeholder: placeHolder, options: [.transition(ImageTransition.fade(1))])
       
@@ -591,7 +604,8 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
       
       cell.imgVideo.kf.indicatorType = .activity
       cell.imgVideo.kf.setImage(with: URL(string: "\(BASE_URL_IMAGE)\(data["video_image"].stringValue)"), placeholder: placeHolder, options: [.transition(ImageTransition.fade(1))])
-      
+        cell.lblDateAndTime.text = "\(data["created"].stringValue)"
+
       cell.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
       
       //cell.btnShare.tag = indexPath.row
@@ -709,6 +723,8 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
 //      cell.btnFavourite.tag = indexPath.row
 //      cell.btnShare.tag = indexPath.row
       
+        cell.lblDateAndTime.text = "\(data["created"].stringValue)"
+
       cell.btnTitle.tag = indexPath.row
       cell.btnTitle.setTitle(data["list_heading"].stringValue, for: .normal)
       
@@ -728,6 +744,34 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
       print("TableView Height: \(constraintHeightTableView.constant)")
       return cell
       
+    }else if data["list_heading"].stringValue == "BapuDarshan"{
+    //Thought
+    
+    let cellIdentifier = "BapuDarshanUITableViewCell"
+    
+    guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? BapuDarshanUITableViewCell  else {
+    fatalError("The dequeued cell is not an instance of MealTableViewCell.")
+    
+    }
+    
+    
+    let placeHolder = UIImage(named: "youtube_placeholder")
+    cell.imgBapuDarshan.kf.indicatorType = .activity
+    cell.imgBapuDarshan.kf.setImage(with: URL(string: "\(BASE_URL_IMAGE)\(data["image_file"].stringValue)"), placeholder: placeHolder, options: [.transition(ImageTransition.fade(1))])
+    
+        cell.lblDate.text = Utility.dateToString(dateStr: data["date"].stringValue, strDateFormat: "dd MMM yyyy")
+     
+        
+    cell.lblDateAndTime.text = "\(data["created"].stringValue)"
+
+    cell.btnTitle.setTitle("Bapu's Image", for: .normal)
+    cell.btnTitle.tag = indexPath.row
+   
+        cell.btnTitle.addTarget(self, action: #selector(btnToSpecificScreen(_:)), for: UIControl.Event.touchUpInside)
+    
+    
+    return cell
+    
     }
     else{
       return UITableViewCell()
@@ -767,6 +811,7 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
       
       let storyboard = UIStoryboard(name: Dashboard_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "KathaChopaiDetailsVC") as! KathaChopaiDetailsVC
+
       vc.strTitle = "Quotes"
       vc.strId = data["quotes_id"].stringValue
       navigationController?.pushViewController(vc, animated:  true)
@@ -827,6 +872,14 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
       vc.strId = data["event_id"].stringValue
       navigationController?.pushViewController(vc, animated:  true)
       
+    }else if data["list_heading"].stringValue == "BapuDarshan"{
+    
+    //Bapu's Thoughts
+    let storyboard = UIStoryboard(name: Media_Storyboard, bundle: nil)
+    let vc = storyboard.instantiateViewController(withIdentifier: "WhatsNewPhotosVC") as! WhatsNewPhotosVC
+    vc.screenDirection = .Media_Photos
+    navigationController?.pushViewController(vc, animated:  true)
+    
     }
   }
   
@@ -1126,6 +1179,14 @@ extension DashboardVC : UITableViewDelegate, UITableViewDataSource{
       let vc = storyboard.instantiateViewController(withIdentifier: "EventsVC") as! EventsVC
       navigationController?.pushViewController(vc, animated:  true)
       
+    }else if data["list_heading"].stringValue == "BapuDarshan"{
+    
+    //Bapu's Thoughts
+    let storyboard = UIStoryboard(name: Media_Storyboard, bundle: nil)
+    let vc = storyboard.instantiateViewController(withIdentifier: "WhatsNewPhotosVC") as! WhatsNewPhotosVC
+    vc.screenDirection = .Media_Photos
+    navigationController?.pushViewController(vc, animated:  true)
+    
     }
     
     
@@ -1173,6 +1234,18 @@ extension DashboardVC : iCarouselDataSource, iCarouselDelegate{
     let imageStr = "\(BASE_URL_IMAGE)\(image["image"].stringValue)"
     let imageString = imageStr.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)
     
+    if image["slider_type_id"].intValue == 1{
+        self.lblSliderTitle.text = "UpComing Katha"
+    }else if image["slider_type_id"].intValue == 2{
+        self.lblSliderTitle.text = "Daily Katha Clip"
+    }else if image["slider_type_id"].intValue == 3{
+        self.lblSliderTitle.text = "Quotes"
+    }else if image["slider_type_id"].intValue == 4{
+        self.lblSliderTitle.text = "Katha Chopai"
+    }else if image["slider_type_id"].intValue == 5{
+        self.lblSliderTitle.text = "Bapu’s Photo"
+    }
+    
     
     itemView.kf.setImage(with: URL(string: imageString!), placeholder: placeHolder, options: [.transition(ImageTransition.fade(1))])
     
@@ -1190,6 +1263,18 @@ extension DashboardVC : iCarouselDataSource, iCarouselDelegate{
       let imageStr = "\(BASE_URL_IMAGE)\(image["image"].stringValue)"
       let imageString = imageStr.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)
       
+        if image["slider_type_id"].intValue == 1{
+            self.lblSliderTitle.text = "UpComing Katha"
+        }else if image["slider_type_id"].intValue == 2{
+            self.lblSliderTitle.text = "Daily Katha Clip"
+        }else if image["slider_type_id"].intValue == 3{
+            self.lblSliderTitle.text = "Quotes"
+        }else if image["slider_type_id"].intValue == 4{
+            self.lblSliderTitle.text = "Katha Chopai"
+        }else if image["slider_type_id"].intValue == 5{
+            self.lblSliderTitle.text = "Bapu’s Photo"
+        }
+        
       self.imgViewMain.kf.setImage(with: URL(string: imageString!), placeholder: placeHolder, options: [.transition(ImageTransition.fade(1))])
       
       self.pageControl.currentPage = carousel.currentItemIndex
@@ -1198,12 +1283,56 @@ extension DashboardVC : iCarouselDataSource, iCarouselDelegate{
     
   }
   
-  
-  
-  private func carousel(carousel: iCarousel, didSelectItemAtIndex index: Int)
-  {
-    print(index)
-  }
+    func carousel(_ carousel: iCarousel, didSelectItemAt index: Int) {
+     print(index)
+        
+        if arrSlider.count != 0{
+
+            let dict = arrSlider[index]
+
+            if dict["slider_type_id"].intValue == 1{
+                
+                let storyboard = UIStoryboard(name: Dashboard_Storyboard, bundle: nil)
+                let vc = storyboard.instantiateViewController(withIdentifier: "UpComingKathasVC") as! UpComingKathasVC
+                navigationController?.pushViewController(vc, animated:  true)
+                
+                
+            }else if dict["slider_type_id"].intValue == 2{
+                
+                //Daily Katha Clip
+                let storyboard = UIStoryboard(name: Media_Storyboard, bundle: nil)
+                let vc = storyboard.instantiateViewController(withIdentifier: "WhatsNewVideoVC") as! WhatsNewVideoVC
+                vc.screenDirection = .Daily_Katha_Clip
+                navigationController?.pushViewController(vc, animated:  true)
+                
+                
+            }else if dict["slider_type_id"].intValue == 3{
+                //Quotes
+                
+                let storyboard = UIStoryboard(name: Dashboard_Storyboard, bundle: nil)
+                let vc = storyboard.instantiateViewController(withIdentifier: "KathaChopaiDetailsVC") as! KathaChopaiDetailsVC
+                vc.strTitle = "Quotes"
+                vc.strId = dict["quotes_id"].stringValue
+                navigationController?.pushViewController(vc, animated:  true)
+                
+            }else if dict["slider_type_id"].intValue == 4{
+                
+                let storyboard = UIStoryboard(name: Dashboard_Storyboard, bundle: nil)
+                let vc = storyboard.instantiateViewController(withIdentifier: "KathaChopaiVC") as! KathaChopaiVC
+                vc.screenDirection = .Katha_Chopai
+                navigationController?.pushViewController(vc, animated:  true)
+                
+            }else if dict["slider_type_id"].intValue == 5{
+                
+                let storyboard = UIStoryboard(name: Media_Storyboard, bundle: nil)
+                let vc = storyboard.instantiateViewController(withIdentifier: "WhatsNewPhotosVC") as! WhatsNewPhotosVC
+                vc.screenDirection = .Media_Photos
+                navigationController?.pushViewController(vc, animated:  true)
+                
+            }
+            
+        }
+    }
   
   
   
