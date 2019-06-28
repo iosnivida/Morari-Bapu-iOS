@@ -172,7 +172,7 @@ extension MenuVC: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, 
        
         //Ram Charitra Manas
         
-        cell.lblTitle.text = "Ram Charitra Manas"
+        cell.lblTitle.text = "Ram Charit Manas"
         cell.lblCounter.isHidden = false
         
         if arrMenu["Ramcharit"]?.stringValue == ""{
@@ -253,16 +253,37 @@ extension MenuVC: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, 
         
       }
       else if indexPath.row == 9{
-        cell.lblTitle.text = "YouTube Channel"
-        cell.lblCounter.isHidden = true
+        
+        //Katha Ebook
+        
+        cell.lblTitle.text = "Katha E-Book"
+        
+        
+        if arrMenu["KathaEBook"]?.stringValue == ""{
+            cell.lblCounter.isHidden = true
+        }
+        else if arrMenu["KathaEBook"]?.intValue ?? 0 < 99{
+            cell.lblCounter.text = arrMenu["KathaEBook"]?.stringValue
+            cell.lblCounter.isHidden = false
+        }else{
+            cell.lblCounter.text = " 99+ "
+            cell.lblCounter.isHidden = false
+        }
+        
+        
       }
       else if indexPath.row == 10{
-        cell.lblTitle.text = "Live Katha Video"
+        
+        cell.lblTitle.text = "YouTube Channel"
         cell.lblCounter.isHidden = true
+      
       }
       else if indexPath.row == 11{
-        cell.lblTitle.text = "Setting"
+        
+        
+        cell.lblTitle.text = "Live Katha Video"
         cell.lblCounter.isHidden = true
+       
       }
       else if indexPath.row == 12{
         cell.lblTitle.text = "Search"
@@ -273,21 +294,9 @@ extension MenuVC: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, 
         cell.lblCounter.isHidden = true
       }
       else if indexPath.row == 14{
-        //Katha Ebook
         
-        cell.lblTitle.text = "Katha E-Book"
-        
-        
-        if arrMenu["KathaEBook"]?.stringValue == ""{
-          cell.lblCounter.isHidden = true
-        }
-        else if arrMenu["KathaEBook"]?.intValue ?? 0 < 99{
-          cell.lblCounter.text = arrMenu["KathaEBook"]?.stringValue
-          cell.lblCounter.isHidden = false
-        }else{
-          cell.lblCounter.text = " 99+ "
-          cell.lblCounter.isHidden = false
-        }
+        cell.lblTitle.text = "Setting"
+        cell.lblCounter.isHidden = true
         
       }
       else if indexPath.row == 15{
@@ -305,16 +314,16 @@ extension MenuVC: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
             if UIDevice.current.userInterfaceIdiom == .pad{
-                let yourWidth = (collectionView.bounds.width - 40) / 3.0
+                let yourWidth = (collectionView.bounds.width - 80) / 3.0
                 let yourHeight = yourWidth
                 
-                return CGSize(width: yourWidth, height: yourHeight - 15)
+                return CGSize(width: yourWidth, height: 90)
             }
             else{
-                let yourWidth = (collectionView.bounds.width - 40) / 3.0
+                let yourWidth = (collectionView.bounds.width - 80) / 3.0
                 let yourHeight = yourWidth
                 
-                return CGSize(width: yourWidth, height: yourHeight - 15)
+                return CGSize(width: yourWidth, height: 90)
             }
         }
     
@@ -359,21 +368,24 @@ extension MenuVC: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, 
           delegate?.SelectedMenu(ScreenName: "Events")
           
         }else if indexPath.row == 9{
-          //You Tube Channel
-          delegate?.SelectedMenu(ScreenName: "You Tube Channel")
+            //Katha Ebook
+            delegate?.SelectedMenu(ScreenName: "Katha Ebook")
+
 
         }else if indexPath.row == 10{
-          //Live Katha Video
-          delegate?.SelectedMenu(ScreenName: "Live Katha Video")
+            //You Tube Channel
+            delegate?.SelectedMenu(ScreenName: "You Tube Channel")
 
         }
        else if indexPath.row == 11{
-          //Setting
-          delegate?.SelectedMenu(ScreenName: "Setting")
-
+            
+        //Live Katha Video
+        delegate?.SelectedMenu(ScreenName: "Live Katha Video")
+            
         }else if indexPath.row == 12{
-          //Search
-          delegate?.SelectedMenu(ScreenName: "Search")
+         
+            //Search
+            delegate?.SelectedMenu(ScreenName: "Search")
 
         }else if indexPath.row == 13{
           //Favourites
@@ -381,9 +393,9 @@ extension MenuVC: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, 
 
         }
         else if indexPath.row == 14{
-          //Katha Ebook
-          delegate?.SelectedMenu(ScreenName: "Katha Ebook")
           
+            //Setting
+            delegate?.SelectedMenu(ScreenName: "Setting")
       }
         else if indexPath.row == 15{
           //Privacy Notice
