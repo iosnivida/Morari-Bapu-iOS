@@ -306,18 +306,18 @@
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZE4-hi-6T0" customClass="ESTMusicIndicatorView" customModule="ESTMusicIndicator">
-                                                        <rect key="frame" x="239" y="8" width="44" height="44"/>
+                                                        <rect key="frame" x="310" y="30" width="25" height="25"/>
                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="width" constant="44" id="YMB-nu-s2S"/>
-                                                            <constraint firstAttribute="height" constant="44" id="c3j-QJ-DPY"/>
+                                                            <constraint firstAttribute="width" constant="25" id="YMB-nu-s2S"/>
+                                                            <constraint firstAttribute="height" constant="25" id="c3j-QJ-DPY"/>
                                                         </constraints>
                                                     </view>
-                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="play" translatesAutoresizingMaskIntoConstraints="NO" id="TAs-qW-jlf">
-                                                        <rect key="frame" x="290" y="8" width="45" height="44"/>
+                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="music-player" translatesAutoresizingMaskIntoConstraints="NO" id="TAs-qW-jlf">
+                                                        <rect key="frame" x="310" y="5" width="25" height="25"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="width" constant="45" id="1ev-w8-R9z"/>
-                                                            <constraint firstAttribute="height" constant="44" id="FBh-I6-pff"/>
+                                                            <constraint firstAttribute="width" constant="25" id="1ev-w8-R9z"/>
+                                                            <constraint firstAttribute="height" constant="25" id="FBh-I6-pff"/>
                                                         </constraints>
                                                     </imageView>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YRS-Zj-PA4">
@@ -331,20 +331,20 @@
                                                 <constraints>
                                                     <constraint firstItem="ZV5-Aj-rnK" firstAttribute="top" secondItem="ARg-m6-KcN" secondAttribute="bottom" constant="4" id="7Fm-2I-Pio"/>
                                                     <constraint firstAttribute="trailing" secondItem="TAs-qW-jlf" secondAttribute="trailing" constant="8" id="C6U-pb-bT6"/>
-                                                    <constraint firstItem="TAs-qW-jlf" firstAttribute="leading" secondItem="ZE4-hi-6T0" secondAttribute="trailing" constant="7" id="EpB-K5-hxM"/>
+                                                    <constraint firstItem="TAs-qW-jlf" firstAttribute="leading" secondItem="ZE4-hi-6T0" secondAttribute="trailing" constant="-25" id="EpB-K5-hxM"/>
                                                     <constraint firstItem="ARg-m6-KcN" firstAttribute="leading" secondItem="aYJ-o1-Scj" secondAttribute="leading" constant="8" id="Jr3-d5-K5F"/>
                                                     <constraint firstAttribute="trailing" secondItem="YRS-Zj-PA4" secondAttribute="trailing" id="L4I-He-Wmw"/>
                                                     <constraint firstItem="YRS-Zj-PA4" firstAttribute="top" secondItem="aYJ-o1-Scj" secondAttribute="top" id="Qnn-ym-3a6"/>
                                                     <constraint firstItem="YRS-Zj-PA4" firstAttribute="leading" secondItem="aYJ-o1-Scj" secondAttribute="leading" id="Tdu-ci-d7Q"/>
-                                                    <constraint firstItem="ZE4-hi-6T0" firstAttribute="leading" secondItem="ZV5-Aj-rnK" secondAttribute="trailing" constant="8" id="XeG-lp-MUe"/>
+                                                    <constraint firstItem="ZE4-hi-6T0" firstAttribute="leading" secondItem="ZV5-Aj-rnK" secondAttribute="trailing" constant="79" id="XeG-lp-MUe"/>
                                                     <constraint firstAttribute="height" constant="60" id="XsR-S5-MWP"/>
                                                     <constraint firstAttribute="bottom" secondItem="YRS-Zj-PA4" secondAttribute="bottom" id="a3N-hp-rVq"/>
                                                     <constraint firstItem="ZV5-Aj-rnK" firstAttribute="leading" secondItem="aYJ-o1-Scj" secondAttribute="leading" constant="8" id="c7M-nU-Dqy"/>
-                                                    <constraint firstItem="TAs-qW-jlf" firstAttribute="top" secondItem="aYJ-o1-Scj" secondAttribute="top" constant="8" id="d88-jz-dl7"/>
-                                                    <constraint firstItem="ZE4-hi-6T0" firstAttribute="leading" secondItem="ARg-m6-KcN" secondAttribute="trailing" constant="8" id="eMn-rc-VWg"/>
-                                                    <constraint firstAttribute="bottom" secondItem="TAs-qW-jlf" secondAttribute="bottom" constant="8" id="i5T-6c-Unc"/>
-                                                    <constraint firstAttribute="bottom" secondItem="ZE4-hi-6T0" secondAttribute="bottom" constant="8" id="oHv-KH-le9"/>
-                                                    <constraint firstItem="ZE4-hi-6T0" firstAttribute="top" secondItem="aYJ-o1-Scj" secondAttribute="top" constant="8" id="sAX-0Q-gN6"/>
+                                                    <constraint firstItem="TAs-qW-jlf" firstAttribute="top" secondItem="aYJ-o1-Scj" secondAttribute="top" constant="5" id="d88-jz-dl7"/>
+                                                    <constraint firstItem="ZE4-hi-6T0" firstAttribute="leading" secondItem="ARg-m6-KcN" secondAttribute="trailing" constant="79" id="eMn-rc-VWg"/>
+                                                    <constraint firstAttribute="bottom" secondItem="TAs-qW-jlf" secondAttribute="bottom" constant="30" id="i5T-6c-Unc"/>
+                                                    <constraint firstAttribute="bottom" secondItem="ZE4-hi-6T0" secondAttribute="bottom" constant="5" id="oHv-KH-le9"/>
+                                                    <constraint firstItem="ZE4-hi-6T0" firstAttribute="top" secondItem="aYJ-o1-Scj" secondAttribute="top" constant="30" id="sAX-0Q-gN6"/>
                                                     <constraint firstItem="ARg-m6-KcN" firstAttribute="top" secondItem="aYJ-o1-Scj" secondAttribute="top" constant="8" id="yaN-Tl-MCQ"/>
                                                 </constraints>
                                                 <userDefinedRuntimeAttributes>
@@ -423,7 +423,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="lun-au-5Mz">
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" pagingEnabled="YES" bouncesZoom="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="lun-au-5Mz">
                                 <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="qvp-fh-urK">
@@ -567,14 +567,14 @@
                                                 </constraints>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hanuman Chalisha" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uRb-vV-dMF">
-                                                <rect key="frame" x="58" y="23" width="309" height="19"/>
+                                                <rect key="frame" x="58" y="23" width="309" height="20"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <fontDescription key="fontDescription" name="MontserratAlternates-SemiBold" family="Montserrat Alternates" pointSize="16"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="249" text="(Duration: 6:35)" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JTX-5U-FPi" customClass="MarqueeLabel" customModule="MarqueeLabel">
-                                                <rect key="frame" x="58" y="46" width="309" height="21"/>
+                                                <rect key="frame" x="58" y="47" width="309" height="20"/>
                                                 <fontDescription key="fontDescription" name="MontserratAlternates-SemiBold" family="Montserrat Alternates" pointSize="12"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
@@ -672,17 +672,17 @@
                                                 </constraints>
                                             </view>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="iXZ-bv-4mk">
-                                                <rect key="frame" x="8" y="0.0" width="359" height="392.5"/>
+                                                <rect key="frame" x="8" y="0.0" width="359" height="390.5"/>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9f4-DV-iDe">
-                                                <rect key="frame" x="8" y="400.5" width="359" height="16.5"/>
+                                                <rect key="frame" x="8" y="398.5" width="359" height="17.5"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <fontDescription key="fontDescription" name="MontserratAlternates-SemiBold" family="Montserrat Alternates" pointSize="14"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NwR-zh-xFT">
-                                                <rect key="frame" x="8" y="422" width="359" height="14"/>
+                                                <rect key="frame" x="8" y="421" width="359" height="15"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <fontDescription key="fontDescription" name="MontserratAlternates-Regular" family="Montserrat Alternates" pointSize="12"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -973,6 +973,7 @@
         <image name="header_title" width="200" height="50"/>
         <image name="home" width="150" height="150"/>
         <image name="menu_1" width="435" height="434"/>
+        <image name="music-player" width="150" height="150"/>
         <image name="next" width="90" height="90"/>
         <image name="no_internet" width="240" height="240"/>
         <image name="play" width="96" height="96"/>

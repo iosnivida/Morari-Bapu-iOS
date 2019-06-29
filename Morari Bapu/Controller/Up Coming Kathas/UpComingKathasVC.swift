@@ -213,16 +213,17 @@ extension UpComingKathasVC : UITableViewDelegate, UITableViewDataSource{
       fatalError("The dequeued cell is not an instance of MealTableViewCell.")
     }
     
-    let data = arrUpComingKathas[indexPath.row]
+    let dict = arrUpComingKathas[indexPath.row]
+    let data = dict["UpcomingKatha"].dictionaryValue
 
     
-    cell.lblDay.text = Utility.dateToString(dateStr: data["from_date"].stringValue, strDateFormat: "dd")
-    cell.lblTitle.text = data["title"].stringValue
-    cell.lblDate.text = Utility.dateToString(dateStr: data["from_date"].stringValue, strDateFormat: "MM, yyyy")
-    cell.lblScheduleDate.text = "\(Utility.dateToString(dateStr: data["from_date"].stringValue, strDateFormat: "dd'th' MMM, yyyy")) To \(Utility.dateToString(dateStr: data["to_date"].stringValue, strDateFormat: "dd'th' MMM, yyyyy"))"
+    cell.lblDay.text = Utility.dateToString(dateStr: data["from_date"]!.stringValue, strDateFormat: "dd")
+    cell.lblTitle.text = data["title"]?.stringValue
+    cell.lblDate.text = Utility.dateToString(dateStr: data["from_date"]!.stringValue, strDateFormat: "MM, yyyy")
+    cell.lblScheduleDate.text = "\(Utility.dateToString(dateStr: data["from_date"]!.stringValue, strDateFormat: "dd'th' MMM, yyyy")) To \(Utility.dateToString(dateStr: data["to_date"]!.stringValue, strDateFormat: "dd'th' MMM, yyyyy"))"
     
     //Notification readable or not
-    if data["is_read"].boolValue == false{
+    if dict["is_read"].boolValue == false{
       //Non-Readable notification
       cell.viewBackground.backgroundColor = UIColor.colorFromHex("#d3d3d3")
       
@@ -264,7 +265,9 @@ extension UpComingKathasVC : UITableViewDelegate, UITableViewDataSource{
       
       let storyboard = UIStoryboard(name: Dashboard_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "UpComingKathaDetailsVC") as! UpComingKathaDetailsVC
-      vc.strId = data["id"].stringValue
+    
+    
+      vc.strId = data["UpcomingKatha"]["id"].stringValue
       navigationController?.pushViewController(vc, animated:  true)
     
   }

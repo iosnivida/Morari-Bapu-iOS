@@ -41,31 +41,7 @@ class KathaChopaiVC: UIViewController {
       tblKathaChopai.estimatedRowHeight = UITableView.automaticDimension
     
       currentPageNo = 1
-      
-      if screenDirection == .Katha_Chopai{
-        //Katha Chopai
-        
-        lblTitle.text = "Katha Chopai"
-        self.arrKathaChopia.removeAll()
-        self.arrFavourite.removeAllObjects()
-        getKathaChopai(pageNo: currentPageNo)
-      }else if screenDirection == .Ram_Charit_Manas{
-        //Ram Charit Manas
-        
-        lblTitle.text = "Ram Charit Manas"
-        self.arrKathaChopia.removeAll()
-        self.arrFavourite.removeAllObjects()
-        getKathaChopai(pageNo: currentPageNo)
-      }
-      else{
-        //Quotes
-        
-        lblTitle.text = "Quotes"
-        self.arrKathaChopia.removeAll()
-        self.arrFavourite.removeAllObjects()
-        getKathaChopai(pageNo: currentPageNo)
-      }
-      
+     
       // Add reachability observer
       if let reachability = AppDelegate.sharedAppDelegate()?.reachability
       {
@@ -77,6 +53,29 @@ class KathaChopaiVC: UIViewController {
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
     
+    if screenDirection == .Katha_Chopai{
+        //Katha Chopai
+        
+        lblTitle.text = "Katha Chopai"
+        self.arrKathaChopia.removeAll()
+        self.arrFavourite.removeAllObjects()
+        getKathaChopai(pageNo: currentPageNo)
+    }else if screenDirection == .Ram_Charit_Manas{
+        //Ram Charit Manas
+        
+        lblTitle.text = "Ram Charit Manas"
+        self.arrKathaChopia.removeAll()
+        self.arrFavourite.removeAllObjects()
+        getKathaChopai(pageNo: currentPageNo)
+    }
+    else{
+        //Quotes
+        
+        lblTitle.text = "Quotes"
+        self.arrKathaChopia.removeAll()
+        self.arrFavourite.removeAllObjects()
+        getKathaChopai(pageNo: currentPageNo)
+    }
     
 
     
@@ -304,7 +303,8 @@ extension KathaChopaiVC : UITableViewDelegate, UITableViewDataSource{
       let vc = storyboard.instantiateViewController(withIdentifier: "KathaChopaiDetailsVC") as! KathaChopaiDetailsVC
       vc.strTitle = lblTitle.text!
       vc.strId = data["id"].stringValue
-
+      vc.arrKathaDetails = arrKathaChopia
+      vc.indexPosition = indexPath
       navigationController?.pushViewController(vc, animated:  true)
       
     }
@@ -314,6 +314,8 @@ extension KathaChopaiVC : UITableViewDelegate, UITableViewDataSource{
       let vc = storyboard.instantiateViewController(withIdentifier: "KathaChopaiDetailsVC") as! KathaChopaiDetailsVC
       vc.strTitle = lblTitle.text!
       vc.strId = data["id"].stringValue
+      vc.arrKathaDetails = arrKathaChopia
+      vc.indexPosition = indexPath
 
       navigationController?.pushViewController(vc, animated:  true)
       
@@ -323,7 +325,8 @@ extension KathaChopaiVC : UITableViewDelegate, UITableViewDataSource{
       let vc = storyboard.instantiateViewController(withIdentifier: "KathaChopaiDetailsVC") as! KathaChopaiDetailsVC
       vc.strTitle = lblTitle.text!
       vc.strId = data["id"].stringValue
-
+      vc.arrKathaDetails = arrKathaChopia
+      vc.indexPosition = indexPath
 
       navigationController?.pushViewController(vc, animated:  true)
       

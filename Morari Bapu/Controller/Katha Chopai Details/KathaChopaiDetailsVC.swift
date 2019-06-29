@@ -12,30 +12,22 @@ import SwiftyJSON
 class KathaChopaiDetailsVC: UIViewController {
 
   @IBOutlet weak var lblTitle: UILabel!
-  @IBOutlet weak var lblSubTitle: UILabel!
-  @IBOutlet weak var btnShare: UIButton!
-  @IBOutlet weak var btnFavourite: UIButton!
-  @IBOutlet weak var lblDate: UILabel!
-  @IBOutlet weak var lblDescription1: UILabel!
-  @IBOutlet weak var lblDescription2: UILabel!
-  @IBOutlet weak var lblDescription3: UILabel!
-  @IBOutlet weak var lblDescription4: UILabel!
 
-  var arrKathaDetails = [String:JSON]()
-  var arrFavourite = NSArray()
+  @IBOutlet weak var cvKathaChopai: UICollectionView!
+    
+  var arrKathaDetails : [JSON] = []
 
   var strTitle = String()
   var strId = String()
   
+    var indexPosition = IndexPath()
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
-      lblDate.text = ""
-      lblDescription1.text = ""
-      
       lblTitle.text = strTitle
       
-      getDetails()
+      //getDetails()
     
       // Add reachability observer
       if let reachability = AppDelegate.sharedAppDelegate()?.reachability
@@ -43,8 +35,18 @@ class KathaChopaiDetailsVC: UIViewController {
         NotificationCenter.default.addObserver( self, selector: #selector( self.reachabilityChanged ),name: Notification.Name.reachabilityChanged, object: reachability )
       }
       
+        if arrKathaDetails.count != 0{
+            DispatchQueue.main.async {
+                self.cvKathaChopai.reloadData()
+                self.cvKathaChopai.scrollToItem(at: self.indexPosition, at: .centeredHorizontally, animated: false)
+                
+                Utility.collectionViewNoDataMessage(collectionView: self.cvKathaChopai, message: "", textColor: UIColor.white)
+            }
+        }
+        
     }
   
+    /*
   //MARK:- Api Call
   func getDetails(){
     
@@ -180,7 +182,7 @@ class KathaChopaiDetailsVC: UIViewController {
         }
       }
     }
-  }
+  }*/
   
   //MARK : Button Event
   @IBAction func btnBack(_ sender: Any) {
@@ -203,6 +205,7 @@ class KathaChopaiDetailsVC: UIViewController {
     
   }
   
+    /*
   @IBAction func btnShare(_ sender: Any) {
     
     var share_Content = String()
@@ -273,9 +276,9 @@ class KathaChopaiDetailsVC: UIViewController {
         if jsonResponce!["status"].stringValue == "true"{
           
           if jsonResponce!["message"].stringValue == "Added in your favourite list"{
-            self.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
+            //self.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
           }else{
-            self.btnFavourite.setImage(UIImage(named: "unfavorite"), for: .normal)
+            //self.btnFavourite.setImage(UIImage(named: "unfavorite"), for: .normal)
           }
         }
         else {
@@ -284,7 +287,7 @@ class KathaChopaiDetailsVC: UIViewController {
       }
     }
   }
-  
+  */
   
 }
 
@@ -476,4 +479,245 @@ extension KathaChopaiDetailsVC : InternetConnectionDelegate{
     self.viewDidLoad()
     
   }
+}
+
+
+// MARK: CollectionView Delegate
+extension KathaChopaiDetailsVC: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, UICollectionViewDataSource{
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        
+        return arrKathaDetails.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "KathaChopaiCollectionViewCell", for: indexPath) as! KathaChopaiCollectionViewCell
+        
+        var dict = arrKathaDetails[indexPath.row]
+
+        if self.lblTitle.text == "Katha Chopai" ||  self.lblTitle.text == "Ram Charit Manas"{
+            
+            cell.btnShare.tag = indexPath.row
+            cell.btnFavourite.tag = indexPath.row
+            
+            cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
+            cell.btnFavourite.addTarget(self, action: #selector(btnFavourite(_:)), for: UIControl.Event.touchUpInside)
+            
+            if dict["is_favourite"].boolValue == true{
+                cell.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
+            }else{
+                cell.btnFavourite.setImage(UIImage(named: "unfavorite"), for: .normal)
+            }
+            
+            cell.lblSubTitle.text = "\(dict["title"].stringValue)"
+            cell.lblDate.text = Utility.dateToString(dateStr: dict["from_date"].stringValue , strDateFormat: "dd MMM yyyy")
+            cell.lblDescription1.text = dict["katha_hindi"].stringValue
+            cell.lblDescription2.text = dict["katha_gujarati"].stringValue
+            cell.lblDescription3.text = dict["katha_english"].stringValue
+            cell.lblDescription4.text = dict["description"].stringValue
+            
+            return cell
+        }else{
+            cell.btnShare.tag = indexPath.row
+            cell.btnFavourite.tag = indexPath.row
+            
+            cell.btnShare.addTarget(self, action: #selector(btnShare), for: UIControl.Event.touchUpInside)
+            cell.btnFavourite.addTarget(self, action: #selector(btnFavourite(_:)), for: UIControl.Event.touchUpInside)
+         
+            if dict["is_favourite"].boolValue == true{
+                cell.btnFavourite.setImage(UIImage(named: "favorite"), for: .normal)
+            }else{
+                cell.btnFavourite.setImage(UIImage(named: "unfavorite"), for: .normal)
+            }
+            
+            cell.lblSubTitle.text = "\(dict["title"].stringValue)"
+            cell.lblDate.text = Utility.dateToString(dateStr: dict["quotes_date"].stringValue , strDateFormat: "dd MMM yyyy")
+            cell.lblDescription1.text = dict["quotes_hindi"].stringValue
+            cell.lblDescription2.text = dict["quotes_gujarati"].stringValue
+            cell.lblDescription3.text = dict["quotes_english"].stringValue
+            
+            return cell
+
+            
+        }
+        
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        if Device.IS_IPHONE_X{
+            return CGSize(width: collectionView.frame.size.width, height: collectionView.frame.size.height)
+        }
+        else{
+            return CGSize(width: collectionView.frame.size.width, height: collectionView.frame.size.height)
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        
+    }
+    
+    
+    
+    @IBAction func btnShare(_ sender: UIButton) {
+        
+            var dict = arrKathaDetails[sender.tag]
+        
+            var share_Content = String()
+            
+            if lblTitle.text == "Katha Chopai"{
+                
+                share_Content = "Katha Chopai \n\n\(dict["title"].stringValue) \n\nDate: \(Utility.dateToString(dateStr: dict["from_date"].stringValue , strDateFormat: "dd MMM yyyy")) \n\n \(dict["katha_gujarati"].stringValue) \n\n\(dict["katha_hindi"].stringValue) \n\n\(dict["katha_english"].stringValue) \n\n\(dict["description"].stringValue) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
+                
+                
+            }else if lblTitle.text == "Ram Charit Manas"{
+                
+                share_Content = "Ram Charit Manas \n\n\(dict["title"].stringValue) \n\nDate: \(Utility.dateToString(dateStr: dict["date"].stringValue , strDateFormat: "dd MMM yyyy")) \n\n \(dict["katha_gujarati"].stringValue) \n\n\(dict["katha_hindi"].stringValue) \n\n\(dict["katha_english"].stringValue) \n\n\(dict["description"].stringValue) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
+            }
+            else{
+                
+                share_Content = "Quotes \n\n\(dict["title"].stringValue) \n\nDate: \(Utility.dateToString(dateStr: dict["quotes_date"].stringValue , strDateFormat: "dd MMM yyyy")) \n\n \(dict["quotes_gujarati"].stringValue) \n\n\(dict["quotes_hindi"].stringValue) \n\n\(dict["quotes_english"].stringValue) \n\nThis message has been sent via the Morari Bapu App.  You can download it too from this link : https://itunes.apple.com/tr/app/morari-bapu/id1050576066?mt=8"
+            }
+            
+            let textToShare = [share_Content]
+            let activityViewController = UIActivityViewController(activityItems: textToShare, applicationActivities: nil)
+            activityViewController.popoverPresentationController?.sourceView = self.view // so that iPads won't crash
+            
+            // exclude some activity types from the list (optional)
+            activityViewController.excludedActivityTypes = [ UIActivity.ActivityType.airDrop, UIActivity.ActivityType.postToFacebook ]
+            
+            DispatchQueue.main.async {
+                self.present(activityViewController, animated: true, completion: nil)
+            }
+        
+    }
+    
+    @IBAction func btnFavourite(_ sender: UIButton) {
+        
+        var paramater = NSDictionary()
+        var data = arrKathaDetails[sender.tag]
+
+        if arrKathaDetails.count != 0{
+
+        if lblTitle.text == "Katha Chopai"{
+            
+            paramater = ["app_id":Utility.getDeviceID(),
+                         "favourite_for":"2",
+                         "favourite_id":data["id"].stringValue]
+            
+            
+        }else if lblTitle.text == "Ram Charit Manas"{
+            
+            paramater = ["app_id":Utility.getDeviceID(),
+                         "favourite_for":"3",
+                         "favourite_id":data["id"].stringValue]
+            
+        }
+        else{
+            
+            paramater = ["app_id":Utility.getDeviceID(),
+                         "favourite_for":"1",
+                         "favourite_id":data["id"].stringValue]
+            
+        }
+        
+        WebServices().CallGlobalAPI(url: WebService_Favourite,headers: [:], parameters: paramater as NSDictionary, HttpMethod: "POST", ProgressView: true) { ( _ jsonResponce:JSON? , _ strErrorMessage:String) in
+            
+            if(jsonResponce?.error != nil) {
+                
+                var errorMess = jsonResponce?.error?.localizedDescription
+                errorMess = MESSAGE_Err_Service
+                Utility().showAlertMessage(vc: self, titleStr: "", messageStr: errorMess!)
+            }
+            else {
+                
+                if jsonResponce!["status"].stringValue == "true"{
+                    
+                    
+                    if jsonResponce!["message"].stringValue == "Added in your favourite list"{
+                        
+                        data["is_favourite"] = true;
+                        
+                        self.arrKathaDetails[sender.tag] = data
+                        self.cvKathaChopai.reloadData()
+                        //self.delegate?.result(self.arrFavourites)
+                        
+                    }else{
+                        
+                        data["is_favourite"] = false;
+                        self.arrKathaDetails[sender.tag] = data
+                        self.cvKathaChopai.reloadData()
+                        //self.delegate?.result(self.arrFavourites)
+                        
+                    }
+                }
+                else {
+                    Utility().showAlertMessage(vc: self, titleStr: "", messageStr: jsonResponce!["message"].stringValue)
+                }
+            }
+        }
+    }
+    }
+    /*
+    @IBAction func btnFavourites(_ sender: UIButton) {
+        
+        if arrImages.count != 0{
+            
+            let data = arrImages[sender.tag]
+            
+            var paramater = NSDictionary()
+            
+            if screenDirection == .Whats_New_Photos{
+                //Whats_New_Photos
+                
+                paramater = ["app_id":Utility.getDeviceID(),
+                             "favourite_for":"11",
+                             "favourite_id":data["id"].stringValue]
+                
+            }else{
+                //Media_Photos
+                
+                paramater = ["app_id":Utility.getDeviceID(),
+                             "favourite_for":"12",
+                             "favourite_id":data["id"].stringValue]
+                
+            }
+            
+            WebServices().CallGlobalAPI(url: WebService_Favourite,headers: [:], parameters: paramater as NSDictionary, HttpMethod: "POST", ProgressView: true) { ( _ jsonResponce:JSON? , _ strErrorMessage:String) in
+                
+                if(jsonResponce?.error != nil) {
+                    
+                    var errorMess = jsonResponce?.error?.localizedDescription
+                    errorMess = MESSAGE_Err_Service
+                    Utility().showAlertMessage(vc: self, titleStr: "", messageStr: errorMess!)
+                }
+                else {
+                    
+                    if jsonResponce!["status"].stringValue == "true"{
+                        
+                        if jsonResponce!["message"].stringValue == "Added in your favourite list"{
+                            
+                            self.arrFavourites.add(data["id"].stringValue)
+                            self.cvImageViewwer.reloadData()
+                            self.delegate?.result(self.arrFavourites)
+                            
+                        }else{
+                            self.arrFavourites.removeObject(at: self.arrFavourites.index(of: data["id"].stringValue))
+                            self.cvImageViewwer.reloadData()
+                            self.delegate?.result(self.arrFavourites)
+                            
+                        }
+                        
+                        
+                    }
+                    else {
+                        Utility().showAlertMessage(vc: self, titleStr: "", messageStr: jsonResponce!["message"].stringValue)
+                    }
+                }
+            }
+            
+        }
+        
+    }*/
 }

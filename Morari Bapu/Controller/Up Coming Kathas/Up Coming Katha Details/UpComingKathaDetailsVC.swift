@@ -73,11 +73,13 @@ class UpComingKathaDetailsVC: UIViewController {
         
         if jsonResponce!["status"].stringValue == "true"{
           
-          self.arrUpcomingKathaDetails = jsonResponce!["data"]["UpcomingKatha"].dictionaryValue
-          self.arrKathaTiming = jsonResponce!["data"]["UpcomingKathaTime"].arrayValue
           DispatchQueue.main.async {
             
             
+            self.arrUpcomingKathaDetails = jsonResponce!["data"]["UpcomingKatha"].dictionaryValue
+            self.arrKathaTiming = jsonResponce!["data"]["UpcomingKathaTime"].arrayValue
+            self.lblOtherInfoApi.attributedText = NSAttributedString(html: jsonResponce!["data"]["UpcomingKatha"]["other"].stringValue)
+
             if self.arrKathaTiming.count != 0{
               self.tblKathaTiming.reloadData()
             }else{
@@ -86,7 +88,6 @@ class UpComingKathaDetailsVC: UIViewController {
             }
             self.scrollView.isHidden = false
      
-            self.lblOtherInfoApi.text = self.arrUpcomingKathaDetails["other"]?.stringValue
             
             self.lblTitle.text = self.arrUpcomingKathaDetails["title"]?.stringValue
             self.lblKathaLoction.text = self.arrUpcomingKathaDetails["location"]?.stringValue

@@ -56,6 +56,7 @@
 		07443DF82165228900F39CCD /* UpcomingKathaTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07443DF72165228900F39CCD /* UpcomingKathaTableViewCell.swift */; };
 		075675F221ED06F700915946 /* MusicPlayerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 075675F121ED06F700915946 /* MusicPlayerVC.swift */; };
 		07637E6A222F0A7500A657BB /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07637E69222F0A7500A657BB /* MediaPlayer.framework */; };
+		0764106C22C676B1009A396B /* KathaChopaiCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0764106B22C676B1009A396B /* KathaChopaiCollectionViewCell.swift */; };
 		0766437C21E79F2700B15520 /* FavouriteVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0766437B21E79F2700B15520 /* FavouriteVC.swift */; };
 		0766437F21E7AC3B00B15520 /* ArticlesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0766437E21E7AC3B00B15520 /* ArticlesVC.swift */; };
 		0766438121E7AC7F00B15520 /* Articles1TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0766438021E7AC7F00B15520 /* Articles1TableViewCell.swift */; };
@@ -178,6 +179,7 @@
 		07443DF72165228900F39CCD /* UpcomingKathaTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpcomingKathaTableViewCell.swift; sourceTree = "<group>"; };
 		075675F121ED06F700915946 /* MusicPlayerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicPlayerVC.swift; sourceTree = "<group>"; };
 		07637E69222F0A7500A657BB /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		0764106B22C676B1009A396B /* KathaChopaiCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KathaChopaiCollectionViewCell.swift; sourceTree = "<group>"; };
 		0766437B21E79F2700B15520 /* FavouriteVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouriteVC.swift; sourceTree = "<group>"; };
 		0766437E21E7AC3B00B15520 /* ArticlesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticlesVC.swift; sourceTree = "<group>"; };
 		0766438021E7AC7F00B15520 /* Articles1TableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Articles1TableViewCell.swift; sourceTree = "<group>"; };
@@ -476,6 +478,7 @@
 			isa = PBXGroup;
 			children = (
 				0709A8DC216B255700371E06 /* KathaChopaiDetailsVC.swift */,
+				0764106B22C676B1009A396B /* KathaChopaiCollectionViewCell.swift */,
 			);
 			path = "Katha Chopai Details";
 			sourceTree = "<group>";
@@ -1030,6 +1033,7 @@
 				07CD60BE22171FE4003C9333 /* KathaTimingTableViewCell.swift in Sources */,
 				074029E421DE6A3D00E4DE4B /* WhatsNewVideoVC.swift in Sources */,
 				076BA35C21632A48004BD807 /* KathaChopaiVC.swift in Sources */,
+				0764106C22C676B1009A396B /* KathaChopaiCollectionViewCell.swift in Sources */,
 				075675F221ED06F700915946 /* MusicPlayerVC.swift in Sources */,
 				070AD48121661A14007E6149 /* WebViewVC.swift in Sources */,
 				07094A8D2161DB6500B5B08C /* Reachability.swift in Sources */,
@@ -1246,14 +1250,14 @@
 				CODE_SIGN_ENTITLEMENTS = "Morari Bapu/Morari Bapu.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = RMQN2WYMSF;
 				INFOPLIST_FILE = "Morari Bapu/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.nivida.bapuapp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.doggie.bapuapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.2;
@@ -1270,14 +1274,14 @@
 				CODE_SIGN_ENTITLEMENTS = "Morari Bapu/Morari Bapu.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = RMQN2WYMSF;
 				INFOPLIST_FILE = "Morari Bapu/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.nivida.bapuapp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.doggie.bapuapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.2;
