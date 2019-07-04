@@ -52,8 +52,6 @@ class UpComingKathasVC: UIViewController {
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
    
- 
-
   }
   
   //MARK:- Api Call
@@ -265,10 +263,13 @@ extension UpComingKathasVC : UITableViewDelegate, UITableViewDataSource{
       
       let storyboard = UIStoryboard(name: Dashboard_Storyboard, bundle: nil)
       let vc = storyboard.instantiateViewController(withIdentifier: "UpComingKathaDetailsVC") as! UpComingKathaDetailsVC
+        vc.strId = data["UpcomingKatha"]["id"].stringValue
+        vc.arrUpComingKathas = arrUpComingKathas
+        vc.indexPosition = indexPath
     
-    
-      vc.strId = data["UpcomingKatha"]["id"].stringValue
-      navigationController?.pushViewController(vc, animated:  true)
+        DispatchQueue.main.async {
+            self.navigationController?.pushViewController(vc, animated:  true)
+        }
     
   }
   
@@ -329,9 +330,8 @@ extension UpComingKathasVC : MenuNavigationDelegate{
     }else if ScreenName == "Daily Katha Clip"{
       //Daily Katha Clip
       let storyboard = UIStoryboard(name: Media_Storyboard, bundle: nil)
-      let vc = storyboard.instantiateViewController(withIdentifier: "WhatsNewVideoVC") as! WhatsNewVideoVC
-      vc.screenDirection = .Daily_Katha_Clip
-      navigationController?.pushViewController(vc, animated:  true)
+            let vc = storyboard.instantiateViewController(withIdentifier: "DailyKathaClipVC") as! DailyKathaClipVC
+            navigationController?.pushViewController(vc, animated:  true)
       
     }else if ScreenName == "Live Katha Audio"{
       //Live Katha Audio

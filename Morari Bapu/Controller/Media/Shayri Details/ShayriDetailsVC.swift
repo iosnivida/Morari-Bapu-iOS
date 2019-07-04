@@ -159,9 +159,8 @@ extension ShayriDetailsVC: MenuNavigationDelegate{
     }else if ScreenName == "Daily Katha Clip"{
       //Daily Katha Clip
       let storyboard = UIStoryboard(name: Media_Storyboard, bundle: nil)
-      let vc = storyboard.instantiateViewController(withIdentifier: "WhatsNewVideoVC") as! WhatsNewVideoVC
-      vc.screenDirection = .Daily_Katha_Clip
-      navigationController?.pushViewController(vc, animated:  true)
+            let vc = storyboard.instantiateViewController(withIdentifier: "DailyKathaClipVC") as! DailyKathaClipVC
+            navigationController?.pushViewController(vc, animated:  true)
       
     }else if ScreenName == "Live Katha Audio"{
       //Live Katha Audio

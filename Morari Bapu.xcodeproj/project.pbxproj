@@ -42,6 +42,10 @@
 		070D461621DD23E10084C0DA /* FeedbackVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 070D461521DD23E10084C0DA /* FeedbackVC.swift */; };
 		0715B16A22207B3900A6DC49 /* BapuDarshanUITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0715B16922207B3900A6DC49 /* BapuDarshanUITableViewCell.swift */; };
 		072027C42225921D00A55489 /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 072027C32225921D00A55489 /* EventKit.framework */; };
+		07294C1A22CE323B00019377 /* DailyKathaClipSliderVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07294C1922CE323B00019377 /* DailyKathaClipSliderVC.swift */; };
+		07294C1C22CE326500019377 /* DailyKathaClipSliderCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07294C1B22CE326500019377 /* DailyKathaClipSliderCollectionViewCell.swift */; };
+		0734F67A22CA0FB600451C04 /* UpComingKathaDetailCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0734F67922CA0FB600451C04 /* UpComingKathaDetailCollectionViewCell.swift */; };
+		0734F67D22CA6F1400451C04 /* DailyKathaClipVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0734F67C22CA6F1300451C04 /* DailyKathaClipVC.swift */; };
 		073C7F7F221E615500BDC6E3 /* WhatsNewTextDetailsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073C7F7E221E615500BDC6E3 /* WhatsNewTextDetailsVC.swift */; };
 		074029E221DE6A2900E4DE4B /* WhatsNewPhotosVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 074029E121DE6A2900E4DE4B /* WhatsNewPhotosVC.swift */; };
 		074029E421DE6A3D00E4DE4B /* WhatsNewVideoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 074029E321DE6A3D00E4DE4B /* WhatsNewVideoVC.swift */; };
@@ -72,7 +76,6 @@
 		07A755252162869100793232 /* MontserratAlternates-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 07A755222162869100793232 /* MontserratAlternates-SemiBold.otf */; };
 		07A755262162869100793232 /* MontserratAlternates-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 07A755232162869100793232 /* MontserratAlternates-Light.otf */; };
 		07A755272162869100793232 /* MontserratAlternates-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 07A755242162869100793232 /* MontserratAlternates-Regular.otf */; };
-		07CD60BE22171FE4003C9333 /* KathaTimingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07CD60BD22171FE4003C9333 /* KathaTimingTableViewCell.swift */; };
 		07D9394921F62B7B003F847D /* UpComingKathasVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07D9394821F62B7B003F847D /* UpComingKathasVC.swift */; };
 		07D9394B21F62CE9003F847D /* UpComingKathaDetailsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07D9394A21F62CE9003F847D /* UpComingKathaDetailsVC.swift */; };
 		07D9A46822C28EBC00737489 /* Media.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 07D9A46722C28EBC00737489 /* Media.storyboard */; };
@@ -165,6 +168,10 @@
 		070D461521DD23E10084C0DA /* FeedbackVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackVC.swift; sourceTree = "<group>"; };
 		0715B16922207B3900A6DC49 /* BapuDarshanUITableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BapuDarshanUITableViewCell.swift; sourceTree = "<group>"; };
 		072027C32225921D00A55489 /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = System/Library/Frameworks/EventKit.framework; sourceTree = SDKROOT; };
+		07294C1922CE323B00019377 /* DailyKathaClipSliderVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyKathaClipSliderVC.swift; sourceTree = "<group>"; };
+		07294C1B22CE326500019377 /* DailyKathaClipSliderCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyKathaClipSliderCollectionViewCell.swift; sourceTree = "<group>"; };
+		0734F67922CA0FB600451C04 /* UpComingKathaDetailCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpComingKathaDetailCollectionViewCell.swift; sourceTree = "<group>"; };
+		0734F67C22CA6F1300451C04 /* DailyKathaClipVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyKathaClipVC.swift; sourceTree = "<group>"; };
 		073C7F7E221E615500BDC6E3 /* WhatsNewTextDetailsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNewTextDetailsVC.swift; sourceTree = "<group>"; };
 		074029E121DE6A2900E4DE4B /* WhatsNewPhotosVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNewPhotosVC.swift; sourceTree = "<group>"; };
 		074029E321DE6A3D00E4DE4B /* WhatsNewVideoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNewVideoVC.swift; sourceTree = "<group>"; };
@@ -196,7 +203,6 @@
 		07A755232162869100793232 /* MontserratAlternates-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MontserratAlternates-Light.otf"; sourceTree = "<group>"; };
 		07A755242162869100793232 /* MontserratAlternates-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MontserratAlternates-Regular.otf"; sourceTree = "<group>"; };
 		07AE6019221C87DA000689F6 /* Morari Bapu.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Morari Bapu.entitlements"; sourceTree = "<group>"; };
-		07CD60BD22171FE4003C9333 /* KathaTimingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KathaTimingTableViewCell.swift; sourceTree = "<group>"; };
 		07D9394821F62B7B003F847D /* UpComingKathasVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpComingKathasVC.swift; sourceTree = "<group>"; };
 		07D9394A21F62CE9003F847D /* UpComingKathaDetailsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpComingKathaDetailsVC.swift; sourceTree = "<group>"; };
 		07D9A46722C28EBC00737489 /* Media.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Media.storyboard; sourceTree = "<group>"; };
@@ -356,6 +362,7 @@
 		07094A812161DA5C00B5B08C /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				0734F67B22CA6EF200451C04 /* Daily Katha Clip */,
 				07083D53221A801800694981 /* Internet Connection */,
 				0701D93E21FCB91A00E08E6C /* Search */,
 				07D9394721F62B33003F847D /* Up Coming Kathas */,
@@ -542,6 +549,16 @@
 			path = Feedback;
 			sourceTree = "<group>";
 		};
+		0734F67B22CA6EF200451C04 /* Daily Katha Clip */ = {
+			isa = PBXGroup;
+			children = (
+				0734F67C22CA6F1300451C04 /* DailyKathaClipVC.swift */,
+				07294C1922CE323B00019377 /* DailyKathaClipSliderVC.swift */,
+				07294C1B22CE326500019377 /* DailyKathaClipSliderCollectionViewCell.swift */,
+			);
+			path = "Daily Katha Clip";
+			sourceTree = "<group>";
+		};
 		073C7F7D221E613200BDC6E3 /* What's New Text Details */ = {
 			isa = PBXGroup;
 			children = (
@@ -684,7 +701,7 @@
 			isa = PBXGroup;
 			children = (
 				07D9394A21F62CE9003F847D /* UpComingKathaDetailsVC.swift */,
-				07CD60BD22171FE4003C9333 /* KathaTimingTableViewCell.swift */,
+				0734F67922CA0FB600451C04 /* UpComingKathaDetailCollectionViewCell.swift */,
 			);
 			path = "Up Coming Katha Details";
 			sourceTree = "<group>";
@@ -1024,13 +1041,14 @@
 				0709A8D9216B1A4000371E06 /* QuotesVC.swift in Sources */,
 				070A9F1121E1177600E8628F /* BapuThoughtsVC.swift in Sources */,
 				0766438521EA495600B15520 /* AudioTableViewCell.swift in Sources */,
+				07294C1A22CE323B00019377 /* DailyKathaClipSliderVC.swift in Sources */,
 				074029EA21DE6C9900E4DE4B /* WhatsNewTextTableViewCell.swift in Sources */,
 				07443DF62165223400F39CCD /* QuotesTableViewCell.swift in Sources */,
+				0734F67A22CA0FB600451C04 /* UpComingKathaDetailCollectionViewCell.swift in Sources */,
 				0766438821EA497000B15520 /* AudioVC.swift in Sources */,
 				070A9F1621E11CBC00E8628F /* ShayriDetailsVC.swift in Sources */,
 				0709A8D6216A80C300371E06 /* SettingsTableViewCell.swift in Sources */,
 				074029EF21DF227000E4DE4B /* ImageViewerVC.swift in Sources */,
-				07CD60BE22171FE4003C9333 /* KathaTimingTableViewCell.swift in Sources */,
 				074029E421DE6A3D00E4DE4B /* WhatsNewVideoVC.swift in Sources */,
 				076BA35C21632A48004BD807 /* KathaChopaiVC.swift in Sources */,
 				0764106C22C676B1009A396B /* KathaChopaiCollectionViewCell.swift in Sources */,
@@ -1053,6 +1071,7 @@
 				07094A592161C32E00B5B08C /* Morari_Bapu.xcdatamodeld in Sources */,
 				0702111321DBA879006B6472 /* FaqVC.swift in Sources */,
 				07094A8A2161DAB400B5B08C /* Utility.swift in Sources */,
+				07294C1C22CE326500019377 /* DailyKathaClipSliderCollectionViewCell.swift in Sources */,
 				073C7F7F221E615500BDC6E3 /* WhatsNewTextDetailsVC.swift in Sources */,
 				0766437F21E7AC3B00B15520 /* ArticlesVC.swift in Sources */,
 				0709A8CE216A6B7000371E06 /* KathaEBookVC.swift in Sources */,
@@ -1060,6 +1079,7 @@
 				07094A892161DAB400B5B08C /* GlobalConstants.swift in Sources */,
 				07A7551D21625A1800793232 /* MenuVC.swift in Sources */,
 				07443DF42165220C00F39CCD /* YoutubeTableViewCell.swift in Sources */,
+				0734F67D22CA6F1400451C04 /* DailyKathaClipVC.swift in Sources */,
 				07083D55221A803400694981 /* InternetConnectionVC.swift in Sources */,
 				0766438121E7AC7F00B15520 /* Articles1TableViewCell.swift in Sources */,
 				0709A8DD216B255700371E06 /* KathaChopaiDetailsVC.swift in Sources */,
@@ -1257,7 +1277,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.doggie.bapuapp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nivida.bapuapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.2;
@@ -1281,7 +1301,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.doggie.bapuapp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nivida.bapuapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.2;
