@@ -252,19 +252,22 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
         cell.lblTitle.text = "About Talgajarda"
         
       }else if indexPath.row == 1{
-        cell.lblTitle.text = "About Shenjal"
+        cell.lblTitle.text = "About Tribhuvandas Dada"
         
       }else if indexPath.row == 2{
-        cell.lblTitle.text = "About Gurukul"
+        cell.lblTitle.text = "About Ramji Mandir"
       }
       else if indexPath.row == 3{
         cell.lblTitle.text = "About Chitrakutdham"
         
       }else if indexPath.row == 4{
-        cell.lblTitle.text = "About Tulsidas Ji"
+        cell.lblTitle.text = "About Chitrakutdham Trust"
+        
+      }else if indexPath.row == 5{
+        cell.lblTitle.text = "About Tulsidasji"
       }
-      else if indexPath.row == 5{
-        cell.lblTitle.text = "About Bapu's Guru"
+      else if indexPath.row == 6{
+        cell.lblTitle.text = "About Ramkatha"
       }
     }else if screenDirection == .Media{
       if indexPath.row == 0{
@@ -526,14 +529,14 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
         
         let storyboard = UIStoryboard(name: Menu_Storyboard, bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "AboutTheAppVC") as! AboutTheAppVC
-        vc.strTitle = "About Shenjal"
+        vc.strTitle = "About Tribhuvandas Dada"
         navigationController?.pushViewController(vc, animated:  true)
         
       }else if indexPath.row == 2{
         
         let storyboard = UIStoryboard(name: Menu_Storyboard, bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "AboutTheAppVC") as! AboutTheAppVC
-        vc.strTitle = "About Gurukul"
+        vc.strTitle = "About Ramji Mandir"
         navigationController?.pushViewController(vc, animated:  true)
         
       }else if indexPath.row == 3{
@@ -547,14 +550,21 @@ extension SettingsVC : UITableViewDelegate, UITableViewDataSource{
         
         let storyboard = UIStoryboard(name: Menu_Storyboard, bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "AboutTheAppVC") as! AboutTheAppVC
-        vc.strTitle = "About Tulsidas Ji"
+        vc.strTitle = "About Chitrakutdham Trust"
         navigationController?.pushViewController(vc, animated:  true)
         
       }else if indexPath.row == 5{
         
         let storyboard = UIStoryboard(name: Menu_Storyboard, bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "AboutTheAppVC") as! AboutTheAppVC
-        vc.strTitle = "About Bapu's Guru"
+        vc.strTitle = "About Tulsidasji"
+        navigationController?.pushViewController(vc, animated:  true)
+        
+      }else if indexPath.row == 6{
+        
+        let storyboard = UIStoryboard(name: Menu_Storyboard, bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "AboutTheAppVC") as! AboutTheAppVC
+        vc.strTitle = "About Ramkatha"
         navigationController?.pushViewController(vc, animated:  true)
         
       }

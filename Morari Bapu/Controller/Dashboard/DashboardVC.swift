@@ -1309,9 +1309,8 @@ extension DashboardVC : iCarouselDataSource, iCarouselDelegate{
                 //Quotes
                 
                 let storyboard = UIStoryboard(name: Dashboard_Storyboard, bundle: nil)
-                let vc = storyboard.instantiateViewController(withIdentifier: "KathaChopaiDetailsVC") as! KathaChopaiDetailsVC
-                vc.strTitle = "Quotes"
-                vc.strId = dict["quotes_id"].stringValue
+                let vc = storyboard.instantiateViewController(withIdentifier: "KathaChopaiVC") as! KathaChopaiVC
+                vc.screenDirection = .Quotes
                 navigationController?.pushViewController(vc, animated:  true)
                 
             }else if dict["slider_type_id"].intValue == 4{
